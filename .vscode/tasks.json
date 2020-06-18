@@ -30,7 +30,7 @@
             "type": "shell",
             "label": "make debug llvm project",
             "command": "make",
-            "args": ["-j2"],
+            "args": ["-j8"],
             "options": {
                 "cwd": "${workspaceFolder}/build/Debug"
             },

@@ -58,20 +58,23 @@ static void LoadObject(AAPSimulator &Sim, ObjectFile *o) {
     if (Text || Data) {
       outs() << format("%3d %-13s %08" PRIx64 " %016" PRIx64 " %s\n", i,
                        Name.str().c_str(), Size, Address, Type.c_str());
-      if (TextFlag) {
-        Address = Address & 0xffffff;
-        outs() << format("Writing %s to %06" PRIx64 "\n", Name.str().c_str(), Address);
+      if (Text) {
+        // Address = Address & 0xffffff;
+        outs() << format("Writing %s to 0x%x" PRIx64 "\n", Name.str().c_str(), Address);
         Sim.WriteCodeSection(BytesStr, Address);
       } else {
-        Address = Address & 0xffff;
-        outs() << format("Writing %s to %04" PRIx64 "\n", Name.str().c_str(), Address);
+        // Address = Address & 0xffff;
+        outs() << format("Writing %s to 0x%x" PRIx64 "\n", Name.str().c_str(), Address);
         Sim.WriteDataSection(BytesStr, Address);
       }
     }
     ++i;
   }
   // Set PC
-  Sim.setPC(0x0);
+  uint64_t StartAddr;
+  if (auto StartAddrOrErr = o->getStartAddress())
+    StartAddr = *StartAddrOrErr;
+  Sim.setPC(StartAddr);
 }
 
 // Load an object

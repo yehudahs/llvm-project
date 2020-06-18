@@ -45,25 +45,26 @@ static cl::opt<bool> Trace("trace");
 
 AAPSimulator::AAPSimulator() {
   std::string Error;
-  TheTarget = TargetRegistry::lookupTarget("aap-none-none", Error);
+  StringRef TripleStr = "mips-none-none";
+  TheTarget = TargetRegistry::lookupTarget(TripleStr.str(), Error);
   if (!TheTarget) {
-    errs() << "aap-run: " << Error << "\n";
+    errs() << "sim: " << Error << "\n";
   }
 
   // Set up all MC/Target components needed by the disassembler
-  MRI = TheTarget->createMCRegInfo("aap-none-none");
+  MRI = TheTarget->createMCRegInfo(TripleStr);
   if (!MRI) {
     errs() << "error: no register info\n";
     return;
   }
   MCTargetOptions MCOptions;
-  AsmInfo = TheTarget->createMCAsmInfo(*MRI, "aap-none-none", MCOptions);
+  AsmInfo = TheTarget->createMCAsmInfo(*MRI, TripleStr, MCOptions);
   if (!AsmInfo) {
     errs() << "error: no asminfo\n";
     return;
   }
 
-  STI = TheTarget->createMCSubtargetInfo("aap-none-none", "", "");
+  STI = TheTarget->createMCSubtargetInfo(TripleStr, "", "");
   if (!STI) {
     errs() << "error: no subtarget info\n";
     return;
@@ -86,7 +87,7 @@ AAPSimulator::AAPSimulator() {
 
   int AsmPrinterVariant = AsmInfo->getAssemblerDialect();
   IP = TheTarget->createMCInstPrinter(
-      Triple("aap-none-none"), AsmPrinterVariant, *AsmInfo, *MII, *MRI);
+      Triple(TripleStr), AsmPrinterVariant, *AsmInfo, *MII, *MRI);
   if (!IP) {
     errs() << "error: no instruction printer\n";
     return;

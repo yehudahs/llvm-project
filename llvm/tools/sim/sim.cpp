@@ -40,14 +40,18 @@ static void report_error(StringRef File, std::error_code EC) {
 static void LoadObject(AAPSimulator &Sim, ObjectFile *o) {
   unsigned i = 0;
   for (const SectionRef &Section : o->sections()) {
-    StringRef & Name = *Section.getName();
+    StringRef Name;
+    if (auto NameOrErr = Section.getName())
+      Name = *NameOrErr;
     uint64_t Address = Section.getAddress();
     uint64_t Size = Section.getSize();
     bool Text = Section.isText();
     bool Data = Section.isData();
     bool BSS = Section.isBSS();
     bool TextFlag = Address & 0x8000000;
-    StringRef & BytesStr = *Section.getContents();
+    StringRef BytesStr;
+    if (auto BytesOrErr = Section.getContents())
+      BytesStr = *BytesOrErr;
     std::string Type = (std::string(Text ? "TEXT " : "") +
                         (Data ? "DATA " : "") + (BSS ? "BSS" : ""));
     // FIXME: We should really load based on LOAD segment flag

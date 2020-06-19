@@ -1,5 +1,5 @@
 {
-    // See https://go.microsoft.com/fwlink/?LinkId=733558 
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
     // for the documentation about the tasks.json format
     "version": "2.0.0",
     "tasks": [
@@ -10,7 +10,7 @@
             "args": ["../../llvm",
                 "-DLLVM_ENABLE_PROJECTS=\"clang;lld\"",
                 "-DCMAKE_BUILD_TYPE=Debug",
-                "-DLLVM_TARGETS_TO_BUILD=\"Mips;X86\"", 
+                "-DLLVM_TARGETS_TO_BUILD=\"Mips;X86\"",
                 "-DLLVM_ENABLE_LLD=ON",
                 "-DCMAKE_CXX_FLAGS=\"-g0\"",
                 "-DCMAKE_CXX_COMPILER=clang++-10",
@@ -28,11 +28,24 @@
         },
         {
             "type": "shell",
-            "label": "make debug llvm project",
+            "label": "make debug simulator",
             "command": "make",
             "args": ["-j8"],
             "options": {
-                "cwd": "${workspaceFolder}/build/Debug"
+                "cwd": "${workspaceFolder}/build/Debug/tools/sim"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": "build"
+        },
+        {
+            "type": "shell",
+            "label": "make debug llvm-objdump",
+            "command": "make",
+            "args": ["-j8"],
+            "options": {
+                "cwd": "${workspaceFolder}/build/Debug/tools/llvm-objdump"
             },
             "problemMatcher": [
                 "$gcc"

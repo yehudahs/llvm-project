@@ -11,7 +11,26 @@
             "program": "${workspaceFolder}/build/Debug/bin/sim",
             "args": ["./a.out"],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/../test/llvm_test",
+            "cwd": "${workspaceFolder}/../deleteme/llvm",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "disasm",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/Debug/bin/llvm-objdump",
+            "args": ["./a.out", "-xlsD", "--triple=mips"],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/../deleteme/llvm",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",

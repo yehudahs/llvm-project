@@ -18,6 +18,7 @@
 #include "llvm/MC/MCInstPrinter.h"
 #include "llvm/MC/MCInstrInfo.h"
 #include "llvm/MC/MCObjectFileInfo.h"
+#include "llvm/Object/ObjectFile.h"
 #include "llvm/MC/MCRegisterInfo.h"
 #include "llvm/MC/MCSubtargetInfo.h"
 #include "llvm/Support/CommandLine.h"
@@ -25,6 +26,59 @@
 #include "llvm/Support/TargetRegistry.h"
 #include "llvm/Target/AAPSimulator.h"
 #include <cstring>
+#include "llvm/ADT/Optional.h"
+#include "llvm/ADT/STLExtras.h"
+#include "llvm/ADT/SetOperations.h"
+#include "llvm/ADT/StringExtras.h"
+#include "llvm/ADT/StringSet.h"
+#include "llvm/ADT/Triple.h"
+#include "llvm/CodeGen/FaultMaps.h"
+#include "llvm/DebugInfo/DWARF/DWARFContext.h"
+#include "llvm/DebugInfo/Symbolize/Symbolize.h"
+#include "llvm/Demangle/Demangle.h"
+#include "llvm/MC/MCAsmInfo.h"
+#include "llvm/MC/MCContext.h"
+#include "llvm/MC/MCDisassembler/MCDisassembler.h"
+#include "llvm/MC/MCDisassembler/MCRelocationInfo.h"
+#include "llvm/MC/MCInst.h"
+#include "llvm/MC/MCInstPrinter.h"
+#include "llvm/MC/MCInstrAnalysis.h"
+#include "llvm/MC/MCInstrInfo.h"
+#include "llvm/MC/MCObjectFileInfo.h"
+#include "llvm/MC/MCRegisterInfo.h"
+#include "llvm/MC/MCSubtargetInfo.h"
+#include "llvm/MC/MCTargetOptions.h"
+#include "llvm/Object/Archive.h"
+#include "llvm/Object/COFF.h"
+#include "llvm/Object/COFFImportFile.h"
+#include "llvm/Object/ELFObjectFile.h"
+#include "llvm/Object/MachO.h"
+#include "llvm/Object/MachOUniversal.h"
+#include "llvm/Object/ObjectFile.h"
+#include "llvm/Object/Wasm.h"
+#include "llvm/Support/Casting.h"
+#include "llvm/Support/CommandLine.h"
+#include "llvm/Support/Debug.h"
+#include "llvm/Support/Errc.h"
+#include "llvm/Support/FileSystem.h"
+#include "llvm/Support/Format.h"
+#include "llvm/Support/FormatVariadic.h"
+#include "llvm/Support/GraphWriter.h"
+#include "llvm/Support/Host.h"
+#include "llvm/Support/InitLLVM.h"
+#include "llvm/Support/MemoryBuffer.h"
+#include "llvm/Support/SourceMgr.h"
+#include "llvm/Support/StringSaver.h"
+#include "llvm/Support/TargetRegistry.h"
+#include "llvm/Support/TargetSelect.h"
+#include "llvm/Support/WithColor.h"
+#include "llvm/Support/raw_ostream.h"
+#include <algorithm>
+#include <cctype>
+#include <cstring>
+#include <system_error>
+#include <unordered_map>
+#include <utility>
 
 #define GET_INSTRINFO_ENUM
 #include "MipsGenInstrInfo.inc"
@@ -43,55 +97,46 @@ static cl::opt<bool> Trace("trace");
 // Register and memory exception handlers
 #define EXCEPT(x) x; if (State.getStatus() != SimStatus::SIM_OK) return State.getStatus()
 
-AAPSimulator::AAPSimulator() {
+static const Target *getTarget(const ObjectFile *Obj, std::string TripleName) {
+  // Figure out the target triple.
+  Triple TheTriple("unknown-unknown-unknown");
+  if (TripleName.empty()) {
+    TheTriple = Obj->makeTriple();
+  } else {
+    TheTriple.setTriple(Triple::normalize(TripleName));
+    auto Arch = Obj->getArch();
+    if (Arch == Triple::arm || Arch == Triple::armeb)
+      Obj->setARMSubArch(TheTriple);
+  }
+
+  // Get the target specific parser.
   std::string Error;
-  StringRef TripleStr = "mips-none-none";
-  TheTarget = TargetRegistry::lookupTarget(TripleStr.str(), Error);
-  if (!TheTarget) {
-    errs() << "sim: " << Error << "\n";
-  }
+  const Target *TheTarget = TargetRegistry::lookupTarget("", TheTriple,
+                                                         Error);
+  if (!TheTarget)
+    errs() <<  "can't find target: " + Error;
 
-  // Set up all MC/Target components needed by the disassembler
-  MRI = TheTarget->createMCRegInfo(TripleStr);
-  if (!MRI) {
-    errs() << "error: no register info\n";
-    return;
-  }
-  MCTargetOptions MCOptions;
-  AsmInfo = TheTarget->createMCAsmInfo(*MRI, TripleStr, MCOptions);
-  if (!AsmInfo) {
-    errs() << "error: no asminfo\n";
-    return;
-  }
+  // Update the triple name and return the found target.
+  TripleName = TheTriple.getTriple();
+  return TheTarget;
+}
 
-  STI = TheTarget->createMCSubtargetInfo(TripleStr, "", "");
-  if (!STI) {
-    errs() << "error: no subtarget info\n";
-    return;
-  }
-
-  MII = TheTarget->createMCInstrInfo();
-  if (!MII) {
-    errs() << "error: no instruction info\n";
-    return;
-  }
-
-  const MCObjectFileInfo *MOFI = new MCObjectFileInfo();
-  MCContext Ctx(AsmInfo, MRI, MOFI);
-
-  DisAsm = TheTarget->createMCDisassembler(*STI, Ctx);
-  if (!DisAsm) {
-    errs() << "error: no disassembler\n";
-    return;
-  }
-
-  int AsmPrinterVariant = AsmInfo->getAssemblerDialect();
-  IP = TheTarget->createMCInstPrinter(
-      Triple(TripleStr), AsmPrinterVariant, *AsmInfo, *MII, *MRI);
-  if (!IP) {
-    errs() << "error: no instruction printer\n";
-    return;
-  }
+// taken from llvm-objdump.cpp file
+AAPSimulator::AAPSimulator(const Target *TheTarget, const ObjectFile *Obj,
+                              MCContext &Ctx, MCDisassembler *PrimaryDisAsm,
+                              MCDisassembler *SecondaryDisAsm,
+                              const MCInstrAnalysis *MIA, MCInstPrinter *IP,
+                              const MCSubtargetInfo *PrimarySTI,
+                              const MCSubtargetInfo *SecondarySTI) :
+                              TheTarget(TheTarget),
+                              Obj(Obj),
+                              Ctx(Ctx),
+                              DisAsm(PrimaryDisAsm),
+                              DisAsmSec(SecondaryDisAsm),
+                              MIA(MIA),
+                              IP(IP),
+                              STI(PrimarySTI),
+                              STISec(SecondarySTI) {
 }
 
 void AAPSimulator::WriteCodeSection(llvm::StringRef Bytes, uint32_t address) {
@@ -644,7 +689,7 @@ SimStatus AAPSimulator::exec(MCInst &Inst, uint32_t pc_w, uint32_t &newpc_w) {
     // case AAP::BRA:
     // case AAP::BRA_short: {
     //   uint32_t Offset = Inst.getOperand(0).getImm();
-    //   int32_t SOffset = 
+    //   int32_t SOffset =
     //       (Inst.getOpcode() == AAP::BRA) ? signExtendBranch(Offset)
     //                                      : signExtendBranchS(Offset);
     //   newpc_w = pc_w + SOffset;
@@ -673,7 +718,7 @@ SimStatus AAPSimulator::step() {
   // Reset any previous exception state
   State.resetStatus();
 
-  if (DisAsm->getInstruction(Inst, Size, Bytes->slice(pc_w << 1), (pc_w << 1),
+  if (DisAsm->getInstruction(Inst, Size, Bytes->slice(pc_w), pc_w,
                              llvm::nulls())) {
     if (Trace) {
       // Instruction decoded, execute it and write back our PC

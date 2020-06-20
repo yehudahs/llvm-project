@@ -41,6 +41,31 @@
                     "ignoreFailures": true
                 }
             ]
+        },
+        {
+            "name": "tablegen",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/Debug/bin/llvm-tblgen",
+            "args": ["--gen-dag-isel",
+                 "./llvm/lib/Target/Mips/Mips.td",
+                 "-I./llvm/include/",
+                 "-I./llvm/lib/Target/Mips/",
+                 "-o", "${workspaceFolder}/deleteme/test.inc",
+                 "-debug",
+                ],
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
         }
     ]
 }

@@ -110,5 +110,6 @@
         "*.tcc": "cpp",
         "cuchar": "cpp",
         "memory_resource": "cpp"
-    }
+    },
+    "cmake.configureOnOpen": false
 }

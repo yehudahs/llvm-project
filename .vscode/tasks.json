@@ -56,7 +56,7 @@
             "type": "shell",
             "label": "make debug llvm-tblgen",
             "command": "make",
-            "args": ["-j8"],
+            "args": [""],
             "options": {
                 "cwd": "${workspaceFolder}/build/Debug/utils/TableGen"
             },

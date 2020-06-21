@@ -43,7 +43,7 @@
             ]
         },
         {
-            "name": "tablegen",
+            "name": "tablegen gen-dag-isel",
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/build/Debug/bin/llvm-tblgen",
@@ -54,7 +54,32 @@
                  "-o", "${workspaceFolder}/deleteme/test.inc",
                  "-debug",
                 ],
-            "stopAtEntry": true,
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "tablegen gen-i-dagsel",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/Debug/bin/llvm-tblgen",
+            "args": ["--gen-i-dagsel",
+                 "./llvm/lib/Target/Mips/Mips.td",
+                 "-I./llvm/include/",
+                 "-I./llvm/lib/Target/Mips/",
+                 "-o", "${workspaceFolder}/deleteme/test-i-dag-sel.inc",
+                 "-debug",
+                ],
+            "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,

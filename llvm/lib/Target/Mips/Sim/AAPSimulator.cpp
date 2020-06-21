@@ -727,7 +727,7 @@ SimStatus AAPSimulator::step() {
       dbgs() << "\n";
     }
 
-    uint32_t newpc_w = pc_w + (Size >> 1);
+    uint32_t newpc_w = pc_w + Size;
     SimStatus status;
     status = exec(Inst, pc_w, newpc_w);
     State.setPC(newpc_w);

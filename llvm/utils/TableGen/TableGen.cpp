@@ -35,6 +35,7 @@ enum ActionType {
   GenCompressInst,
   GenCallingConv,
   GenDAGISel,
+  GenIDAGSel,
   GenDFAPacketizer,
   GenFastISel,
   GenSubtarget,
@@ -96,6 +97,8 @@ cl::opt<ActionType> Action(
                    "Generate assembly instruction matcher"),
         clEnumValN(GenDAGISel, "gen-dag-isel",
                    "Generate a DAG instruction selector"),
+        clEnumValN(GenIDAGSel, "gen-i-dagsel",
+                   "Generate a instruction DAG selector"),
         clEnumValN(GenDFAPacketizer, "gen-dfa-packetizer",
                    "Generate DFA Packetizer for VLIW targets"),
         clEnumValN(GenFastISel, "gen-fast-isel",
@@ -180,6 +183,9 @@ bool LLVMTableGenMain(raw_ostream &OS, RecordKeeper &Records) {
     break;
   case GenDAGISel:
     EmitDAGISel(Records, OS);
+    break;
+  case GenIDAGSel:
+    EmitIDAGSel(Records, OS);
     break;
   case GenDFAPacketizer:
     EmitDFAPacketizer(Records, OS);

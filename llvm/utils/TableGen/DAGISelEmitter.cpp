@@ -10,11 +10,13 @@
 //
 //===----------------------------------------------------------------------===//
 
+#include <map>
 #include "CodeGenDAGPatterns.h"
 #include "DAGISelMatcher.h"
 #include "llvm/Support/Debug.h"
 #include "llvm/TableGen/Record.h"
 #include "llvm/TableGen/TableGenBackend.h"
+
 using namespace llvm;
 
 #define DEBUG_TYPE "dag-isel-emitter"
@@ -205,7 +207,7 @@ void IDAGSelEmitter::run(raw_ostream &OS) {
         "// When neither of the GET_DAGISEL* macros is defined, the functions\n"
         "// are emitted inline.\n\n";
 
-  errs() << "\n\nALL PATTERNS TO MATCH:\n\n";
+  LLVM_DEBUG(errs() << "\n\nALL PATTERNS TO MATCH:\n\n";
              for (CodeGenDAGPatterns::ptm_iterator I = CGP.ptm_begin(),
                   E = CGP.ptm_end();
                   I != E; ++I) {
@@ -214,15 +216,40 @@ void IDAGSelEmitter::run(raw_ostream &OS) {
                errs() << "\nRESULT:  ";
                I->getDstPattern()->dump();
                errs() << "\n";
-             };
-  auto Target = CGP.getTargetInfo().getName().str();
+             });
+
+  //collect all the opcode targets
+  std::map<StringRef, std::vector<TreePatternNode *>*> OpcodeMatcher;
   for (CodeGenDAGPatterns::ptm_iterator I = CGP.ptm_begin(),
       E = CGP.ptm_end();
       I != E; ++I) {
-    OS << "case " << Target << "::" << I->getDstPattern()->getOperator()->getName() << ":\n";
-    OS << "\tprintf(\"" << I->getDstPattern()->getOperator()->getName() << "\");\n";
+        auto Opcode = I->getDstPattern()->getOperator()->getName();
+        auto TreeIter = OpcodeMatcher.find(Opcode);
+        if (TreeIter == OpcodeMatcher.end()){
+         auto Tree = new std::vector<TreePatternNode*>();
+         Tree->push_back(I->getDstPattern());
+         OpcodeMatcher[Opcode] = Tree;
+        }else{
+          auto Tree = TreeIter->second;
+          Tree->push_back(I->getDstPattern());
+          OpcodeMatcher[Opcode] = Tree;
+        }
+        
+      }
+
+  auto Target = CGP.getTargetInfo().getName().str();
+  for(auto OpcodeMatcherPair : OpcodeMatcher){
+    OS << "case " << Target << "::" << OpcodeMatcherPair.first << ":\n";
+    OS << "\tdbgs() << \"" << OpcodeMatcherPair.first << "\" << \"\\n\";\n";
     OS << "\tbreak;\n";
-  };
+  }
+  // for (CodeGenDAGPatterns::ptm_iterator I = CGP.ptm_begin(),
+  //     E = CGP.ptm_end();
+  //     I != E; ++I) {
+  //   OS << "case " << Target << "::" << I->getDstPattern()->getOperator()->getName() << ":\n";
+  //   OS << "\tprintf(\"" << I->getDstPattern()->getOperator()->getName() << "\");\n";
+  //   OS << "\tbreak;\n";
+  // };
 
   return;
 

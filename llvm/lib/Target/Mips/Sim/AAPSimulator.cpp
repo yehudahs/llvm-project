@@ -217,10 +217,12 @@ SimStatus AAPSimulator::exec(MCInst &Inst, uint32_t pc_w, uint32_t &newpc_w) {
 #if UNKNOWN_SHOULD_UNREACHABLE
       llvm_unreachable("No simulator support for this instruction");
 #else
-      newpc_w = pc_w;
-      return SimStatus::SIM_TRAP;
+      // newpc_w = pc_w;
+      dbgs() << "unknown pattern for opcode: " << Inst.getOpcode() << "\n";
+      break;
 #endif
       break;
+    #include "MipsGenInstDagSel.inc"
 
     // NOP Handling
     // 0: Breakpoint
@@ -716,16 +718,17 @@ SimStatus AAPSimulator::step() {
   ArrayRef<uint8_t> *Bytes = State.getCodeArray();
 
   // Reset any previous exception state
-  State.resetStatus();
-
+  // State.resetStatus();
+  //             DisAsm->getInstruction(Inst, Size, Bytes.slice(Index),
+  //                                    SectionAddr + Index, CommentStream);
   if (DisAsm->getInstruction(Inst, Size, Bytes->slice(pc_w), pc_w,
                              llvm::nulls())) {
-    if (Trace) {
+    // if (Trace) {
       // Instruction decoded, execute it and write back our PC
       dbgs() << format("%06" PRIx64 ":", pc_w);
       IP->printInst(&Inst, pc_w, "", *STI, dbgs());
       dbgs() << "\n";
-    }
+    // }
 
     uint32_t newpc_w = pc_w + Size;
     SimStatus status;

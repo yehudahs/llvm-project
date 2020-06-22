@@ -4,6 +4,7 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "name": "simulator",
             "type": "cppdbg",
@@ -11,7 +12,7 @@
             "program": "${workspaceFolder}/build/Debug/bin/sim",
             "args": ["./a.out"],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/../deleteme/llvm",
+            "cwd": "${workspaceFolder}/deleteme",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
@@ -30,7 +31,7 @@
             "program": "${workspaceFolder}/build/Debug/bin/llvm-objdump",
             "args": ["./a.out", "-xlsD", "--triple=mips"],
             "stopAtEntry": false,
-            "cwd": "${workspaceFolder}/../deleteme/llvm",
+            "cwd": "${workspaceFolder}/deleteme",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
@@ -81,6 +82,28 @@
                 ],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "objdump",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/Debug/bin/llvm-objdump",
+            "args": ["--triple=mips", 
+                "-lsDx", 
+                "./a.out",
+                ],
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}/deleteme",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",

@@ -10,13 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include <map>
 #include "CodeGenDAGPatterns.h"
 #include "DAGISelMatcher.h"
 #include "llvm/Support/Debug.h"
 #include "llvm/TableGen/Record.h"
 #include "llvm/TableGen/TableGenBackend.h"
-
 using namespace llvm;
 
 #define DEBUG_TYPE "dag-isel-emitter"
@@ -28,13 +26,6 @@ class DAGISelEmitter {
   CodeGenDAGPatterns CGP;
 public:
   explicit DAGISelEmitter(RecordKeeper &R) : CGP(R) {}
-  void run(raw_ostream &OS);
-};
-
-class IDAGSelEmitter {
-  CodeGenDAGPatterns CGP;
-public:
-  explicit IDAGSelEmitter(RecordKeeper &R) : CGP(R) {}
   void run(raw_ostream &OS);
 };
 } // End anonymous namespace
@@ -189,80 +180,10 @@ void DAGISelEmitter::run(raw_ostream &OS) {
   EmitMatcherTable(TheMatcher.get(), CGP, OS);
 }
 
-void IDAGSelEmitter::run(raw_ostream &OS) {
-  emitSourceFileHeader("Instruction DAG Selector for the " +
-                       CGP.getTargetInfo().getName().str() + " target", OS);
-
-  OS << "// *** NOTE: This file is #included into the middle of the target\n"
-     << "// *** instruction selector class.  These functions are really "
-     << "methods.\n\n";
-
-  OS << "// If GET_DAGISEL_DECL is #defined with any value, only function\n"
-        "// declarations will be included when this file is included.\n"
-        "// If GET_DAGISEL_BODY is #defined, its value should be the name of\n"
-        "// the instruction selector class. Function bodies will be emitted\n"
-        "// and each function's name will be qualified with the name of the\n"
-        "// class.\n"
-        "//\n"
-        "// When neither of the GET_DAGISEL* macros is defined, the functions\n"
-        "// are emitted inline.\n\n";
-
-  LLVM_DEBUG(errs() << "\n\nALL PATTERNS TO MATCH:\n\n";
-             for (CodeGenDAGPatterns::ptm_iterator I = CGP.ptm_begin(),
-                  E = CGP.ptm_end();
-                  I != E; ++I) {
-               errs() << "PATTERN: ";
-               I->getSrcPattern()->dump();
-               errs() << "\nRESULT:  ";
-               I->getDstPattern()->dump();
-               errs() << "\n";
-             });
-
-  //collect all the opcode targets
-  std::map<StringRef, std::vector<TreePatternNode *>*> OpcodeMatcher;
-  for (CodeGenDAGPatterns::ptm_iterator I = CGP.ptm_begin(),
-      E = CGP.ptm_end();
-      I != E; ++I) {
-        auto Opcode = I->getDstPattern()->getOperator()->getName();
-        auto TreeIter = OpcodeMatcher.find(Opcode);
-        if (TreeIter == OpcodeMatcher.end()){
-         auto Tree = new std::vector<TreePatternNode*>();
-         Tree->push_back(I->getDstPattern());
-         OpcodeMatcher[Opcode] = Tree;
-        }else{
-          auto Tree = TreeIter->second;
-          Tree->push_back(I->getDstPattern());
-          OpcodeMatcher[Opcode] = Tree;
-        }
-        
-      }
-
-  auto Target = CGP.getTargetInfo().getName().str();
-  for(auto OpcodeMatcherPair : OpcodeMatcher){
-    OS << "case " << Target << "::" << OpcodeMatcherPair.first << ":\n";
-    OS << "\tdbgs() << \"" << OpcodeMatcherPair.first << "\" << \"\\n\";\n";
-    OS << "\tbreak;\n";
-  }
-  // for (CodeGenDAGPatterns::ptm_iterator I = CGP.ptm_begin(),
-  //     E = CGP.ptm_end();
-  //     I != E; ++I) {
-  //   OS << "case " << Target << "::" << I->getDstPattern()->getOperator()->getName() << ":\n";
-  //   OS << "\tprintf(\"" << I->getDstPattern()->getOperator()->getName() << "\");\n";
-  //   OS << "\tbreak;\n";
-  // };
-
-  return;
-
-}
-
 namespace llvm {
 
 void EmitDAGISel(RecordKeeper &RK, raw_ostream &OS) {
   DAGISelEmitter(RK).run(OS);
-}
-
-void EmitIDAGSel(RecordKeeper &RK, raw_ostream &OS) {
-  IDAGSelEmitter(RK).run(OS);
 }
 
 } // End llvm namespace

@@ -109,7 +109,8 @@
         "*.ipp": "cpp",
         "*.tcc": "cpp",
         "cuchar": "cpp",
-        "memory_resource": "cpp"
+        "memory_resource": "cpp",
+        "*.def": "cpp"
     },
     "cmake.configureOnOpen": false
 }

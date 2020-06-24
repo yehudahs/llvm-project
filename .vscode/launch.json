@@ -114,6 +114,50 @@
                     "ignoreFailures": true
                 }
             ]
+        },
+        {
+            "name": "lli",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/Debug/bin/lli",
+            "args": [ 
+                "--force-interpreter",
+                "${workspaceFolder}/deleteme/output.bc",
+            ],
+            "stopAtEntry": true,
+            "cwd": "${workspaceFolder}/deleteme",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
+        },
+        {
+            "name": "clang",
+            "type": "cppdbg",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/Debug/bin/clang",
+            "args": [
+                "-emit-llvm",
+                "-S", "test1.c", "-o", "test1.ll"
+            ],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}/deleteme",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                }
+            ]
         }
     ]
 }

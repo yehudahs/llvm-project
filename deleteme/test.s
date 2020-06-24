@@ -1,52 +1,43 @@
-	.text
-	.abicalls
-	.option	pic0
-	.section	.mdebug.abi32,"",@progbits
+	.file	1 "test.c"
+	.section .mdebug.abi32
+	.previous
 	.nan	legacy
+	.module	fp=xx
+	.module	nooddspreg
+	.abicalls
 	.text
-	.file	"test.c"
-	.globl	main                    # -- Begin function main
-	.p2align	2
-	.type	main,@function
-	.set	nomicromips
+	.align	2
+	.globl	main
 	.set	nomips16
+	.set	nomicromips
 	.ent	main
-main:                                   # @main
-	.frame	$fp,24,$ra
-	.mask 	0xc0000000,-4
+	.type	main, @function
+main:
+	.frame	$fp,24,$31		# vars= 16, regs= 1/0, args= 0, gp= 0
+	.mask	0x40000000,-4
 	.fmask	0x00000000,0
 	.set	noreorder
 	.set	nomacro
-	.set	noat
-# %bb.0:                                # %entry
-	addiu	$sp, $sp, -24
-	sw	$ra, 20($sp)            # 4-byte Folded Spill
-	sw	$fp, 16($sp)            # 4-byte Folded Spill
-	move	$fp, $sp
-	sw	$zero, 12($fp)
-	addiu	$1, $zero, 5
-	sw	$1, 8($fp)
-	addiu	$1, $zero, 6
-	sw	$1, 4($fp)
-	lw	$1, 8($fp)
-	lw	$2, 4($fp)
-	addu	$1, $1, $2
-	sw	$1, 0($fp)
-	lw	$2, 0($fp)
-	move	$sp, $fp
-	lw	$fp, 16($sp)            # 4-byte Folded Reload
-	lw	$ra, 20($sp)            # 4-byte Folded Reload
-	addiu	$sp, $sp, 24
-	jr	$ra
+	addiu	$sp,$sp,-24
+	sw	$fp,20($sp)
+	move	$fp,$sp
+	li	$2,5			# 0x5
+	sw	$2,4($fp)
+	li	$2,6			# 0x6
+	sw	$2,8($fp)
+	lw	$3,4($fp)
+	lw	$2,8($fp)
+	addu	$2,$3,$2
+	sw	$2,12($fp)
+	lw	$2,12($fp)
+	move	$sp,$fp
+	lw	$fp,20($sp)
+	addiu	$sp,$sp,24
+	jr	$31
 	nop
-	.set	at
+
 	.set	macro
 	.set	reorder
 	.end	main
-$func_end0:
-	.size	main, ($func_end0)-main
-                                        # -- End function
-	.ident	"clang version 11.0.0 (https://github.com/yehudahs/llvm-project.git 482b4e522a7ffd81d5107e43eea6c34df46142ea)"
-	.section	".note.GNU-stack","",@progbits
-	.addrsig
-	.text
+	.size	main, .-main
+	.ident	"GCC: (Ubuntu 7.5.0-3ubuntu1~18.04) 7.5.0"

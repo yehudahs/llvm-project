@@ -27,11 +27,23 @@ class IDAGSelEmitter {
   CodeGenDAGPatterns CGP;
   RecordKeeper &Records;
   CodeGenTarget Target;
+  std::map<StringRef, Record*> OprndMap;
 public:
-  explicit IDAGSelEmitter(RecordKeeper &R) : CGP(R), Records(R), Target(R) {}
+  explicit IDAGSelEmitter(RecordKeeper &R);
   void run(raw_ostream &OS);
   void emit_pattern(TreePatternNode *PatternTree, raw_ostream &OS);
 };
+
+IDAGSelEmitter::IDAGSelEmitter(RecordKeeper & R) 
+  : CGP(R), Records(R), Target(R) {
+    std::vector<Record*> Regs = Records.getAllDerivedDefinitions("DAGOperand");
+    for (Record *Reg : Regs) {
+      errs() << "inserting " << Reg->getName() << "\n";
+      StringRef OprndName = Reg->getName();
+      OprndMap[OprndName] = Reg;
+    }
+}
+
 } // End anonymous namespace
 
 
@@ -117,15 +129,60 @@ void IDAGSelEmitter::run(raw_ostream &OS) {
         "// are emitted inline.\n\n";
 
 
-  std::vector<Record*> Instrs = Records.getAllDerivedDefinitions("Instruction");
+  // std::vector<Record*> Regs = Records.getAllDerivedDefinitions("Register");
+  std::vector<Record*> Regs = Records.getAllDerivedDefinitions("DAGOperand");
 
+  for (Record *OrigReg : Regs) {
+    Record * CurrReg = OrigReg;
+    // CurrReg->dump();
+    errs() << "//typedef ";
+    errs() << CurrReg->getName() << " = ";
+    RecordVal * Val = CurrReg->getValue("RegTypes");
+    while (!Val) {
+      // RecordVal * RegClassVal = CurrReg->getValue("RegClass");
+      // Init * RegClassValInit = RegClassVal->getValue();
+      // StringRef RegClass = CurrReg->getValue("RegClass")->getValue()->getAsString();
+      // errs() << *CurrReg->getValue("RegClass")->getValue();
+      std::map<StringRef, Record*>::iterator It;
+      if (CurrReg->getValue("RegClass")) {
+        It = OprndMap.find(CurrReg->getValue("RegClass")->getValue()->getAsString());
+        if (It == OprndMap.end()) {
+          errs() << "error: '" << CurrReg->getValue("RegClass")->getValue()->getAsString() 
+                << "' is not in the list of DAGOperand\n";
+          return;
+        } else{
+          CurrReg = It->second;
+          Val = CurrReg->getValue("RegTypes");
+        }
+      }else if (CurrReg->getValue("Type")){
+        // errs() << CurrReg->getValue("Type")->getValue()->getAsString() << "\n";
+        Val = CurrReg->getValue("Type");
+      }else{
+        errs() << "error: ' can't find" << CurrReg->getName() << "' type\n";
+          return;
+      }
+    }
+    
+    // errs() << "Val: " << Val->getName() << "\n";
+    // errs() << "Res: " << *CurrReg->getValue(Val->getName())->getValue() << ";\n";
+    if (CurrReg->getValue(Val->getName())){
+      errs() << *CurrReg->getValue(Val->getName())->getValue() << ";\n";
+    }else{
+      errs() << "//knowen ";
+      errs() << CurrReg->getNameInitAsString() << "\n";
+    }
+    // Reg->getValue("");
+    // Reg->dump();
+  }
+
+  std::vector<Record*> Instrs = Records.getAllDerivedDefinitions("Instruction");
   for (Record *Instr : Instrs) {
     ListInit *LI = nullptr;
 
     if (isa<ListInit>(Instr->getValueInit("Pattern")))
       LI = Instr->getValueAsListInit("Pattern");
 
-    // Instr->dump();
+    Instr->dump();
     OS << "case " << TargetName << "::" << Instr->getNameInitAsString() << ":\n";
     if (LI) {
       OS << "\tdbgs() << \"";

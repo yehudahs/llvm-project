@@ -30,6 +30,7 @@ class IDAGSelEmitter {
   std::map<StringRef, Record*> OprndMap;
   void EmitSimRegisters(raw_ostream &OS);
   std::map<StringRef, std::vector<MVT::SimpleValueType>*> CollectRegisterTypes();
+  void CollectPhysicalRegisters();
 public:
   explicit IDAGSelEmitter(RecordKeeper &R);
   void run(raw_ostream &OS);
@@ -166,7 +167,7 @@ std::map<StringRef, std::vector<MVT::SimpleValueType>*> IDAGSelEmitter::CollectR
         // }
         // errs() << ElmtName << "\n";
       }else{
-        errs() << "unknown type";
+        errs() << "unknown type" << "\n";
         // llvm_unreachable("unknown Init type");
       }
       // errs() << OrigReg->getName() << " = " << *RegisterTypesVec <<";\n";
@@ -181,8 +182,78 @@ std::map<StringRef, std::vector<MVT::SimpleValueType>*> IDAGSelEmitter::CollectR
 
 }
 
+void IDAGSelEmitter::CollectPhysicalRegisters(){
+  CodeGenRegBank &RegBank = Target.getRegBank();
+  const auto &RegisterClasses = RegBank.getRegClasses();
+  for (const auto &RC : RegisterClasses) {
+    ArrayRef<Record*> Order = RC.getOrder();
+
+    // Give the register class a legal C name if it's anonymous.
+    const std::string &Name = RC.getName();
+    errs() << Name << " : ";
+
+    // RegClassStrings.add(Name);
+
+    // Emit the register list now.
+    // OS << "  // " << Name << " Register Class...\n"
+    //    << "  const MCPhysReg " << Name
+    //    << "[] = {\n    ";
+    for (Record *Reg : Order) {
+      errs() << getQualifiedName(Reg) << ", ";
+    }
+    errs() << "\n";
+
+    // OS << "  // " << Name << " Bit set.\n"
+    //    << "  const uint8_t " << Name
+    //    << "Bits[] = {\n    ";
+    // BitVectorEmitter BVE;
+    // for (Record *Reg : Order) {
+    //   BVE.add(Target.getRegBank().getReg(Reg)->EnumValue);
+    // }
+    // BVE.print(OS);
+    // OS << "\n  };\n\n";
+
+  }
+
+  // StringRef TargetName = Target.getName();
+  // const CodeGenRegBank &RegisterClassHierarchy = Target.getRegBank();
+
+  // std::vector<RegisterBank> Banks;
+  // for (const auto &V : Records.getAllDerivedDefinitions("Register")) {
+  //   errs() << V->getName() << "\n";
+  //   ArrayRef<RecordVal> RecordValVec = V->getValues();
+  //   for (RecordVal RecordVal: RecordValVec) {
+  //     errs() << RecordVal.getName() << " = " << RecordVal.getValue()->getAsString() << "\n";
+  //   }
+  // }
+  // for (const auto &V : Records.getAllDerivedDefinitions("RegisterClass")) {
+  //   errs() << V->getName() << "\n";
+  //   ArrayRef<RecordVal> RecordValVec = V->getValues();
+  //   for (RecordVal RecordVal: RecordValVec) {
+  //     errs() << RecordVal.getName() << " = " << RecordVal.getValue()->getAsString() << "\n";
+  //   }
+    // SmallPtrSet<const CodeGenRegisterClass *, 8> VisitedRCs;
+    // RegisterBank Bank(*V);
+
+    // for (const CodeGenRegisterClass *RC :
+    //      Bank.getExplicitlySpecifiedRegisterClasses(RegisterClassHierarchy)) {
+    //   visitRegisterBankClasses(
+    //       RegisterClassHierarchy, RC, "explicit",
+    //       [&Bank](const CodeGenRegisterClass *RC, StringRef Kind) {
+    //         LLVM_DEBUG(dbgs()
+    //                    << "Added " << RC->getName() << "(" << Kind << ")\n");
+    //         Bank.addRegisterClass(RC);
+    //       },
+    //       VisitedRCs);
+    // }
+
+    // Banks.push_back(Bank);
+  // }
+}
+
 void IDAGSelEmitter::EmitSimRegisters(raw_ostream &OS){
   std::map<StringRef, std::vector<MVT::SimpleValueType>*> RegisterTypes = CollectRegisterTypes();
+  CollectPhysicalRegisters();
   for ( const auto &OprndTypePair : RegisterTypes) {
     errs() << OprndTypePair.first << " = ";
     std::vector<MVT::SimpleValueType> * OprndTypesVec = OprndTypePair.second;

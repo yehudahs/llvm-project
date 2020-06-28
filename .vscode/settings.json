@@ -1,6 +1,5 @@
 {
     "files.associations": {
-        "*.inc": "cpp",
         "*.gen": "cpp",
         "__bit_reference": "cpp",
         "__hash_table": "cpp",
@@ -110,7 +109,8 @@
         "*.tcc": "cpp",
         "cuchar": "cpp",
         "memory_resource": "cpp",
-        "*.def": "cpp"
+        "*.def": "cpp",
+        "*.inc": "cpp"
     },
     "cmake.configureOnOpen": false
 }

@@ -28,17 +28,19 @@ class IDAGSelEmitter {
   RecordKeeper &Records;
   CodeGenTarget Target;
   std::map<StringRef, Record*> OprndMap;
+  void EmitSimRegisters(raw_ostream &OS);
+  std::map<StringRef, std::vector<MVT::SimpleValueType>*> CollectRegisterTypes();
 public:
   explicit IDAGSelEmitter(RecordKeeper &R);
   void run(raw_ostream &OS);
-  void emit_pattern(TreePatternNode *PatternTree, raw_ostream &OS);
+  // void emit_pattern(TreePatternNode *PatternTree, raw_ostream &OS);
 };
 
 IDAGSelEmitter::IDAGSelEmitter(RecordKeeper & R) 
   : CGP(R), Records(R), Target(R) {
     std::vector<Record*> Regs = Records.getAllDerivedDefinitions("DAGOperand");
     for (Record *Reg : Regs) {
-      errs() << "inserting " << Reg->getName() << "\n";
+      // errs() << "inserting " << Reg->getName() << "\n";
       StringRef OprndName = Reg->getName();
       OprndMap[OprndName] = Reg;
     }
@@ -69,43 +71,127 @@ IDAGSelEmitter::IDAGSelEmitter(RecordKeeper & R)
 //     OS << "]\n";
 // }
 
-void IDAGSelEmitter::emit_pattern(TreePatternNode *PatternTree, 
-                              raw_ostream &OS) {
-  if (PatternTree->isLeaf())
-    OS << *PatternTree->getLeafValue();
-  else
-    OS << '(' << PatternTree->getOperator()->getName();
+// void IDAGSelEmitter::emit_pattern(TreePatternNode *PatternTree, 
+//                               raw_ostream &OS) {
+//   if (PatternTree->isLeaf())
+//     OS << *PatternTree->getLeafValue();
+//   else
+//     OS << '(' << PatternTree->getOperator()->getName();
 
-  for (unsigned i = 0, e = PatternTree->getNumTypes(); i != e; ++i) {
-    OS << ':';
-    PatternTree->getExtType(i).writeToStream(OS);
-  }
+//   for (unsigned i = 0, e = PatternTree->getNumTypes(); i != e; ++i) {
+//     OS << ':';
+//     PatternTree->getExtType(i).writeToStream(OS);
+//   }
 
-  if (!PatternTree->isLeaf()) {
-    if (PatternTree->getNumChildren() != 0) {
-      OS << " ";
-      PatternTree->getChild(0)->print(OS);
-      for (unsigned i = 1, e = PatternTree->getNumChildren(); i != e; ++i) {
-        OS << ", ";
-        PatternTree->getChild(i)->print(OS);
+//   if (!PatternTree->isLeaf()) {
+//     if (PatternTree->getNumChildren() != 0) {
+//       OS << " ";
+//       PatternTree->getChild(0)->print(OS);
+//       for (unsigned i = 1, e = PatternTree->getNumChildren(); i != e; ++i) {
+//         OS << ", ";
+//         PatternTree->getChild(i)->print(OS);
+//       }
+//     }
+//     OS << ")";
+//   }
+
+//   for (const TreePredicateCall &Pred : PatternTree->getPredicateCalls()) {
+//     OS << "<<P:";
+//     if (Pred.Scope)
+//       OS << Pred.Scope << ":";
+//     OS << Pred.Fn.getFnName() << ">>";
+//   }
+//   if (PatternTree->getTransformFn())
+//     OS << "<<X:" << PatternTree->getTransformFn()->getName() << ">>";
+//   if (!PatternTree->getName().empty())
+//     OS << ":$" << PatternTree->getName();
+
+//   for (const ScopedName &Name : PatternTree->getNamesAsPredicateArg())
+//     OS << ":$pred:" << Name.getScope() << ":" << Name.getIdentifier();
+// }
+
+std::map<StringRef, std::vector<MVT::SimpleValueType>*> IDAGSelEmitter::CollectRegisterTypes(){
+  std::vector<Record*> Regs = Records.getAllDerivedDefinitions("DAGOperand");
+  std::map<StringRef, std::vector<MVT::SimpleValueType>*> RegisterTypes;
+
+  for (Record *OrigReg : Regs) {
+    std::vector<MVT::SimpleValueType>* RegisterTypesVec = new std::vector<MVT::SimpleValueType>();
+    Record * CurrReg = OrigReg;
+    // CurrReg->dump();
+    // errs() << "//typedef ";
+    // errs() << OrigReg->getName() << " = ";
+    RecordVal * Val = CurrReg->getValue("RegTypes");
+    while (!Val) {
+      // RecordVal * RegClassVal = CurrReg->getValue("RegClass");
+      // Init * RegClassValInit = RegClassVal->getValue();
+      // StringRef RegClass = CurrReg->getValue("RegClass")->getValue()->getAsString();
+      // errs() << *CurrReg->getValue("RegClass")->getValue();
+      std::map<StringRef, Record*>::iterator It;
+      if (CurrReg->getValue("RegClass")) {
+        It = OprndMap.find(CurrReg->getValue("RegClass")->getValue()->getAsString());
+        if (It == OprndMap.end()) {
+          std::string OperndName = CurrReg->getValue("RegClass")->getValue()->getAsString();
+          llvm_unreachable(("error: " + OperndName + " is not in the list of DAGOperand\n").c_str());
+        } else{
+          CurrReg = It->second;
+          Val = CurrReg->getValue("RegTypes");
+        }
+      }else if (CurrReg->getValue("Type")){
+        // errs() << CurrReg->getValue("Type")->getValue()->getAsString() << "\n";
+        Val = CurrReg->getValue("Type");
+      }else{
+        std::string RegNameStr = CurrReg->getName().str();
+        llvm_unreachable(("error: can't find" + RegNameStr + " type\n").c_str());
       }
     }
-    OS << ")";
+    
+    // errs() << "Val: " << Val->getName() << "\n";
+    // errs() << "Res: " << *CurrReg->getValue(Val->getName())->getValue() << ";\n";
+    if (CurrReg->getValue(Val->getName())){
+      auto InitVal = CurrReg->getValue(Val->getName())->getValue();
+      if (ListInit::classof(InitVal)){
+        ListInit *VTs = dyn_cast<ListInit>(InitVal);
+        for (unsigned i = 0, e = VTs->size(); i != e; ++i) {
+          Record *VT = VTs->getElementAsRecord(i);
+          RegisterTypesVec->push_back(getValueType(VT));
+          // StringRef ElmtName = getEnumName(getValueType(VT));
+          // RegisterTypesVec->push_back(ElmtName);
+        } 
+        // std::string ElmtName;
+        // for (Init * Element : dyn_cast<ListInit>(InitVal)->getValues()) {
+        //   Record *VT = Element->getElementAsRecord(i);
+        //   ElmtName = Element->getAsString().c_str();
+        //   RegisterTypesVec->push_back(ElmtName);
+        //   errs() << ElmtName << "\n";
+        // }
+        // errs() << ElmtName << "\n";
+      }else{
+        errs() << "unknown type";
+        // llvm_unreachable("unknown Init type");
+      }
+      // errs() << OrigReg->getName() << " = " << *RegisterTypesVec <<";\n";
+      RegisterTypes[OrigReg->getName()] = RegisterTypesVec;
+    }else{
+      std::string OprndName = CurrReg->getName().str();
+      llvm_unreachable(("known " + OprndName + " type").c_str());
+    }
   }
 
-  for (const TreePredicateCall &Pred : PatternTree->getPredicateCalls()) {
-    OS << "<<P:";
-    if (Pred.Scope)
-      OS << Pred.Scope << ":";
-    OS << Pred.Fn.getFnName() << ">>";
-  }
-  if (PatternTree->getTransformFn())
-    OS << "<<X:" << PatternTree->getTransformFn()->getName() << ">>";
-  if (!PatternTree->getName().empty())
-    OS << ":$" << PatternTree->getName();
+  return RegisterTypes;
 
-  for (const ScopedName &Name : PatternTree->getNamesAsPredicateArg())
-    OS << ":$pred:" << Name.getScope() << ":" << Name.getIdentifier();
+}
+
+void IDAGSelEmitter::EmitSimRegisters(raw_ostream &OS){
+  std::map<StringRef, std::vector<MVT::SimpleValueType>*> RegisterTypes = CollectRegisterTypes();
+  for ( const auto &OprndTypePair : RegisterTypes) {
+    errs() << OprndTypePair.first << " = ";
+    std::vector<MVT::SimpleValueType> * OprndTypesVec = OprndTypePair.second;
+    for (MVT::SimpleValueType OprndType: *OprndTypesVec){
+      errs() << getEnumName(OprndType) << ",";
+    }
+    errs() << "\n";
+  }
+  return;
 }
 
 //taken from CodeEmitterGen::run
@@ -130,58 +216,15 @@ void IDAGSelEmitter::run(raw_ostream &OS) {
 
 
   // std::vector<Record*> Regs = Records.getAllDerivedDefinitions("Register");
-  std::vector<Record*> Regs = Records.getAllDerivedDefinitions("DAGOperand");
-
-  for (Record *OrigReg : Regs) {
-    Record * CurrReg = OrigReg;
-    // CurrReg->dump();
-    errs() << "//typedef ";
-    errs() << CurrReg->getName() << " = ";
-    RecordVal * Val = CurrReg->getValue("RegTypes");
-    while (!Val) {
-      // RecordVal * RegClassVal = CurrReg->getValue("RegClass");
-      // Init * RegClassValInit = RegClassVal->getValue();
-      // StringRef RegClass = CurrReg->getValue("RegClass")->getValue()->getAsString();
-      // errs() << *CurrReg->getValue("RegClass")->getValue();
-      std::map<StringRef, Record*>::iterator It;
-      if (CurrReg->getValue("RegClass")) {
-        It = OprndMap.find(CurrReg->getValue("RegClass")->getValue()->getAsString());
-        if (It == OprndMap.end()) {
-          errs() << "error: '" << CurrReg->getValue("RegClass")->getValue()->getAsString() 
-                << "' is not in the list of DAGOperand\n";
-          return;
-        } else{
-          CurrReg = It->second;
-          Val = CurrReg->getValue("RegTypes");
-        }
-      }else if (CurrReg->getValue("Type")){
-        // errs() << CurrReg->getValue("Type")->getValue()->getAsString() << "\n";
-        Val = CurrReg->getValue("Type");
-      }else{
-        errs() << "error: ' can't find" << CurrReg->getName() << "' type\n";
-          return;
-      }
-    }
-    
-    // errs() << "Val: " << Val->getName() << "\n";
-    // errs() << "Res: " << *CurrReg->getValue(Val->getName())->getValue() << ";\n";
-    if (CurrReg->getValue(Val->getName())){
-      errs() << *CurrReg->getValue(Val->getName())->getValue() << ";\n";
-    }else{
-      errs() << "//knowen ";
-      errs() << CurrReg->getNameInitAsString() << "\n";
-    }
-    // Reg->getValue("");
-    // Reg->dump();
-  }
-
+  EmitSimRegisters(OS);
   std::vector<Record*> Instrs = Records.getAllDerivedDefinitions("Instruction");
+  int index = 0;
   for (Record *Instr : Instrs) {
     ListInit *LI = nullptr;
 
     if (isa<ListInit>(Instr->getValueInit("Pattern")))
       LI = Instr->getValueAsListInit("Pattern");
-
+    errs() << "index " << index << " : ";
     Instr->dump();
     OS << "case " << TargetName << "::" << Instr->getNameInitAsString() << ":\n";
     if (LI) {

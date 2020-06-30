@@ -29,8 +29,9 @@ class IDAGSelEmitter {
   CodeGenTarget Target;
   std::map<StringRef, Record*> OprndMap;
   void EmitSimRegisters(raw_ostream &OS);
-  std::map<StringRef, std::vector<MVT::SimpleValueType>*> CollectRegisterTypes();
-  void CollectPhysicalRegisters();
+  std::map<StringRef, std::vector<MVT::SimpleValueType>*> CollectRegisterTypes(raw_ostream &OS);
+  void CollectPhysicalRegisters(raw_ostream &OS);
+  void PrintAsmSim(TreePattern I, raw_ostream &OS);
 public:
   explicit IDAGSelEmitter(RecordKeeper &R);
   void run(raw_ostream &OS);
@@ -111,9 +112,11 @@ IDAGSelEmitter::IDAGSelEmitter(RecordKeeper & R)
 //     OS << ":$pred:" << Name.getScope() << ":" << Name.getIdentifier();
 // }
 
-std::map<StringRef, std::vector<MVT::SimpleValueType>*> IDAGSelEmitter::CollectRegisterTypes(){
+std::map<StringRef, std::vector<MVT::SimpleValueType>*> IDAGSelEmitter::CollectRegisterTypes(raw_ostream &OS){
   std::vector<Record*> Regs = Records.getAllDerivedDefinitions("DAGOperand");
   std::map<StringRef, std::vector<MVT::SimpleValueType>*> RegisterTypes;
+  
+  OS << "using namespace llvm;\n\n";
 
   for (Record *OrigReg : Regs) {
     std::vector<MVT::SimpleValueType>* RegisterTypesVec = new std::vector<MVT::SimpleValueType>();
@@ -122,42 +125,46 @@ std::map<StringRef, std::vector<MVT::SimpleValueType>*> IDAGSelEmitter::CollectR
     // errs() << "//typedef ";
     // errs() << OrigReg->getName() << " = ";
     RecordVal * Val = CurrReg->getValue("RegTypes");
-    while (!Val) {
-      // RecordVal * RegClassVal = CurrReg->getValue("RegClass");
-      // Init * RegClassValInit = RegClassVal->getValue();
-      // StringRef RegClass = CurrReg->getValue("RegClass")->getValue()->getAsString();
-      // errs() << *CurrReg->getValue("RegClass")->getValue();
-      std::map<StringRef, Record*>::iterator It;
-      if (CurrReg->getValue("RegClass")) {
-        It = OprndMap.find(CurrReg->getValue("RegClass")->getValue()->getAsString());
-        if (It == OprndMap.end()) {
-          std::string OperndName = CurrReg->getValue("RegClass")->getValue()->getAsString();
-          llvm_unreachable(("error: " + OperndName + " is not in the list of DAGOperand\n").c_str());
-        } else{
-          CurrReg = It->second;
-          Val = CurrReg->getValue("RegTypes");
-        }
-      }else if (CurrReg->getValue("Type")){
-        // errs() << CurrReg->getValue("Type")->getValue()->getAsString() << "\n";
-        Val = CurrReg->getValue("Type");
-      }else{
-        std::string RegNameStr = CurrReg->getName().str();
-        llvm_unreachable(("error: can't find" + RegNameStr + " type\n").c_str());
-      }
+    if (!Val) {
+      continue;
     }
+    // while (!Val) {
+    //   std::map<StringRef, Record*>::iterator It;
+    //   if (CurrReg->getValue("RegClass")) {
+    //     It = OprndMap.find(CurrReg->getValue("RegClass")->getValue()->getAsString());
+    //     if (It == OprndMap.end()) {
+    //       std::string OperndName = CurrReg->getValue("RegClass")->getValue()->getAsString();
+    //       llvm_unreachable(("error: " + OperndName + " is not in the list of DAGOperand\n").c_str());
+    //     } else{
+    //       CurrReg = It->second;
+    //       Val = CurrReg->getValue("RegTypes");
+    //     }
+    //   }else if (CurrReg->getValue("Type")){
+    //     // errs() << CurrReg->getValue("Type")->getValue()->getAsString() << "\n";
+    //     Val = CurrReg->getValue("Type");
+    //   }else{
+    //     std::string RegNameStr = CurrReg->getName().str();
+    //     llvm_unreachable(("error: can't find" + RegNameStr + " type\n").c_str());
+    //   }
+    // }
     
     // errs() << "Val: " << Val->getName() << "\n";
     // errs() << "Res: " << *CurrReg->getValue(Val->getName())->getValue() << ";\n";
     if (CurrReg->getValue(Val->getName())){
+      OS << "// " << CurrReg->getName() << " MVT Types\n"; 
+      OS << "const MVT::SimpleValueType " << CurrReg->getName() << "[] {\n\t";
       auto InitVal = CurrReg->getValue(Val->getName())->getValue();
       if (ListInit::classof(InitVal)){
         ListInit *VTs = dyn_cast<ListInit>(InitVal);
         for (unsigned i = 0, e = VTs->size(); i != e; ++i) {
           Record *VT = VTs->getElementAsRecord(i);
-          RegisterTypesVec->push_back(getValueType(VT));
+          // RegisterTypesVec->push_back(getValueType(VT));
           // StringRef ElmtName = getEnumName(getValueType(VT));
+          OS << getEnumName(getValueType(VT)) << ", ";
           // RegisterTypesVec->push_back(ElmtName);
-        } 
+        }
+        OS << "\n};\n\n";
+
         // std::string ElmtName;
         // for (Init * Element : dyn_cast<ListInit>(InitVal)->getValues()) {
         //   Record *VT = Element->getElementAsRecord(i);
@@ -182,15 +189,39 @@ std::map<StringRef, std::vector<MVT::SimpleValueType>*> IDAGSelEmitter::CollectR
 
 }
 
-void IDAGSelEmitter::CollectPhysicalRegisters(){
-  CodeGenRegBank &RegBank = Target.getRegBank();
-  const auto &RegisterClasses = RegBank.getRegClasses();
-  for (const auto &RC : RegisterClasses) {
-    ArrayRef<Record*> Order = RC.getOrder();
+void IDAGSelEmitter::CollectPhysicalRegisters(raw_ostream &OS){
+  OS << "class MachineRegister {\n"
+     << "    unsigned RegIdx;\n"
+     << "    StringRef Name;\n"
+    //  << "    const MVT::SimpleValueType* Types;\n"
+     << "  public:\n"
+    //  << "    MachineRegister(StringRef Name, const MVT::SimpleValueType *Types):\n"
+     << "    MachineRegister(StringRef Name):\n"
+     << "      RegIdx(0), Name(Name) {}\n"
+     << "    unsigned GetRegIdx() {return RegIdx;}\n"
+     << "    StringRef GetName() {return Name;}\n"
+    //  << "    const MVT::SimpleValueType* GetTypes() {return Types;}\n"
+     << "};\n";
+
+  std::vector<Record*> Regs = Records.getAllDerivedDefinitions("Register");
+  for (const auto &Reg : Regs){
+    // errs() << Reg->getName() << " = ";
+    OS << "MachineRegister " << Reg->getName() << "(\"" << Reg->getName() << "\");\n";
+    // for (const auto & Val: Reg->getValues()){
+    //   errs() << Val << "\n";
+    // }
+    // errs() << Reg->getValue("Size")->getValue()->getAsString() << "\n";
+  }
+
+
+  // CodeGenRegBank &RegBank = Target.getRegBank();
+  // const auto &RegisterClasses = RegBank.getRegClasses();
+  // for (const auto &RC : RegisterClasses) {
+  //   ArrayRef<Record*> Order = RC.getOrder();
 
     // Give the register class a legal C name if it's anonymous.
-    const std::string &Name = RC.getName();
-    errs() << Name << " : ";
+    // const std::string &RCName = RC.getName();
+    // errs() << RCName << " : ";
 
     // RegClassStrings.add(Name);
 
@@ -198,10 +229,14 @@ void IDAGSelEmitter::CollectPhysicalRegisters(){
     // OS << "  // " << Name << " Register Class...\n"
     //    << "  const MCPhysReg " << Name
     //    << "[] = {\n    ";
-    for (Record *Reg : Order) {
-      errs() << getQualifiedName(Reg) << ", ";
-    }
-    errs() << "\n";
+    // for (Record *Reg : Order) {
+      // OS << "MachineRegister " << Reg->getName() << "(\"" << Reg->getName() << "\");\n";
+      // OS << RCName << ");\n";
+
+      // errs() << getQualifiedName(Reg) << ", ";
+    // }
+    // OS << "\n";
+    // errs() << "\n";
 
     // OS << "  // " << Name << " Bit set.\n"
     //    << "  const uint8_t " << Name
@@ -213,7 +248,7 @@ void IDAGSelEmitter::CollectPhysicalRegisters(){
     // BVE.print(OS);
     // OS << "\n  };\n\n";
 
-  }
+  // }
 
   // StringRef TargetName = Target.getName();
   // const CodeGenRegBank &RegisterClassHierarchy = Target.getRegBank();
@@ -252,17 +287,103 @@ void IDAGSelEmitter::CollectPhysicalRegisters(){
 }
 
 void IDAGSelEmitter::EmitSimRegisters(raw_ostream &OS){
-  std::map<StringRef, std::vector<MVT::SimpleValueType>*> RegisterTypes = CollectRegisterTypes();
-  CollectPhysicalRegisters();
-  for ( const auto &OprndTypePair : RegisterTypes) {
-    errs() << OprndTypePair.first << " = ";
-    std::vector<MVT::SimpleValueType> * OprndTypesVec = OprndTypePair.second;
-    for (MVT::SimpleValueType OprndType: *OprndTypesVec){
-      errs() << getEnumName(OprndType) << ",";
-    }
-    errs() << "\n";
-  }
+  // std::map<StringRef, std::vector<MVT::SimpleValueType>*> RegisterTypes = CollectRegisterTypes(OS);
+  CollectPhysicalRegisters(OS);
+  // for ( const auto &OprndTypePair : RegisterTypes) {
+  //   errs() << OprndTypePair.first << " = ";
+  //   std::vector<MVT::SimpleValueType> * OprndTypesVec = OprndTypePair.second;
+  //   for (MVT::SimpleValueType OprndType: *OprndTypesVec){
+  //     errs() << getEnumName(OprndType) << ",";
+  //   }
+  //   errs() << "\n";
+  // }
   return;
+}
+//copy from CodeGenDagPattern.cpp file
+static bool hasNullFragReference(DagInit *DI) {
+  DefInit *OpDef = dyn_cast<DefInit>(DI->getOperator());
+  if (!OpDef) return false;
+  Record *Operator = OpDef->getDef();
+
+  // If this is the null fragment, return true.
+  // errs() << "operation: " << Operator->getName() << "\n";
+  if (Operator->getName() == "null_frag") return true;
+  // If any of the arguments reference the null fragment, return true.
+  for (unsigned i = 0, e = DI->getNumArgs(); i != e; ++i) {
+    DagInit *Arg = dyn_cast<DagInit>(DI->getArg(i));
+    if (Arg && hasNullFragReference(Arg))
+      return true;
+  }
+
+  return false;
+}
+
+//copy from CodeGenDagPattern.cpp file
+static bool hasNullFragReference(Record *Instr, ListInit *LI) {
+  for (Init *I : LI->getValues()) {
+    DagInit *DI = dyn_cast<DagInit>(I);
+    assert(DI && "non-dag in an instruction Pattern list?!");
+    if (hasNullFragReference(DI))
+      return true;
+  }
+  return false;
+}
+
+static bool isValidOperations(const TreePatternNodePtr Tree){
+  if (!Tree->isLeaf()){
+    std::set<StringRef> ValidOprs{
+      "set",
+      "add",
+      };
+    StringRef Opr = Tree->getOperator()->getName();
+    // if (Opr == "intrinsic_w_chain")
+    if (ValidOprs.find(Opr) == ValidOprs.end())
+      return false;
+
+    if (Tree->getNumChildren() != 0) {
+      for (unsigned i = 0, e = Tree->getNumChildren(); i != e; ++i) {
+        if(!isValidOperations(Tree->getChildShared(i)))
+          return false;
+      }
+    }
+  }
+
+  return true;
+}
+
+static bool isValidOperations(TreePattern &I){
+  const std::vector<TreePatternNodePtr> Trees = I.getTrees();
+  for (const TreePatternNodePtr &Tree : Trees) {
+    if (!isValidOperations(Tree)){
+      return false;
+    }
+  }
+  return true;
+}
+
+
+void IDAGSelEmitter::PrintAsmSim(TreePattern I, raw_ostream &OS) {
+  OS << I.getRecord()->getName();
+  std::vector<std::string> Args = I.getArgList();
+  if (!Args.empty()) {
+    OS << "(" << Args[0];
+    for (unsigned i = 1, e = Args.size(); i != e; ++i)
+      OS << ", " << Args[i];
+    OS << ")";
+  }
+  OS << ": ";
+  const std::vector<TreePatternNodePtr> Trees = I.getTrees();
+  if (Trees.size() > 1)
+    OS << "[\n";
+  for (const TreePatternNodePtr &Tree : Trees) {
+    OS << "\t";
+    Tree->print(OS);
+    Tree->print(errs());
+    // OS << "\n";
+  }
+
+  if (Trees.size() > 1)
+    OS << "]\n";
 }
 
 //taken from CodeEmitterGen::run
@@ -290,23 +411,50 @@ void IDAGSelEmitter::run(raw_ostream &OS) {
   EmitSimRegisters(OS);
   std::vector<Record*> Instrs = Records.getAllDerivedDefinitions("Instruction");
   int index = 0;
+  OS << "\n\n\n"
+     << "bool SimExe(MCInst &Inst){\n"
+     << "  bool Res = false;\n"
+     << "  switch (Inst.getOpcode()) {\n"
+     << "    default:\n" 
+     << "      break;\n";
+
   for (Record *Instr : Instrs) {
     ListInit *LI = nullptr;
 
+    // CodeGenInstruction &CGI = Target.getInstruction(Instr);
+
     if (isa<ListInit>(Instr->getValueInit("Pattern")))
       LI = Instr->getValueAsListInit("Pattern");
-    errs() << "index " << index << " : ";
-    Instr->dump();
-    OS << "case " << TargetName << "::" << Instr->getNameInitAsString() << ":\n";
-    if (LI) {
-      OS << "\tdbgs() << \"";
-      LI->print(OS);
-      OS << "\\n\";";
+    
+    // If there is no pattern, only collect minimal information about the
+    // instruction for its operand list.  We have to assume that there is one
+    // result, as we have no detailed info. A pattern which references the
+    // null_frag operator is as-if no pattern were specified. Normally this
+    // is from a multiclass expansion w/ a SDPatternOperator passed in as
+    // null_frag.
+    if (!LI || LI->empty() || hasNullFragReference(Instr, LI)) {
+      continue;
     }
-    OS << "\n";
-    OS << "\tbreak;\n";
-    // parseInstructionPattern(CGI, LI, Instructions);
-  }
+    
+    TreePattern I(Instr, LI, true, CGP);
+
+    if (!isValidOperations(I))
+      continue;
+
+    errs() << "index " << index << " : ";
+    // Instr->dump();
+    OS << "    case " << TargetName << "::" << Instr->getNameInitAsString() << ":\n"
+       << "      dbgs() << \"";
+    PrintAsmSim(I, OS);
+    OS << "\";\n";
+    OS << "      break;\n";
+      // parseInstructionPattern(CGI, LI, Instructions);
+    
+  } 
+  OS << "\n\n"
+    << "  }\n"
+    << "  return Res;\n"
+    << "}\n";
 
 //   errs() << "\n\nALL PATTERNS TO MATCH:\n\n";
 //              for (CodeGenDAGPatterns::ptm_iterator I = CGP.ptm_begin(),

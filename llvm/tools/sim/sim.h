@@ -16,15 +16,5 @@ T unwrapOrError(Expected<T> EO, Ts &&... Args) {
 }
 
 namespace llvmsim {
-class Register {
-  unsigned RegIdx;
-  StringRef Name;
-  MVT::SimpleValueType Type;
-public:
-  Register(unsigned RegIdx, StringRef Name, MVT::SimpleValueType Type):
-    RegIdx(RegIdx), Name(Name), Type(Type) {}
-  unsigned GetRegIdx() {return RegIdx;}
-  StringRef GetName() {return Name;}
-  MVT::SimpleValueType GetType() {return Type;}
-};
+
 }

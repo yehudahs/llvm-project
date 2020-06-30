@@ -73,6 +73,7 @@
 #include "llvm/Support/TargetSelect.h"
 #include "llvm/Support/WithColor.h"
 #include "llvm/Support/raw_ostream.h"
+#include "llvm/Support/MachineValueType.h"
 #include <algorithm>
 #include <cctype>
 #include <cstring>
@@ -210,7 +211,14 @@ static int16_t signExtendBranchCCS(uint16_t val) {
   return signExtendBranchAndLinkS(val);
 }
 
+#include "MipsGenInstDagSel.inc"
+
 SimStatus AAPSimulator::exec(MCInst &Inst, uint32_t pc_w, uint32_t &newpc_w) {
+
+  bool Res = SimExe(Inst);
+  if (Res)
+    return SimStatus::SIM_OK;
+
   switch (Inst.getOpcode()) {
     // Unknown instruction
     default:
@@ -222,7 +230,7 @@ SimStatus AAPSimulator::exec(MCInst &Inst, uint32_t pc_w, uint32_t &newpc_w) {
       break;
 #endif
       break;
-    #include "MipsGenInstDagSel.inc"
+    // #include "MipsGenInstDagSel.inc"
 
     // NOP Handling
     // 0: Breakpoint

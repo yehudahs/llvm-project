@@ -1,0 +1,21 @@
+#include "llvm/MC/MCInst.h"
+
+using namespace llvm;
+namespace instexe{
+
+class MachineRegister {
+    unsigned RegIdx;
+    StringRef Name;
+    //  const MVT::SimpleValueType* Types;
+    public:
+    //  MachineRegister(StringRef Name, const MVT::SimpleValueType *Types):
+    MachineRegister(StringRef Name):
+    RegIdx(0), Name(Name) {}
+    unsigned GetRegIdx() {return RegIdx;}
+    StringRef GetName() {return Name;}
+    //  const MVT::SimpleValueType* GetTypes() {return Types;}
+};
+
+MachineRegister SimAdd(MCInst &Inst);
+
+}

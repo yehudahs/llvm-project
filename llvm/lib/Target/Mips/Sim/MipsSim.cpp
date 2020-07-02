@@ -131,13 +131,13 @@ AAPSimulator::AAPSimulator(const Target *TheTarget, const ObjectFile *Obj,
                               const MCSubtargetInfo *SecondarySTI) :
                               TheTarget(TheTarget),
                               Obj(Obj),
-                              Ctx(Ctx),
                               DisAsm(PrimaryDisAsm),
-                              DisAsmSec(SecondaryDisAsm),
                               MIA(MIA),
-                              IP(IP),
+                              DisAsmSec(SecondaryDisAsm),
                               STI(PrimarySTI),
-                              STISec(SecondarySTI) {
+                              IP(IP),
+                              STISec(SecondarySTI),
+                              Ctx(Ctx){
 }
 
 void AAPSimulator::WriteCodeSection(llvm::StringRef Bytes, uint32_t address) {

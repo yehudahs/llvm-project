@@ -19,15 +19,10 @@
 // When neither of the GET_DAGISEL* macros is defined, the functions
 // are emitted inline.
 
-class MachineRegister {
-    unsigned RegIdx;
-    StringRef Name;
-  public:
-    MachineRegister(StringRef Name):
-      RegIdx(0), Name(Name) {}
-    unsigned GetRegIdx() {return RegIdx;}
-    StringRef GetName() {return Name;}
-};
+#include "llvm/Sim/inst-exe.h"
+
+using namespace instexe;
+
 MachineRegister A0("A0");
 MachineRegister A0_64("A0_64");
 MachineRegister A1("A1");
@@ -476,4027 +471,4886 @@ bool SimExe(MCInst &Inst){
   bool Res = false;
   switch (Inst.getOpcode()) {
     default:
+      Inst.dump();
       break;
     case Mips::ABSQ_S_PH:
-      dbgs() << "ABSQ_S_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4045:{}, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_absq_s_ph DSPROpnd:$rt))]";
     case Mips::ABSQ_S_PH_MM:
-      dbgs() << "ABSQ_S_PH_MM: 	(set DSPROpnd:{}:$rt, (intrinsic_w_chain:{} 4045:{}, DSPROpnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_absq_s_ph DSPROpnd:$rs))]";
     case Mips::ABSQ_S_QB:
-      dbgs() << "ABSQ_S_QB: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4046:{}, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_absq_s_qb DSPROpnd:$rt))]";
     case Mips::ABSQ_S_QB_MMR2:
-      dbgs() << "ABSQ_S_QB_MMR2: 	(set DSPROpnd:{}:$rt, (intrinsic_w_chain:{} 4046:{}, DSPROpnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_absq_s_qb DSPROpnd:$rs))]";
     case Mips::ABSQ_S_W:
-      dbgs() << "ABSQ_S_W: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4047:{}, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_absq_s_w GPR32Opnd:$rt))]";
     case Mips::ABSQ_S_W_MM:
-      dbgs() << "ABSQ_S_W_MM: 	(set GPR32Opnd:{}:$rt, (intrinsic_w_chain:{} 4047:{}, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (int_mips_absq_s_w GPR32Opnd:$rs))]";
+    case Mips::ADD:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::ADDIU_MMR6:
-      dbgs() << "ADDIU_MMR6: 	(set GPR32Opnd:{}:$rt, (add:{} GPR32Opnd:{}:$rs, (immSExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (add GPR32Opnd:$rs, immSExt16:$imm16))]";
     case Mips::ADDQH_PH:
-      dbgs() << "ADDQH_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4055:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_addqh_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::ADDQH_PH_MMR2:
-      dbgs() << "ADDQH_PH_MMR2: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4055:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_addqh_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::ADDQH_R_PH:
-      dbgs() << "ADDQH_R_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4056:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_addqh_r_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::ADDQH_R_PH_MMR2:
-      dbgs() << "ADDQH_R_PH_MMR2: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4056:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_addqh_r_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::ADDQH_R_W:
-      dbgs() << "ADDQH_R_W: 	(set GPR32Opnd:{}:$rd, (intrinsic_wo_chain:{} 4057:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_addqh_r_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::ADDQH_R_W_MMR2:
-      dbgs() << "ADDQH_R_W_MMR2: 	(set GPR32Opnd:{}:$rd, (intrinsic_wo_chain:{} 4057:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_addqh_r_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::ADDQH_W:
-      dbgs() << "ADDQH_W: 	(set GPR32Opnd:{}:$rd, (intrinsic_wo_chain:{} 4058:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_addqh_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::ADDQH_W_MMR2:
-      dbgs() << "ADDQH_W_MMR2: 	(set GPR32Opnd:{}:$rd, (intrinsic_wo_chain:{} 4058:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_addqh_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
+    case Mips::ADDQ_PH:
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (null_frag DSPROpnd:$rs, DSPROpnd:$rt))]";
+    case Mips::ADDQ_PH_MM:
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (null_frag DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::ADDQ_S_PH:
-      dbgs() << "ADDQ_S_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4053:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_addq_s_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::ADDQ_S_PH_MM:
-      dbgs() << "ADDQ_S_PH_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4053:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_addq_s_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::ADDQ_S_W:
-      dbgs() << "ADDQ_S_W: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4054:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_addq_s_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::ADDQ_S_W_MM:
-      dbgs() << "ADDQ_S_W_MM: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4054:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_addq_s_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
+    case Mips::ADDR_PS64:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::ADDSC:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rs, GPR32Opnd:$rt))]";
+    case Mips::ADDSC_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::ADDS_A_B:
-      dbgs() << "ADDS_A_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4059:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_adds_a_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::ADDS_A_D:
-      dbgs() << "ADDS_A_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4060:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_adds_a_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::ADDS_A_H:
-      dbgs() << "ADDS_A_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4061:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_adds_a_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::ADDS_A_W:
-      dbgs() << "ADDS_A_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4062:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_adds_a_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::ADDS_S_B:
-      dbgs() << "ADDS_S_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4063:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_adds_s_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::ADDS_S_D:
-      dbgs() << "ADDS_S_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4064:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_adds_s_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::ADDS_S_H:
-      dbgs() << "ADDS_S_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4065:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_adds_s_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::ADDS_S_W:
-      dbgs() << "ADDS_S_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4066:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_adds_s_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::ADDS_U_B:
-      dbgs() << "ADDS_U_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4067:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_adds_u_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::ADDS_U_D:
-      dbgs() << "ADDS_U_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4068:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_adds_u_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::ADDS_U_H:
-      dbgs() << "ADDS_U_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4069:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_adds_u_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::ADDS_U_W:
-      dbgs() << "ADDS_U_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4070:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_adds_u_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::ADDU16_MM:
-      dbgs() << "ADDU16_MM: 	(set GPRMM16Opnd:{}:$rd, (add:{} GPRMM16Opnd:{}:$rs, GPRMM16Opnd:{}:$rt))";
+    {
+      dbgs() << "[(set GPRMM16Opnd:$rd, (add GPRMM16Opnd:$rs, GPRMM16Opnd:$rt))]";
+      MachineRegister TmpRes = SimAdd(Inst);
       break;
+    }
     case Mips::ADDU16_MMR6:
-      dbgs() << "ADDU16_MMR6: 	(set GPRMM16Opnd:{}:$rd, (add:{} GPRMM16Opnd:{}:$rs, GPRMM16Opnd:{}:$rt))";
+    {
+      dbgs() << "[(set GPRMM16Opnd:$rd, (add GPRMM16Opnd:$rs, GPRMM16Opnd:$rt))]";
+      MachineRegister TmpRes = SimAdd(Inst);
       break;
+    }
     case Mips::ADDUH_QB:
-      dbgs() << "ADDUH_QB: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4076:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_adduh_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::ADDUH_QB_MMR2:
-      dbgs() << "ADDUH_QB_MMR2: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4076:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_adduh_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::ADDUH_R_QB:
-      dbgs() << "ADDUH_R_QB: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4077:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_adduh_r_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::ADDUH_R_QB_MMR2:
-      dbgs() << "ADDUH_R_QB_MMR2: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4077:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_adduh_r_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
+    case Mips::ADDU_MMR6:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::ADDU_PH:
-      dbgs() << "ADDU_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4072:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_addu_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::ADDU_PH_MMR2:
-      dbgs() << "ADDU_PH_MMR2: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4072:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_addu_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
+    case Mips::ADDU_QB:
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (null_frag DSPROpnd:$rs, DSPROpnd:$rt))]";
+    case Mips::ADDU_QB_MM:
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (null_frag DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::ADDU_S_PH:
-      dbgs() << "ADDU_S_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4074:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_addu_s_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::ADDU_S_PH_MMR2:
-      dbgs() << "ADDU_S_PH_MMR2: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4074:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_addu_s_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::ADDU_S_QB:
-      dbgs() << "ADDU_S_QB: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4075:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_addu_s_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::ADDU_S_QB_MM:
-      dbgs() << "ADDU_S_QB_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4075:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_addu_s_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::ADDVI_B:
-      dbgs() << "ADDVI_B: 	(set MSA128BOpnd:{}:$wd, (add:{} MSA128BOpnd:{}:$ws, vsplati8_uimm5:{}:$imm))";
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (add MSA128BOpnd:$ws, vsplati8_uimm5:$imm))]";
+      MachineRegister TmpRes = SimAdd(Inst);
       break;
+    }
     case Mips::ADDVI_D:
-      dbgs() << "ADDVI_D: 	(set MSA128DOpnd:{}:$wd, (add:{} MSA128DOpnd:{}:$ws, vsplati64_uimm5:{}:$imm))";
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (add MSA128DOpnd:$ws, vsplati64_uimm5:$imm))]";
+      MachineRegister TmpRes = SimAdd(Inst);
       break;
+    }
     case Mips::ADDVI_H:
-      dbgs() << "ADDVI_H: 	(set MSA128HOpnd:{}:$wd, (add:{} MSA128HOpnd:{}:$ws, vsplati16_uimm5:{}:$imm))";
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (add MSA128HOpnd:$ws, vsplati16_uimm5:$imm))]";
+      MachineRegister TmpRes = SimAdd(Inst);
       break;
+    }
     case Mips::ADDVI_W:
-      dbgs() << "ADDVI_W: 	(set MSA128WOpnd:{}:$wd, (add:{} MSA128WOpnd:{}:$ws, vsplati32_uimm5:{}:$imm))";
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (add MSA128WOpnd:$ws, vsplati32_uimm5:$imm))]";
+      MachineRegister TmpRes = SimAdd(Inst);
       break;
+    }
     case Mips::ADDV_B:
-      dbgs() << "ADDV_B: 	(set MSA128BOpnd:{}:$wd, (add:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (add MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
+      MachineRegister TmpRes = SimAdd(Inst);
       break;
+    }
     case Mips::ADDV_D:
-      dbgs() << "ADDV_D: 	(set MSA128DOpnd:{}:$wd, (add:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (add MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
+      MachineRegister TmpRes = SimAdd(Inst);
       break;
+    }
     case Mips::ADDV_H:
-      dbgs() << "ADDV_H: 	(set MSA128HOpnd:{}:$wd, (add:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (add MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
+      MachineRegister TmpRes = SimAdd(Inst);
       break;
+    }
     case Mips::ADDV_W:
-      dbgs() << "ADDV_W: 	(set MSA128WOpnd:{}:$wd, (add:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (add MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
+      MachineRegister TmpRes = SimAdd(Inst);
       break;
+    }
+    case Mips::ADDWC:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rs, GPR32Opnd:$rt))]";
+    case Mips::ADDWC_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::ADD_A_B:
-      dbgs() << "ADD_A_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4048:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_add_a_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::ADD_A_D:
-      dbgs() << "ADD_A_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4049:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_add_a_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::ADD_A_H:
-      dbgs() << "ADD_A_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4050:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_add_a_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::ADD_A_W:
-      dbgs() << "ADD_A_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4051:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_add_a_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
+    case Mips::ADD_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rs, GPR32Opnd:$rt))]";
+    case Mips::ADD_MMR6:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rs, GPR32Opnd:$rt))]";
+    case Mips::ADDi:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag GPR32Opnd:$rs, null_frag:$imm16))]";
+    case Mips::ADDi_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag GPR32Opnd:$rs, null_frag:$imm16))]";
     case Mips::ADDiu:
-      dbgs() << "ADDiu: 	(set GPR32Opnd:{}:$rt, (add:{} GPR32Opnd:{}:$rs, (imm32SExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (add GPR32Opnd:$rs, imm32SExt16:$imm16))]";
+    case Mips::ADDiu_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag GPR32Opnd:$rs, null_frag:$imm16))]";
     case Mips::ADDu:
-      dbgs() << "ADDu: 	(set GPR32Opnd:{}:$rd, (add:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (add GPR32Opnd:$rs, GPR32Opnd:$rt))]";
+      MachineRegister TmpRes = SimAdd(Inst);
       break;
+    }
     case Mips::ADDu_MM:
-      dbgs() << "ADDu_MM: 	(set GPR32Opnd:{}:$rd, (add:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (add GPR32Opnd:$rs, GPR32Opnd:$rt))]";
+      MachineRegister TmpRes = SimAdd(Inst);
       break;
+    }
     case Mips::ADJCALLSTACKDOWN:
-      dbgs() << "ADJCALLSTACKDOWN: 	(callseq_start (timm:{}):$amt1, (timm:{}):$amt2)";
-      break;
+    {
+      dbgs() << "[(callseq_start timm:$amt1, timm:$amt2)]";
     case Mips::ADJCALLSTACKUP:
-      dbgs() << "ADJCALLSTACKUP: 	(callseq_end (timm:{}):$amt1, (timm:{}):$amt2)";
-      break;
+    {
+      dbgs() << "[(callseq_end timm:$amt1, timm:$amt2)]";
     case Mips::AND:
-      dbgs() << "AND: 	(set GPR32Opnd:{}:$rd, (and:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (and GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::AND16_MM:
-      dbgs() << "AND16_MM: 	(set GPRMM16Opnd:{}:$dst, (and:{} GPRMM16Opnd:{}:$rs, GPRMM16Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPRMM16Opnd:$dst, (and GPRMM16Opnd:$rs, GPRMM16Opnd:$rt))]";
+    case Mips::AND16_MMR6:
+    {
+      dbgs() << "[(set GPRMM16Opnd:$dst, (null_frag GPRMM16Opnd:$rs, GPRMM16Opnd:$rt))]";
     case Mips::AND64:
-      dbgs() << "AND64: 	(set GPR64Opnd:{}:$rd, (and:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (and GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::ANDI_B:
-      dbgs() << "ANDI_B: 	(set MSA128BOpnd:{}:$wd, (and:{} MSA128BOpnd:{}:$ws, vsplati8_uimm8:{}:$u8))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (and MSA128BOpnd:$ws, vsplati8_uimm8:$u8))]";
+    case Mips::ANDI_MMR6:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag GPR32Opnd:$rs, null_frag:$imm16))]";
     case Mips::AND_MM:
-      dbgs() << "AND_MM: 	(set GPR32Opnd:{}:$rd, (and:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (and GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::AND_MMR6:
-      dbgs() << "AND_MMR6: 	(set GPR32Opnd:{}:$rd, (and:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (and GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::AND_V:
-      dbgs() << "AND_V: 	(set MSA128BOpnd:{}:$wd, (and:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (and MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::AND_V_D_PSEUDO:
-      dbgs() << "AND_V_D_PSEUDO: 	(set MSA128DOpnd:{}:$wd, (and:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (and MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::AND_V_H_PSEUDO:
-      dbgs() << "AND_V_H_PSEUDO: 	(set MSA128HOpnd:{}:$wd, (and:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (and MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::AND_V_W_PSEUDO:
-      dbgs() << "AND_V_W_PSEUDO: 	(set MSA128WOpnd:{}:$wd, (and:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (and MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::ANDi:
-      dbgs() << "ANDi: 	(set GPR32Opnd:{}:$rt, (and:{} GPR32Opnd:{}:$rs, (imm32ZExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (and GPR32Opnd:$rs, imm32ZExt16:$imm16))]";
     case Mips::ANDi64:
-      dbgs() << "ANDi64: 	(set GPR64Opnd:{}:$rt, (and:{} GPR64Opnd:{}:$rs, (immZExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (and GPR64Opnd:$rs, immZExt16:$imm16))]";
+    case Mips::ANDi_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag GPR32Opnd:$rs, null_frag:$imm16))]";
     case Mips::APPEND:
-      dbgs() << "APPEND: 	(set GPR32Opnd:{}:$rt, (intrinsic_wo_chain:{} 4089:{}, GPR32Opnd:{}:$src, GPR32Opnd:{}:$rs, (timmZExt5:{}):$sa))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (int_mips_append GPR32Opnd:$src, GPR32Opnd:$rs, timmZExt5:$sa))]";
     case Mips::APPEND_MMR2:
-      dbgs() << "APPEND_MMR2: 	(set GPR32Opnd:{}:$rt, (intrinsic_wo_chain:{} 4089:{}, GPR32Opnd:{}:$src, GPR32Opnd:{}:$rs, (timmZExt5:{}):$sa))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (int_mips_append GPR32Opnd:$src, GPR32Opnd:$rs, timmZExt5:$sa))]";
     case Mips::ASUB_S_B:
-      dbgs() << "ASUB_S_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4090:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_asub_s_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::ASUB_S_D:
-      dbgs() << "ASUB_S_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4091:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_asub_s_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::ASUB_S_H:
-      dbgs() << "ASUB_S_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4092:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_asub_s_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::ASUB_S_W:
-      dbgs() << "ASUB_S_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4093:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_asub_s_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::ASUB_U_B:
-      dbgs() << "ASUB_U_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4094:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_asub_u_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::ASUB_U_D:
-      dbgs() << "ASUB_U_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4095:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_asub_u_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::ASUB_U_H:
-      dbgs() << "ASUB_U_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4096:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_asub_u_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::ASUB_U_W:
-      dbgs() << "ASUB_U_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4097:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_asub_u_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::ATOMIC_CMP_SWAP_I16:
-      dbgs() << "ATOMIC_CMP_SWAP_I16: 	(set GPR32:{}:$dst, (atomic_cmp_swap_16:{} iPTR:{}:$ptr, GPR32:{}:$cmp, GPR32:{}:$swap))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_cmp_swap_16 iPTR:$ptr, GPR32:$cmp, GPR32:$swap))]";
     case Mips::ATOMIC_CMP_SWAP_I32:
-      dbgs() << "ATOMIC_CMP_SWAP_I32: 	(set GPR32:{}:$dst, (atomic_cmp_swap_32:{} iPTR:{}:$ptr, GPR32:{}:$cmp, GPR32:{}:$swap))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_cmp_swap_32 iPTR:$ptr, GPR32:$cmp, GPR32:$swap))]";
     case Mips::ATOMIC_CMP_SWAP_I64:
-      dbgs() << "ATOMIC_CMP_SWAP_I64: 	(set GPR64:{}:$dst, (atomic_cmp_swap_64:{} iPTR:{}:$ptr, GPR64:{}:$cmp, GPR64:{}:$swap))";
-      break;
+    {
+      dbgs() << "[(set GPR64:$dst, (atomic_cmp_swap_64 iPTR:$ptr, GPR64:$cmp, GPR64:$swap))]";
     case Mips::ATOMIC_CMP_SWAP_I8:
-      dbgs() << "ATOMIC_CMP_SWAP_I8: 	(set GPR32:{}:$dst, (atomic_cmp_swap_8:{} iPTR:{}:$ptr, GPR32:{}:$cmp, GPR32:{}:$swap))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_cmp_swap_8 iPTR:$ptr, GPR32:$cmp, GPR32:$swap))]";
     case Mips::ATOMIC_LOAD_ADD_I16:
-      dbgs() << "ATOMIC_LOAD_ADD_I16: 	(set GPR32:{}:$dst, (atomic_load_add_16:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_add_16 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_ADD_I32:
-      dbgs() << "ATOMIC_LOAD_ADD_I32: 	(set GPR32:{}:$dst, (atomic_load_add_32:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_add_32 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_ADD_I64:
-      dbgs() << "ATOMIC_LOAD_ADD_I64: 	(set GPR64:{}:$dst, (atomic_load_add_64:{} iPTR:{}:$ptr, GPR64:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR64:$dst, (atomic_load_add_64 iPTR:$ptr, GPR64:$incr))]";
     case Mips::ATOMIC_LOAD_ADD_I8:
-      dbgs() << "ATOMIC_LOAD_ADD_I8: 	(set GPR32:{}:$dst, (atomic_load_add_8:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_add_8 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_AND_I16:
-      dbgs() << "ATOMIC_LOAD_AND_I16: 	(set GPR32:{}:$dst, (atomic_load_and_16:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_and_16 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_AND_I32:
-      dbgs() << "ATOMIC_LOAD_AND_I32: 	(set GPR32:{}:$dst, (atomic_load_and_32:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_and_32 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_AND_I64:
-      dbgs() << "ATOMIC_LOAD_AND_I64: 	(set GPR64:{}:$dst, (atomic_load_and_64:{} iPTR:{}:$ptr, GPR64:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR64:$dst, (atomic_load_and_64 iPTR:$ptr, GPR64:$incr))]";
     case Mips::ATOMIC_LOAD_AND_I8:
-      dbgs() << "ATOMIC_LOAD_AND_I8: 	(set GPR32:{}:$dst, (atomic_load_and_8:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_and_8 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_MAX_I16:
-      dbgs() << "ATOMIC_LOAD_MAX_I16: 	(set GPR32:{}:$dst, (atomic_load_max_16:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_max_16 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_MAX_I32:
-      dbgs() << "ATOMIC_LOAD_MAX_I32: 	(set GPR32:{}:$dst, (atomic_load_max_32:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_max_32 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_MAX_I64:
-      dbgs() << "ATOMIC_LOAD_MAX_I64: 	(set GPR64:{}:$dst, (atomic_load_max_64:{} iPTR:{}:$ptr, GPR64:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR64:$dst, (atomic_load_max_64 iPTR:$ptr, GPR64:$incr))]";
     case Mips::ATOMIC_LOAD_MAX_I8:
-      dbgs() << "ATOMIC_LOAD_MAX_I8: 	(set GPR32:{}:$dst, (atomic_load_max_8:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_max_8 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_MIN_I16:
-      dbgs() << "ATOMIC_LOAD_MIN_I16: 	(set GPR32:{}:$dst, (atomic_load_min_16:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_min_16 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_MIN_I32:
-      dbgs() << "ATOMIC_LOAD_MIN_I32: 	(set GPR32:{}:$dst, (atomic_load_min_32:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_min_32 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_MIN_I64:
-      dbgs() << "ATOMIC_LOAD_MIN_I64: 	(set GPR64:{}:$dst, (atomic_load_min_64:{} iPTR:{}:$ptr, GPR64:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR64:$dst, (atomic_load_min_64 iPTR:$ptr, GPR64:$incr))]";
     case Mips::ATOMIC_LOAD_MIN_I8:
-      dbgs() << "ATOMIC_LOAD_MIN_I8: 	(set GPR32:{}:$dst, (atomic_load_min_8:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_min_8 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_NAND_I16:
-      dbgs() << "ATOMIC_LOAD_NAND_I16: 	(set GPR32:{}:$dst, (atomic_load_nand_16:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_nand_16 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_NAND_I32:
-      dbgs() << "ATOMIC_LOAD_NAND_I32: 	(set GPR32:{}:$dst, (atomic_load_nand_32:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_nand_32 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_NAND_I64:
-      dbgs() << "ATOMIC_LOAD_NAND_I64: 	(set GPR64:{}:$dst, (atomic_load_nand_64:{} iPTR:{}:$ptr, GPR64:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR64:$dst, (atomic_load_nand_64 iPTR:$ptr, GPR64:$incr))]";
     case Mips::ATOMIC_LOAD_NAND_I8:
-      dbgs() << "ATOMIC_LOAD_NAND_I8: 	(set GPR32:{}:$dst, (atomic_load_nand_8:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_nand_8 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_OR_I16:
-      dbgs() << "ATOMIC_LOAD_OR_I16: 	(set GPR32:{}:$dst, (atomic_load_or_16:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_or_16 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_OR_I32:
-      dbgs() << "ATOMIC_LOAD_OR_I32: 	(set GPR32:{}:$dst, (atomic_load_or_32:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_or_32 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_OR_I64:
-      dbgs() << "ATOMIC_LOAD_OR_I64: 	(set GPR64:{}:$dst, (atomic_load_or_64:{} iPTR:{}:$ptr, GPR64:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR64:$dst, (atomic_load_or_64 iPTR:$ptr, GPR64:$incr))]";
     case Mips::ATOMIC_LOAD_OR_I8:
-      dbgs() << "ATOMIC_LOAD_OR_I8: 	(set GPR32:{}:$dst, (atomic_load_or_8:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_or_8 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_SUB_I16:
-      dbgs() << "ATOMIC_LOAD_SUB_I16: 	(set GPR32:{}:$dst, (atomic_load_sub_16:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_sub_16 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_SUB_I32:
-      dbgs() << "ATOMIC_LOAD_SUB_I32: 	(set GPR32:{}:$dst, (atomic_load_sub_32:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_sub_32 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_SUB_I64:
-      dbgs() << "ATOMIC_LOAD_SUB_I64: 	(set GPR64:{}:$dst, (atomic_load_sub_64:{} iPTR:{}:$ptr, GPR64:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR64:$dst, (atomic_load_sub_64 iPTR:$ptr, GPR64:$incr))]";
     case Mips::ATOMIC_LOAD_SUB_I8:
-      dbgs() << "ATOMIC_LOAD_SUB_I8: 	(set GPR32:{}:$dst, (atomic_load_sub_8:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_sub_8 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_UMAX_I16:
-      dbgs() << "ATOMIC_LOAD_UMAX_I16: 	(set GPR32:{}:$dst, (atomic_load_umax_16:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_umax_16 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_UMAX_I32:
-      dbgs() << "ATOMIC_LOAD_UMAX_I32: 	(set GPR32:{}:$dst, (atomic_load_umax_32:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_umax_32 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_UMAX_I64:
-      dbgs() << "ATOMIC_LOAD_UMAX_I64: 	(set GPR64:{}:$dst, (atomic_load_umax_64:{} iPTR:{}:$ptr, GPR64:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR64:$dst, (atomic_load_umax_64 iPTR:$ptr, GPR64:$incr))]";
     case Mips::ATOMIC_LOAD_UMAX_I8:
-      dbgs() << "ATOMIC_LOAD_UMAX_I8: 	(set GPR32:{}:$dst, (atomic_load_umax_8:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_umax_8 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_UMIN_I16:
-      dbgs() << "ATOMIC_LOAD_UMIN_I16: 	(set GPR32:{}:$dst, (atomic_load_umin_16:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_umin_16 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_UMIN_I32:
-      dbgs() << "ATOMIC_LOAD_UMIN_I32: 	(set GPR32:{}:$dst, (atomic_load_umin_32:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_umin_32 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_UMIN_I64:
-      dbgs() << "ATOMIC_LOAD_UMIN_I64: 	(set GPR64:{}:$dst, (atomic_load_umin_64:{} iPTR:{}:$ptr, GPR64:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR64:$dst, (atomic_load_umin_64 iPTR:$ptr, GPR64:$incr))]";
     case Mips::ATOMIC_LOAD_UMIN_I8:
-      dbgs() << "ATOMIC_LOAD_UMIN_I8: 	(set GPR32:{}:$dst, (atomic_load_umin_8:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_umin_8 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_XOR_I16:
-      dbgs() << "ATOMIC_LOAD_XOR_I16: 	(set GPR32:{}:$dst, (atomic_load_xor_16:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_xor_16 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_XOR_I32:
-      dbgs() << "ATOMIC_LOAD_XOR_I32: 	(set GPR32:{}:$dst, (atomic_load_xor_32:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_xor_32 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_LOAD_XOR_I64:
-      dbgs() << "ATOMIC_LOAD_XOR_I64: 	(set GPR64:{}:$dst, (atomic_load_xor_64:{} iPTR:{}:$ptr, GPR64:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR64:$dst, (atomic_load_xor_64 iPTR:$ptr, GPR64:$incr))]";
     case Mips::ATOMIC_LOAD_XOR_I8:
-      dbgs() << "ATOMIC_LOAD_XOR_I8: 	(set GPR32:{}:$dst, (atomic_load_xor_8:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_load_xor_8 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_SWAP_I16:
-      dbgs() << "ATOMIC_SWAP_I16: 	(set GPR32:{}:$dst, (atomic_swap_16:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_swap_16 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_SWAP_I32:
-      dbgs() << "ATOMIC_SWAP_I32: 	(set GPR32:{}:$dst, (atomic_swap_32:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_swap_32 iPTR:$ptr, GPR32:$incr))]";
     case Mips::ATOMIC_SWAP_I64:
-      dbgs() << "ATOMIC_SWAP_I64: 	(set GPR64:{}:$dst, (atomic_swap_64:{} iPTR:{}:$ptr, GPR64:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR64:$dst, (atomic_swap_64 iPTR:$ptr, GPR64:$incr))]";
     case Mips::ATOMIC_SWAP_I8:
-      dbgs() << "ATOMIC_SWAP_I8: 	(set GPR32:{}:$dst, (atomic_swap_8:{} iPTR:{}:$ptr, GPR32:{}:$incr))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (atomic_swap_8 iPTR:$ptr, GPR32:$incr))]";
     case Mips::AVER_S_B:
-      dbgs() << "AVER_S_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4106:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_aver_s_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::AVER_S_D:
-      dbgs() << "AVER_S_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4107:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_aver_s_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::AVER_S_H:
-      dbgs() << "AVER_S_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4108:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_aver_s_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::AVER_S_W:
-      dbgs() << "AVER_S_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4109:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_aver_s_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::AVER_U_B:
-      dbgs() << "AVER_U_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4110:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_aver_u_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::AVER_U_D:
-      dbgs() << "AVER_U_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4111:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_aver_u_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::AVER_U_H:
-      dbgs() << "AVER_U_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4112:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_aver_u_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::AVER_U_W:
-      dbgs() << "AVER_U_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4113:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_aver_u_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::AVE_S_B:
-      dbgs() << "AVE_S_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4098:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_ave_s_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::AVE_S_D:
-      dbgs() << "AVE_S_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4099:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_ave_s_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::AVE_S_H:
-      dbgs() << "AVE_S_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4100:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_ave_s_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::AVE_S_W:
-      dbgs() << "AVE_S_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4101:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_ave_s_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::AVE_U_B:
-      dbgs() << "AVE_U_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4102:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_ave_u_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::AVE_U_D:
-      dbgs() << "AVE_U_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4103:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_ave_u_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::AVE_U_H:
-      dbgs() << "AVE_U_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4104:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_ave_u_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::AVE_U_W:
-      dbgs() << "AVE_U_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4105:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_ave_u_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::B:
-      dbgs() << "B: 	(br (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(br bb:$offset)]";
     case Mips::BADDu:
-      dbgs() << "BADDu: 	(set GPR64Opnd:{}:$rd, (and:{} (add:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt), 255:{}))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (and (add GPR64Opnd:$rs, GPR64Opnd:$rt), 255))]";
     case Mips::BALIGN:
-      dbgs() << "BALIGN: 	(set GPR32Opnd:{}:$rt, (intrinsic_wo_chain:{} 4114:{}, GPR32Opnd:{}:$src, GPR32Opnd:{}:$rs, (timmZExt2:{}):$sa))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (int_mips_balign GPR32Opnd:$src, GPR32Opnd:$rs, timmZExt2:$sa))]";
     case Mips::BALIGN_MMR2:
-      dbgs() << "BALIGN_MMR2: 	(set GPR32Opnd:{}:$rt, (intrinsic_wo_chain:{} 4114:{}, GPR32Opnd:{}:$src, GPR32Opnd:{}:$rs, (immZExt2:{}):$bp))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (int_mips_balign GPR32Opnd:$src, GPR32Opnd:$rs, immZExt2:$bp))]";
     case Mips::BBIT0:
-      dbgs() << "BBIT0: 	(brcond (seteq:{ *:[i32] } (and:{} GPR64Opnd:{}:$rs, (shl:{} 1:{}, (immZExt5_64:{}):$p)), 0:{}), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (seteq (and GPR64Opnd:$rs, (shl { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }, immZExt5_64:$p)), 0)), bb:$offset)]";
     case Mips::BBIT032:
-      dbgs() << "BBIT032: 	(brcond (seteq:{ *:[i32] } (and:{} GPR64Opnd:{}:$rs, (shl:{} 4294967296:{}, (immZExt5_64:{}):$p)), 0:{}), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (seteq (and GPR64Opnd:$rs, (shl { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, immZExt5_64:$p)), 0)), bb:$offset)]";
     case Mips::BBIT1:
-      dbgs() << "BBIT1: 	(brcond (setne:{ *:[i32] } (and:{} GPR64Opnd:{}:$rs, (shl:{} 1:{}, (immZExt5_64:{}):$p)), 0:{}), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (setne (and GPR64Opnd:$rs, (shl { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 }, immZExt5_64:$p)), 0)), bb:$offset)]";
     case Mips::BBIT132:
-      dbgs() << "BBIT132: 	(brcond (setne:{ *:[i32] } (and:{} GPR64Opnd:{}:$rs, (shl:{} 4294967296:{}, (immZExt5_64:{}):$p)), 0:{}), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (setne (and GPR64Opnd:$rs, (shl { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, immZExt5_64:$p)), 0)), bb:$offset)]";
     case Mips::BC1F:
-      dbgs() << "BC1F: 	(MipsFPBrcond (MIPS_BRANCH_F:{}), FCCRegsOpnd:{}:$fcc, (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(MipsFPBrcond MIPS_BRANCH_F, FCCRegsOpnd:$fcc, bb:$offset)]";
     case Mips::BC1F_MM:
-      dbgs() << "BC1F_MM: 	(MipsFPBrcond (MIPS_BRANCH_F:{}), FCCRegsOpnd:{}:$fcc, (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(MipsFPBrcond MIPS_BRANCH_F, FCCRegsOpnd:$fcc, bb:$offset)]";
     case Mips::BC1T:
-      dbgs() << "BC1T: 	(MipsFPBrcond (MIPS_BRANCH_T:{}), FCCRegsOpnd:{}:$fcc, (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(MipsFPBrcond MIPS_BRANCH_T, FCCRegsOpnd:$fcc, bb:$offset)]";
     case Mips::BC1T_MM:
-      dbgs() << "BC1T_MM: 	(MipsFPBrcond (MIPS_BRANCH_T:{}), FCCRegsOpnd:{}:$fcc, (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(MipsFPBrcond MIPS_BRANCH_T, FCCRegsOpnd:$fcc, bb:$offset)]";
     case Mips::BCLRI_B:
-      dbgs() << "BCLRI_B: 	(set MSA128BOpnd:{}:$wd, (and:{} MSA128BOpnd:{}:$ws, vsplat_uimm_inv_pow2:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (and MSA128BOpnd:$ws, vsplat_uimm_inv_pow2:$m))]";
     case Mips::BCLRI_D:
-      dbgs() << "BCLRI_D: 	(set MSA128DOpnd:{}:$wd, (and:{} MSA128DOpnd:{}:$ws, vsplat_uimm_inv_pow2:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (and MSA128DOpnd:$ws, vsplat_uimm_inv_pow2:$m))]";
     case Mips::BCLRI_H:
-      dbgs() << "BCLRI_H: 	(set MSA128HOpnd:{}:$wd, (and:{} MSA128HOpnd:{}:$ws, vsplat_uimm_inv_pow2:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (and MSA128HOpnd:$ws, vsplat_uimm_inv_pow2:$m))]";
     case Mips::BCLRI_W:
-      dbgs() << "BCLRI_W: 	(set MSA128WOpnd:{}:$wd, (and:{} MSA128WOpnd:{}:$ws, vsplat_uimm_inv_pow2:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (and MSA128WOpnd:$ws, vsplat_uimm_inv_pow2:$m))]";
     case Mips::BCLR_B:
-      dbgs() << "BCLR_B: 	(set MSA128BOpnd:{}:$wd, (vbclr_b:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vbclr_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::BCLR_D:
-      dbgs() << "BCLR_D: 	(set MSA128DOpnd:{}:$wd, (vbclr_d:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vbclr_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::BCLR_H:
-      dbgs() << "BCLR_H: 	(set MSA128HOpnd:{}:$wd, (vbclr_h:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vbclr_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::BCLR_W:
-      dbgs() << "BCLR_W: 	(set MSA128WOpnd:{}:$wd, (vbclr_w:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vbclr_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::BC_MMR6:
-      dbgs() << "BC_MMR6: 	(br (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(br bb:$offset)]";
     case Mips::BEQ:
-      dbgs() << "BEQ: 	(brcond (seteq:{ *:[i32] } GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (seteq GPR32Opnd:$rs, GPR32Opnd:$rt)), bb:$offset)]";
     case Mips::BEQ64:
-      dbgs() << "BEQ64: 	(brcond (seteq:{ *:[i32] } GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (seteq GPR64Opnd:$rs, GPR64Opnd:$rt)), bb:$offset)]";
     case Mips::BEQ_MM:
-      dbgs() << "BEQ_MM: 	(brcond (seteq:{ *:[i32] } GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (seteq GPR32Opnd:$rs, GPR32Opnd:$rt)), bb:$offset)]";
     case Mips::BGEZ:
-      dbgs() << "BGEZ: 	(brcond (setge:{ *:[i32] } GPR32Opnd:{}:$rs, 0:{}), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (setge GPR32Opnd:$rs, 0)), bb:$offset)]";
     case Mips::BGEZ64:
-      dbgs() << "BGEZ64: 	(brcond (setge:{ *:[i32] } GPR64Opnd:{}:$rs, 0:{}), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (setge GPR64Opnd:$rs, 0)), bb:$offset)]";
     case Mips::BGEZ_MM:
-      dbgs() << "BGEZ_MM: 	(brcond (setge:{ *:[i32] } GPR32Opnd:{}:$rs, 0:{}), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (setge GPR32Opnd:$rs, 0)), bb:$offset)]";
     case Mips::BGTZ:
-      dbgs() << "BGTZ: 	(brcond (setgt:{ *:[i32] } GPR32Opnd:{}:$rs, 0:{}), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (setgt GPR32Opnd:$rs, 0)), bb:$offset)]";
     case Mips::BGTZ64:
-      dbgs() << "BGTZ64: 	(brcond (setgt:{ *:[i32] } GPR64Opnd:{}:$rs, 0:{}), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (setgt GPR64Opnd:$rs, 0)), bb:$offset)]";
     case Mips::BGTZ_MM:
-      dbgs() << "BGTZ_MM: 	(brcond (setgt:{ *:[i32] } GPR32Opnd:{}:$rs, 0:{}), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (setgt GPR32Opnd:$rs, 0)), bb:$offset)]";
     case Mips::BINSLI_B:
-      dbgs() << "BINSLI_B: 	(set MSA128BOpnd:{}:$wd, (vselect:{} vsplat_maskl_bits_uimm3:{ *:[v16i8] }:$m, MSA128BOpnd:{ *:[v16i8] }:$ws, MSA128BOpnd:{}:$wd_in))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vselect (v16i8 vsplat_maskl_bits_uimm3:$m), (v16i8 MSA128BOpnd:$ws), MSA128BOpnd:$wd_in))]";
     case Mips::BINSLI_D:
-      dbgs() << "BINSLI_D: 	(set MSA128DOpnd:{}:$wd, (vselect:{} vsplat_maskl_bits_uimm6:{ *:[v2i64] }:$m, MSA128DOpnd:{ *:[v2i64] }:$ws, MSA128DOpnd:{}:$wd_in))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vselect (v2i64 vsplat_maskl_bits_uimm6:$m), (v2i64 MSA128DOpnd:$ws), MSA128DOpnd:$wd_in))]";
     case Mips::BINSLI_H:
-      dbgs() << "BINSLI_H: 	(set MSA128HOpnd:{}:$wd, (vselect:{} vsplat_maskl_bits_uimm4:{ *:[v8i16] }:$m, MSA128HOpnd:{ *:[v8i16] }:$ws, MSA128HOpnd:{}:$wd_in))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vselect (v8i16 vsplat_maskl_bits_uimm4:$m), (v8i16 MSA128HOpnd:$ws), MSA128HOpnd:$wd_in))]";
     case Mips::BINSLI_W:
-      dbgs() << "BINSLI_W: 	(set MSA128WOpnd:{}:$wd, (vselect:{} vsplat_maskl_bits_uimm5:{ *:[v4i32] }:$m, MSA128WOpnd:{ *:[v4i32] }:$ws, MSA128WOpnd:{}:$wd_in))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vselect (v4i32 vsplat_maskl_bits_uimm5:$m), (v4i32 MSA128WOpnd:$ws), MSA128WOpnd:$wd_in))]";
     case Mips::BINSL_B:
-      dbgs() << "BINSL_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4123:{}, MSA128BOpnd:{}:$wd_in, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_binsl_b MSA128BOpnd:$wd_in, MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::BINSL_D:
-      dbgs() << "BINSL_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4124:{}, MSA128DOpnd:{}:$wd_in, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_binsl_d MSA128DOpnd:$wd_in, MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::BINSL_H:
-      dbgs() << "BINSL_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4125:{}, MSA128HOpnd:{}:$wd_in, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_binsl_h MSA128HOpnd:$wd_in, MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::BINSL_W:
-      dbgs() << "BINSL_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4126:{}, MSA128WOpnd:{}:$wd_in, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_binsl_w MSA128WOpnd:$wd_in, MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::BINSRI_B:
-      dbgs() << "BINSRI_B: 	(set MSA128BOpnd:{}:$wd, (vselect:{} vsplat_maskr_bits_uimm3:{ *:[v16i8] }:$m, MSA128BOpnd:{ *:[v16i8] }:$ws, MSA128BOpnd:{}:$wd_in))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vselect (v16i8 vsplat_maskr_bits_uimm3:$m), (v16i8 MSA128BOpnd:$ws), MSA128BOpnd:$wd_in))]";
     case Mips::BINSRI_D:
-      dbgs() << "BINSRI_D: 	(set MSA128DOpnd:{}:$wd, (vselect:{} vsplat_maskr_bits_uimm6:{ *:[v2i64] }:$m, MSA128DOpnd:{ *:[v2i64] }:$ws, MSA128DOpnd:{}:$wd_in))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vselect (v2i64 vsplat_maskr_bits_uimm6:$m), (v2i64 MSA128DOpnd:$ws), MSA128DOpnd:$wd_in))]";
     case Mips::BINSRI_H:
-      dbgs() << "BINSRI_H: 	(set MSA128HOpnd:{}:$wd, (vselect:{} vsplat_maskr_bits_uimm4:{ *:[v8i16] }:$m, MSA128HOpnd:{ *:[v8i16] }:$ws, MSA128HOpnd:{}:$wd_in))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vselect (v8i16 vsplat_maskr_bits_uimm4:$m), (v8i16 MSA128HOpnd:$ws), MSA128HOpnd:$wd_in))]";
     case Mips::BINSRI_W:
-      dbgs() << "BINSRI_W: 	(set MSA128WOpnd:{}:$wd, (vselect:{} vsplat_maskr_bits_uimm5:{ *:[v4i32] }:$m, MSA128WOpnd:{ *:[v4i32] }:$ws, MSA128WOpnd:{}:$wd_in))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vselect (v4i32 vsplat_maskr_bits_uimm5:$m), (v4i32 MSA128WOpnd:$ws), MSA128WOpnd:$wd_in))]";
     case Mips::BINSR_B:
-      dbgs() << "BINSR_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4131:{}, MSA128BOpnd:{}:$wd_in, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_binsr_b MSA128BOpnd:$wd_in, MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::BINSR_D:
-      dbgs() << "BINSR_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4132:{}, MSA128DOpnd:{}:$wd_in, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_binsr_d MSA128DOpnd:$wd_in, MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::BINSR_H:
-      dbgs() << "BINSR_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4133:{}, MSA128HOpnd:{}:$wd_in, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_binsr_h MSA128HOpnd:$wd_in, MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::BINSR_W:
-      dbgs() << "BINSR_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4134:{}, MSA128WOpnd:{}:$wd_in, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_binsr_w MSA128WOpnd:$wd_in, MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::BITREV:
-      dbgs() << "BITREV: 	(set GPR32Opnd:{}:$rd, (intrinsic_wo_chain:{} 4139:{}, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_bitrev GPR32Opnd:$rt))]";
     case Mips::BITREV_MM:
-      dbgs() << "BITREV_MM: 	(set GPR32Opnd:{}:$rt, (intrinsic_wo_chain:{} 4139:{}, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (int_mips_bitrev GPR32Opnd:$rs))]";
     case Mips::BLEZ:
-      dbgs() << "BLEZ: 	(brcond (setle:{ *:[i32] } GPR32Opnd:{}:$rs, 0:{}), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (setle GPR32Opnd:$rs, 0)), bb:$offset)]";
     case Mips::BLEZ64:
-      dbgs() << "BLEZ64: 	(brcond (setle:{ *:[i32] } GPR64Opnd:{}:$rs, 0:{}), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (setle GPR64Opnd:$rs, 0)), bb:$offset)]";
     case Mips::BLEZ_MM:
-      dbgs() << "BLEZ_MM: 	(brcond (setle:{ *:[i32] } GPR32Opnd:{}:$rs, 0:{}), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (setle GPR32Opnd:$rs, 0)), bb:$offset)]";
     case Mips::BLTZ:
-      dbgs() << "BLTZ: 	(brcond (setlt:{ *:[i32] } GPR32Opnd:{}:$rs, 0:{}), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (setlt GPR32Opnd:$rs, 0)), bb:$offset)]";
     case Mips::BLTZ64:
-      dbgs() << "BLTZ64: 	(brcond (setlt:{ *:[i32] } GPR64Opnd:{}:$rs, 0:{}), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (setlt GPR64Opnd:$rs, 0)), bb:$offset)]";
     case Mips::BLTZ_MM:
-      dbgs() << "BLTZ_MM: 	(brcond (setlt:{ *:[i32] } GPR32Opnd:{}:$rs, 0:{}), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (setlt GPR32Opnd:$rs, 0)), bb:$offset)]";
     case Mips::BMNZI_B:
-      dbgs() << "BMNZI_B: 	(set MSA128BOpnd:{}:$wd, (vselect:{} vsplati8_uimm8:{}:$u8, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wd_in))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vselect vsplati8_uimm8:$u8, MSA128BOpnd:$ws, MSA128BOpnd:$wd_in))]";
     case Mips::BMNZ_V:
-      dbgs() << "BMNZ_V: 	(set MSA128BOpnd:{}:$wd, (vselect:{} MSA128BOpnd:{}:$wt, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wd_in))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vselect MSA128BOpnd:$wt, MSA128BOpnd:$ws, MSA128BOpnd:$wd_in))]";
     case Mips::BMZI_B:
-      dbgs() << "BMZI_B: 	(set MSA128BOpnd:{}:$wd, (vselect:{} vsplati8_uimm8:{}:$u8, MSA128BOpnd:{}:$wd_in, MSA128BOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vselect vsplati8_uimm8:$u8, MSA128BOpnd:$wd_in, MSA128BOpnd:$ws))]";
     case Mips::BMZ_V:
-      dbgs() << "BMZ_V: 	(set MSA128BOpnd:{}:$wd, (vselect:{} MSA128BOpnd:{}:$wt, MSA128BOpnd:{}:$wd_in, MSA128BOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vselect MSA128BOpnd:$wt, MSA128BOpnd:$wd_in, MSA128BOpnd:$ws))]";
     case Mips::BNE:
-      dbgs() << "BNE: 	(brcond (setne:{ *:[i32] } GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (setne GPR32Opnd:$rs, GPR32Opnd:$rt)), bb:$offset)]";
     case Mips::BNE64:
-      dbgs() << "BNE64: 	(brcond (setne:{ *:[i32] } GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (setne GPR64Opnd:$rs, GPR64Opnd:$rt)), bb:$offset)]";
     case Mips::BNEGI_B:
-      dbgs() << "BNEGI_B: 	(set MSA128BOpnd:{}:$wd, (xor:{} MSA128BOpnd:{}:$ws, vsplat_uimm_pow2:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (xor MSA128BOpnd:$ws, vsplat_uimm_pow2:$m))]";
     case Mips::BNEGI_D:
-      dbgs() << "BNEGI_D: 	(set MSA128DOpnd:{}:$wd, (xor:{} MSA128DOpnd:{}:$ws, vsplat_uimm_pow2:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (xor MSA128DOpnd:$ws, vsplat_uimm_pow2:$m))]";
     case Mips::BNEGI_H:
-      dbgs() << "BNEGI_H: 	(set MSA128HOpnd:{}:$wd, (xor:{} MSA128HOpnd:{}:$ws, vsplat_uimm_pow2:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (xor MSA128HOpnd:$ws, vsplat_uimm_pow2:$m))]";
     case Mips::BNEGI_W:
-      dbgs() << "BNEGI_W: 	(set MSA128WOpnd:{}:$wd, (xor:{} MSA128WOpnd:{}:$ws, vsplat_uimm_pow2:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (xor MSA128WOpnd:$ws, vsplat_uimm_pow2:$m))]";
     case Mips::BNEG_B:
-      dbgs() << "BNEG_B: 	(set MSA128BOpnd:{}:$wd, (vbneg_b:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vbneg_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::BNEG_D:
-      dbgs() << "BNEG_D: 	(set MSA128DOpnd:{}:$wd, (vbneg_d:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vbneg_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::BNEG_H:
-      dbgs() << "BNEG_H: 	(set MSA128HOpnd:{}:$wd, (vbneg_h:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vbneg_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::BNEG_W:
-      dbgs() << "BNEG_W: 	(set MSA128WOpnd:{}:$wd, (vbneg_w:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vbneg_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::BNE_MM:
-      dbgs() << "BNE_MM: 	(brcond (setne:{ *:[i32] } GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt), (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(brcond (i32 (setne GPR32Opnd:$rs, GPR32Opnd:$rt)), bb:$offset)]";
     case Mips::BPOSGE32_PSEUDO:
-      dbgs() << "BPOSGE32_PSEUDO: 	(set GPR32Opnd:{}:$dst, (intrinsic_w_chain:{} 4157:{}))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$dst, (int_mips_bposge32))]";
     case Mips::BSELI_B:
-      dbgs() << "BSELI_B: 	(set MSA128BOpnd:{}:$wd, (vselect:{} MSA128BOpnd:{}:$wd_in, vsplati8_uimm8:{}:$u8, MSA128BOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vselect MSA128BOpnd:$wd_in, vsplati8_uimm8:$u8, MSA128BOpnd:$ws))]";
     case Mips::BSEL_D_PSEUDO:
-      dbgs() << "BSEL_D_PSEUDO: 	(set MSA128DOpnd:{}:$wd, (vselect:{ *:[v2i64] } MSA128DOpnd:{}:$wd_in, MSA128DOpnd:{}:$wt, MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (v2i64 (vselect MSA128DOpnd:$wd_in, MSA128DOpnd:$wt, MSA128DOpnd:$ws)))]";
     case Mips::BSEL_FD_PSEUDO:
-      dbgs() << "BSEL_FD_PSEUDO: 	(set MSA128DOpnd:{}:$wd, (vselect:{ *:[v2f64] } MSA128DOpnd:{}:$wd_in, MSA128DOpnd:{}:$wt, MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (v2f64 (vselect MSA128DOpnd:$wd_in, MSA128DOpnd:$wt, MSA128DOpnd:$ws)))]";
     case Mips::BSEL_FW_PSEUDO:
-      dbgs() << "BSEL_FW_PSEUDO: 	(set MSA128WOpnd:{}:$wd, (vselect:{ *:[v4f32] } MSA128WOpnd:{}:$wd_in, MSA128WOpnd:{}:$wt, MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (v4f32 (vselect MSA128WOpnd:$wd_in, MSA128WOpnd:$wt, MSA128WOpnd:$ws)))]";
     case Mips::BSEL_H_PSEUDO:
-      dbgs() << "BSEL_H_PSEUDO: 	(set MSA128HOpnd:{}:$wd, (vselect:{ *:[v8i16] } MSA128HOpnd:{}:$wd_in, MSA128HOpnd:{}:$wt, MSA128HOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (v8i16 (vselect MSA128HOpnd:$wd_in, MSA128HOpnd:$wt, MSA128HOpnd:$ws)))]";
     case Mips::BSEL_V:
-      dbgs() << "BSEL_V: 	(set MSA128BOpnd:{}:$wd, (vselect:{} MSA128BOpnd:{}:$wd_in, MSA128BOpnd:{}:$wt, MSA128BOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vselect MSA128BOpnd:$wd_in, MSA128BOpnd:$wt, MSA128BOpnd:$ws))]";
     case Mips::BSEL_W_PSEUDO:
-      dbgs() << "BSEL_W_PSEUDO: 	(set MSA128WOpnd:{}:$wd, (vselect:{ *:[v4i32] } MSA128WOpnd:{}:$wd_in, MSA128WOpnd:{}:$wt, MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (v4i32 (vselect MSA128WOpnd:$wd_in, MSA128WOpnd:$wt, MSA128WOpnd:$ws)))]";
     case Mips::BSETI_B:
-      dbgs() << "BSETI_B: 	(set MSA128BOpnd:{}:$wd, (or:{} MSA128BOpnd:{}:$ws, vsplat_uimm_pow2:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (or MSA128BOpnd:$ws, vsplat_uimm_pow2:$m))]";
     case Mips::BSETI_D:
-      dbgs() << "BSETI_D: 	(set MSA128DOpnd:{}:$wd, (or:{} MSA128DOpnd:{}:$ws, vsplat_uimm_pow2:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (or MSA128DOpnd:$ws, vsplat_uimm_pow2:$m))]";
     case Mips::BSETI_H:
-      dbgs() << "BSETI_H: 	(set MSA128HOpnd:{}:$wd, (or:{} MSA128HOpnd:{}:$ws, vsplat_uimm_pow2:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (or MSA128HOpnd:$ws, vsplat_uimm_pow2:$m))]";
     case Mips::BSETI_W:
-      dbgs() << "BSETI_W: 	(set MSA128WOpnd:{}:$wd, (or:{} MSA128WOpnd:{}:$ws, vsplat_uimm_pow2:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (or MSA128WOpnd:$ws, vsplat_uimm_pow2:$m))]";
     case Mips::BSET_B:
-      dbgs() << "BSET_B: 	(set MSA128BOpnd:{}:$wd, (vbset_b:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vbset_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::BSET_D:
-      dbgs() << "BSET_D: 	(set MSA128DOpnd:{}:$wd, (vbset_d:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vbset_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::BSET_H:
-      dbgs() << "BSET_H: 	(set MSA128HOpnd:{}:$wd, (vbset_h:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vbset_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::BSET_W:
-      dbgs() << "BSET_W: 	(set MSA128WOpnd:{}:$wd, (vbset_w:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vbset_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::B_MM:
-      dbgs() << "B_MM: 	(br (bb:{}):$offset)";
-      break;
+    {
+      dbgs() << "[(br bb:$offset)]";
     case Mips::BuildPairF64:
-      dbgs() << "BuildPairF64: 	(set AFGR64Opnd:{}:$dst, (MipsBuildPairF64:{} GPR32Opnd:{}:$lo, GPR32Opnd:{}:$hi))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$dst, (MipsBuildPairF64 GPR32Opnd:$lo, GPR32Opnd:$hi))]";
     case Mips::BuildPairF64_64:
-      dbgs() << "BuildPairF64_64: 	(set FGR64Opnd:{}:$dst, (MipsBuildPairF64:{} GPR32Opnd:{}:$lo, GPR32Opnd:{}:$hi))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$dst, (MipsBuildPairF64 GPR32Opnd:$lo, GPR32Opnd:$hi))]";
+    case Mips::CEIL_L_D64:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::CEIL_L_D_MMR6:
+    {
+      dbgs() << "[(set FGR64Opnd:$ft, (null_frag FGR64Opnd:$fs))]";
+    case Mips::CEIL_L_S:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CEIL_L_S_MMR6:
+    {
+      dbgs() << "[(set FGR64Opnd:$ft, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CEIL_W_D32:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::CEIL_W_D64:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::CEIL_W_D_MMR6:
+    {
+      dbgs() << "[(set FGR32Opnd:$ft, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::CEIL_W_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::CEIL_W_S:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CEIL_W_S_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CEIL_W_S_MMR6:
+    {
+      dbgs() << "[(set FGR32Opnd:$ft, (null_frag FGR32Opnd:$fs))]";
     case Mips::CEQI_B:
-      dbgs() << "CEQI_B: 	(set MSA128BOpnd:{}:$wd, (vseteq_v16i8:{} MSA128BOpnd:{}:$ws, vsplati8_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vseteq_v16i8 MSA128BOpnd:$ws, vsplati8_simm5:$imm))]";
     case Mips::CEQI_D:
-      dbgs() << "CEQI_D: 	(set MSA128DOpnd:{}:$wd, (vseteq_v2i64:{} MSA128DOpnd:{}:$ws, vsplati64_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vseteq_v2i64 MSA128DOpnd:$ws, vsplati64_simm5:$imm))]";
     case Mips::CEQI_H:
-      dbgs() << "CEQI_H: 	(set MSA128HOpnd:{}:$wd, (vseteq_v8i16:{} MSA128HOpnd:{}:$ws, vsplati16_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vseteq_v8i16 MSA128HOpnd:$ws, vsplati16_simm5:$imm))]";
     case Mips::CEQI_W:
-      dbgs() << "CEQI_W: 	(set MSA128WOpnd:{}:$wd, (vseteq_v4i32:{} MSA128WOpnd:{}:$ws, vsplati32_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vseteq_v4i32 MSA128WOpnd:$ws, vsplati32_simm5:$imm))]";
     case Mips::CEQ_B:
-      dbgs() << "CEQ_B: 	(set MSA128BOpnd:{}:$wd, (vseteq_v16i8:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vseteq_v16i8 MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::CEQ_D:
-      dbgs() << "CEQ_D: 	(set MSA128DOpnd:{}:$wd, (vseteq_v2i64:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vseteq_v2i64 MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::CEQ_H:
-      dbgs() << "CEQ_H: 	(set MSA128HOpnd:{}:$wd, (vseteq_v8i16:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vseteq_v8i16 MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::CEQ_W:
-      dbgs() << "CEQ_W: 	(set MSA128WOpnd:{}:$wd, (vseteq_v4i32:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vseteq_v4i32 MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
+    case Mips::CFC1:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag CCROpnd:$fs))]";
+    case Mips::CFC1_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag CCROpnd:$fs))]";
     case Mips::CINS:
-      dbgs() << "CINS: 	(set GPR64Opnd:{}:$rt, (MipsCIns:{} GPR64Opnd:{}:$rs, (immZExt5:{}):$pos, (imm:{}):$lenm1))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (MipsCIns GPR64Opnd:$rs, immZExt5:$pos, imm:$lenm1))]";
     case Mips::CINS32:
-      dbgs() << "CINS32: 	(set GPR64Opnd:{}:$rt, (MipsCIns:{} GPR64Opnd:{}:$rs, (immZExt5Plus32:{}):$pos, (imm:{}):$lenm1))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (MipsCIns GPR64Opnd:$rs, immZExt5Plus32:$pos, imm:$lenm1))]";
     case Mips::CINS_i32:
-      dbgs() << "CINS_i32: 	(set GPR32Opnd:{}:$rt, (MipsCIns:{} GPR32Opnd:{}:$rs, (immZExt5:{}):$pos, (imm:{}):$lenm1))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (MipsCIns GPR32Opnd:$rs, immZExt5:$pos, imm:$lenm1))]";
     case Mips::CLEI_S_B:
-      dbgs() << "CLEI_S_B: 	(set MSA128BOpnd:{}:$wd, (vsetle_v16i8:{} MSA128BOpnd:{}:$ws, vsplati8_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vsetle_v16i8 MSA128BOpnd:$ws, vsplati8_simm5:$imm))]";
     case Mips::CLEI_S_D:
-      dbgs() << "CLEI_S_D: 	(set MSA128DOpnd:{}:$wd, (vsetle_v2i64:{} MSA128DOpnd:{}:$ws, vsplati64_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vsetle_v2i64 MSA128DOpnd:$ws, vsplati64_simm5:$imm))]";
     case Mips::CLEI_S_H:
-      dbgs() << "CLEI_S_H: 	(set MSA128HOpnd:{}:$wd, (vsetle_v8i16:{} MSA128HOpnd:{}:$ws, vsplati16_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vsetle_v8i16 MSA128HOpnd:$ws, vsplati16_simm5:$imm))]";
     case Mips::CLEI_S_W:
-      dbgs() << "CLEI_S_W: 	(set MSA128WOpnd:{}:$wd, (vsetle_v4i32:{} MSA128WOpnd:{}:$ws, vsplati32_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vsetle_v4i32 MSA128WOpnd:$ws, vsplati32_simm5:$imm))]";
     case Mips::CLEI_U_B:
-      dbgs() << "CLEI_U_B: 	(set MSA128BOpnd:{}:$wd, (vsetule_v16i8:{} MSA128BOpnd:{}:$ws, vsplati8_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vsetule_v16i8 MSA128BOpnd:$ws, vsplati8_uimm5:$imm))]";
     case Mips::CLEI_U_D:
-      dbgs() << "CLEI_U_D: 	(set MSA128DOpnd:{}:$wd, (vsetule_v2i64:{} MSA128DOpnd:{}:$ws, vsplati64_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vsetule_v2i64 MSA128DOpnd:$ws, vsplati64_uimm5:$imm))]";
     case Mips::CLEI_U_H:
-      dbgs() << "CLEI_U_H: 	(set MSA128HOpnd:{}:$wd, (vsetule_v8i16:{} MSA128HOpnd:{}:$ws, vsplati16_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vsetule_v8i16 MSA128HOpnd:$ws, vsplati16_uimm5:$imm))]";
     case Mips::CLEI_U_W:
-      dbgs() << "CLEI_U_W: 	(set MSA128WOpnd:{}:$wd, (vsetule_v4i32:{} MSA128WOpnd:{}:$ws, vsplati32_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vsetule_v4i32 MSA128WOpnd:$ws, vsplati32_uimm5:$imm))]";
     case Mips::CLE_S_B:
-      dbgs() << "CLE_S_B: 	(set MSA128BOpnd:{}:$wd, (vsetle_v16i8:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vsetle_v16i8 MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::CLE_S_D:
-      dbgs() << "CLE_S_D: 	(set MSA128DOpnd:{}:$wd, (vsetle_v2i64:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vsetle_v2i64 MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::CLE_S_H:
-      dbgs() << "CLE_S_H: 	(set MSA128HOpnd:{}:$wd, (vsetle_v8i16:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vsetle_v8i16 MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::CLE_S_W:
-      dbgs() << "CLE_S_W: 	(set MSA128WOpnd:{}:$wd, (vsetle_v4i32:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vsetle_v4i32 MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::CLE_U_B:
-      dbgs() << "CLE_U_B: 	(set MSA128BOpnd:{}:$wd, (vsetule_v16i8:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vsetule_v16i8 MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::CLE_U_D:
-      dbgs() << "CLE_U_D: 	(set MSA128DOpnd:{}:$wd, (vsetule_v2i64:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vsetule_v2i64 MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::CLE_U_H:
-      dbgs() << "CLE_U_H: 	(set MSA128HOpnd:{}:$wd, (vsetule_v8i16:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vsetule_v8i16 MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::CLE_U_W:
-      dbgs() << "CLE_U_W: 	(set MSA128WOpnd:{}:$wd, (vsetule_v4i32:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vsetule_v4i32 MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::CLO:
-      dbgs() << "CLO: 	(set GPR32Opnd:{}:$rd, (ctlz:{} (not:{} GPR32Opnd:{}:$rs)))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (ctlz (not GPR32Opnd:$rs)))]";
     case Mips::CLO_MM:
-      dbgs() << "CLO_MM: 	(set GPR32Opnd:{}:$rd, (ctlz:{} (not:{} GPR32Opnd:{}:$rs)))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (ctlz (not GPR32Opnd:$rs)))]";
     case Mips::CLO_R6:
-      dbgs() << "CLO_R6: 	(set GPR32Opnd:{}:$rd, (ctlz:{} (not:{} GPR32Opnd:{}:$rs)))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (ctlz (not GPR32Opnd:$rs)))]";
     case Mips::CLTI_S_B:
-      dbgs() << "CLTI_S_B: 	(set MSA128BOpnd:{}:$wd, (vsetlt_v16i8:{} MSA128BOpnd:{}:$ws, vsplati8_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vsetlt_v16i8 MSA128BOpnd:$ws, vsplati8_simm5:$imm))]";
     case Mips::CLTI_S_D:
-      dbgs() << "CLTI_S_D: 	(set MSA128DOpnd:{}:$wd, (vsetlt_v2i64:{} MSA128DOpnd:{}:$ws, vsplati64_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vsetlt_v2i64 MSA128DOpnd:$ws, vsplati64_simm5:$imm))]";
     case Mips::CLTI_S_H:
-      dbgs() << "CLTI_S_H: 	(set MSA128HOpnd:{}:$wd, (vsetlt_v8i16:{} MSA128HOpnd:{}:$ws, vsplati16_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vsetlt_v8i16 MSA128HOpnd:$ws, vsplati16_simm5:$imm))]";
     case Mips::CLTI_S_W:
-      dbgs() << "CLTI_S_W: 	(set MSA128WOpnd:{}:$wd, (vsetlt_v4i32:{} MSA128WOpnd:{}:$ws, vsplati32_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vsetlt_v4i32 MSA128WOpnd:$ws, vsplati32_simm5:$imm))]";
     case Mips::CLTI_U_B:
-      dbgs() << "CLTI_U_B: 	(set MSA128BOpnd:{}:$wd, (vsetult_v16i8:{} MSA128BOpnd:{}:$ws, vsplati8_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vsetult_v16i8 MSA128BOpnd:$ws, vsplati8_uimm5:$imm))]";
     case Mips::CLTI_U_D:
-      dbgs() << "CLTI_U_D: 	(set MSA128DOpnd:{}:$wd, (vsetult_v2i64:{} MSA128DOpnd:{}:$ws, vsplati64_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vsetult_v2i64 MSA128DOpnd:$ws, vsplati64_uimm5:$imm))]";
     case Mips::CLTI_U_H:
-      dbgs() << "CLTI_U_H: 	(set MSA128HOpnd:{}:$wd, (vsetult_v8i16:{} MSA128HOpnd:{}:$ws, vsplati16_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vsetult_v8i16 MSA128HOpnd:$ws, vsplati16_uimm5:$imm))]";
     case Mips::CLTI_U_W:
-      dbgs() << "CLTI_U_W: 	(set MSA128WOpnd:{}:$wd, (vsetult_v4i32:{} MSA128WOpnd:{}:$ws, vsplati32_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vsetult_v4i32 MSA128WOpnd:$ws, vsplati32_uimm5:$imm))]";
     case Mips::CLT_S_B:
-      dbgs() << "CLT_S_B: 	(set MSA128BOpnd:{}:$wd, (vsetlt_v16i8:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vsetlt_v16i8 MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::CLT_S_D:
-      dbgs() << "CLT_S_D: 	(set MSA128DOpnd:{}:$wd, (vsetlt_v2i64:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vsetlt_v2i64 MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::CLT_S_H:
-      dbgs() << "CLT_S_H: 	(set MSA128HOpnd:{}:$wd, (vsetlt_v8i16:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vsetlt_v8i16 MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::CLT_S_W:
-      dbgs() << "CLT_S_W: 	(set MSA128WOpnd:{}:$wd, (vsetlt_v4i32:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vsetlt_v4i32 MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::CLT_U_B:
-      dbgs() << "CLT_U_B: 	(set MSA128BOpnd:{}:$wd, (vsetult_v16i8:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vsetult_v16i8 MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::CLT_U_D:
-      dbgs() << "CLT_U_D: 	(set MSA128DOpnd:{}:$wd, (vsetult_v2i64:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vsetult_v2i64 MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::CLT_U_H:
-      dbgs() << "CLT_U_H: 	(set MSA128HOpnd:{}:$wd, (vsetult_v8i16:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vsetult_v8i16 MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::CLT_U_W:
-      dbgs() << "CLT_U_W: 	(set MSA128WOpnd:{}:$wd, (vsetult_v4i32:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vsetult_v4i32 MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::CLZ:
-      dbgs() << "CLZ: 	(set GPR32Opnd:{}:$rd, (ctlz:{} GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (ctlz GPR32Opnd:$rs))]";
     case Mips::CLZ_MM:
-      dbgs() << "CLZ_MM: 	(set GPR32Opnd:{}:$rd, (ctlz:{} GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (ctlz GPR32Opnd:$rs))]";
     case Mips::CLZ_R6:
-      dbgs() << "CLZ_R6: 	(set GPR32Opnd:{}:$rd, (ctlz:{} GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (ctlz GPR32Opnd:$rs))]";
     case Mips::CMPGDU_EQ_QB:
-      dbgs() << "CMPGDU_EQ_QB: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4217:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_cmpgdu_eq_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::CMPGDU_EQ_QB_MMR2:
-      dbgs() << "CMPGDU_EQ_QB_MMR2: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4217:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_cmpgdu_eq_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::CMPGDU_LE_QB:
-      dbgs() << "CMPGDU_LE_QB: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4218:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_cmpgdu_le_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::CMPGDU_LE_QB_MMR2:
-      dbgs() << "CMPGDU_LE_QB_MMR2: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4218:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_cmpgdu_le_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::CMPGDU_LT_QB:
-      dbgs() << "CMPGDU_LT_QB: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4219:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_cmpgdu_lt_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::CMPGDU_LT_QB_MMR2:
-      dbgs() << "CMPGDU_LT_QB_MMR2: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4219:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_cmpgdu_lt_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::CMPGU_EQ_QB:
-      dbgs() << "CMPGU_EQ_QB: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4220:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_cmpgu_eq_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::CMPGU_EQ_QB_MM:
-      dbgs() << "CMPGU_EQ_QB_MM: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4220:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_cmpgu_eq_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::CMPGU_LE_QB:
-      dbgs() << "CMPGU_LE_QB: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4221:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_cmpgu_le_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::CMPGU_LE_QB_MM:
-      dbgs() << "CMPGU_LE_QB_MM: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4221:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_cmpgu_le_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::CMPGU_LT_QB:
-      dbgs() << "CMPGU_LT_QB: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4222:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_cmpgu_lt_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::CMPGU_LT_QB_MM:
-      dbgs() << "CMPGU_LT_QB_MM: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4222:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_cmpgu_lt_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::CMPU_EQ_QB:
-      dbgs() << "CMPU_EQ_QB: 	(intrinsic_void 4223:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt)";
-      break;
+    {
+      dbgs() << "[(int_mips_cmpu_eq_qb DSPROpnd:$rs, DSPROpnd:$rt)]";
     case Mips::CMPU_EQ_QB_MM:
-      dbgs() << "CMPU_EQ_QB_MM: 	(intrinsic_void 4223:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt)";
-      break;
+    {
+      dbgs() << "[(int_mips_cmpu_eq_qb DSPROpnd:$rs, DSPROpnd:$rt)]";
     case Mips::CMPU_LE_QB:
-      dbgs() << "CMPU_LE_QB: 	(intrinsic_void 4224:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt)";
-      break;
+    {
+      dbgs() << "[(int_mips_cmpu_le_qb DSPROpnd:$rs, DSPROpnd:$rt)]";
     case Mips::CMPU_LE_QB_MM:
-      dbgs() << "CMPU_LE_QB_MM: 	(intrinsic_void 4224:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt)";
-      break;
+    {
+      dbgs() << "[(int_mips_cmpu_le_qb DSPROpnd:$rs, DSPROpnd:$rt)]";
     case Mips::CMPU_LT_QB:
-      dbgs() << "CMPU_LT_QB: 	(intrinsic_void 4225:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt)";
-      break;
+    {
+      dbgs() << "[(int_mips_cmpu_lt_qb DSPROpnd:$rs, DSPROpnd:$rt)]";
     case Mips::CMPU_LT_QB_MM:
-      dbgs() << "CMPU_LT_QB_MM: 	(intrinsic_void 4225:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt)";
-      break;
+    {
+      dbgs() << "[(int_mips_cmpu_lt_qb DSPROpnd:$rs, DSPROpnd:$rt)]";
+    case Mips::CMP_AF_D_MMR6:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::CMP_AF_S_MMR6:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::CMP_EQ_D:
-      dbgs() << "CMP_EQ_D: 	(set FGRCCOpnd:{}:$fd, (setoeq:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setoeq FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::CMP_EQ_D_MMR6:
-      dbgs() << "CMP_EQ_D_MMR6: 	(set FGRCCOpnd:{}:$fd, (setoeq:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setoeq FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::CMP_EQ_PH:
-      dbgs() << "CMP_EQ_PH: 	(intrinsic_void 4214:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt)";
-      break;
+    {
+      dbgs() << "[(int_mips_cmp_eq_ph DSPROpnd:$rs, DSPROpnd:$rt)]";
     case Mips::CMP_EQ_PH_MM:
-      dbgs() << "CMP_EQ_PH_MM: 	(intrinsic_void 4214:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt)";
-      break;
+    {
+      dbgs() << "[(int_mips_cmp_eq_ph DSPROpnd:$rs, DSPROpnd:$rt)]";
     case Mips::CMP_EQ_S:
-      dbgs() << "CMP_EQ_S: 	(set FGRCCOpnd:{}:$fd, (setoeq:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setoeq FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::CMP_EQ_S_MMR6:
-      dbgs() << "CMP_EQ_S_MMR6: 	(set FGRCCOpnd:{}:$fd, (setoeq:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setoeq FGR32Opnd:$fs, FGR32Opnd:$ft))]";
+    case Mips::CMP_F_D:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::CMP_F_S:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::CMP_LE_D:
-      dbgs() << "CMP_LE_D: 	(set FGRCCOpnd:{}:$fd, (setole:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setole FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::CMP_LE_D_MMR6:
-      dbgs() << "CMP_LE_D_MMR6: 	(set FGRCCOpnd:{}:$fd, (setole:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setole FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::CMP_LE_PH:
-      dbgs() << "CMP_LE_PH: 	(intrinsic_void 4215:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt)";
-      break;
+    {
+      dbgs() << "[(int_mips_cmp_le_ph DSPROpnd:$rs, DSPROpnd:$rt)]";
     case Mips::CMP_LE_PH_MM:
-      dbgs() << "CMP_LE_PH_MM: 	(intrinsic_void 4215:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt)";
-      break;
+    {
+      dbgs() << "[(int_mips_cmp_le_ph DSPROpnd:$rs, DSPROpnd:$rt)]";
     case Mips::CMP_LE_S:
-      dbgs() << "CMP_LE_S: 	(set FGRCCOpnd:{}:$fd, (setole:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setole FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::CMP_LE_S_MMR6:
-      dbgs() << "CMP_LE_S_MMR6: 	(set FGRCCOpnd:{}:$fd, (setole:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setole FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::CMP_LT_D:
-      dbgs() << "CMP_LT_D: 	(set FGRCCOpnd:{}:$fd, (setolt:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setolt FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::CMP_LT_D_MMR6:
-      dbgs() << "CMP_LT_D_MMR6: 	(set FGRCCOpnd:{}:$fd, (setolt:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setolt FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::CMP_LT_PH:
-      dbgs() << "CMP_LT_PH: 	(intrinsic_void 4216:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt)";
-      break;
+    {
+      dbgs() << "[(int_mips_cmp_lt_ph DSPROpnd:$rs, DSPROpnd:$rt)]";
     case Mips::CMP_LT_PH_MM:
-      dbgs() << "CMP_LT_PH_MM: 	(intrinsic_void 4216:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt)";
-      break;
+    {
+      dbgs() << "[(int_mips_cmp_lt_ph DSPROpnd:$rs, DSPROpnd:$rt)]";
     case Mips::CMP_LT_S:
-      dbgs() << "CMP_LT_S: 	(set FGRCCOpnd:{}:$fd, (setolt:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setolt FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::CMP_LT_S_MMR6:
-      dbgs() << "CMP_LT_S_MMR6: 	(set FGRCCOpnd:{}:$fd, (setolt:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setolt FGR32Opnd:$fs, FGR32Opnd:$ft))]";
+    case Mips::CMP_SAF_D:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::CMP_SAF_D_MMR6:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::CMP_SAF_S:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
+    case Mips::CMP_SAF_S_MMR6:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
+    case Mips::CMP_SEQ_D:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::CMP_SEQ_D_MMR6:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::CMP_SEQ_S:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
+    case Mips::CMP_SEQ_S_MMR6:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
+    case Mips::CMP_SLE_D:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::CMP_SLE_D_MMR6:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::CMP_SLE_S:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
+    case Mips::CMP_SLE_S_MMR6:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
+    case Mips::CMP_SLT_D:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::CMP_SLT_D_MMR6:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::CMP_SLT_S:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
+    case Mips::CMP_SLT_S_MMR6:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
+    case Mips::CMP_SUEQ_D:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::CMP_SUEQ_D_MMR6:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::CMP_SUEQ_S:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
+    case Mips::CMP_SUEQ_S_MMR6:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
+    case Mips::CMP_SULE_D:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::CMP_SULE_D_MMR6:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::CMP_SULE_S:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
+    case Mips::CMP_SULE_S_MMR6:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
+    case Mips::CMP_SULT_D:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::CMP_SULT_D_MMR6:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::CMP_SULT_S:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
+    case Mips::CMP_SULT_S_MMR6:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
+    case Mips::CMP_SUN_D:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::CMP_SUN_D_MMR6:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::CMP_SUN_S:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
+    case Mips::CMP_SUN_S_MMR6:
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::CMP_UEQ_D:
-      dbgs() << "CMP_UEQ_D: 	(set FGRCCOpnd:{}:$fd, (setueq:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setueq FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::CMP_UEQ_D_MMR6:
-      dbgs() << "CMP_UEQ_D_MMR6: 	(set FGRCCOpnd:{}:$fd, (setueq:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setueq FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::CMP_UEQ_S:
-      dbgs() << "CMP_UEQ_S: 	(set FGRCCOpnd:{}:$fd, (setueq:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setueq FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::CMP_UEQ_S_MMR6:
-      dbgs() << "CMP_UEQ_S_MMR6: 	(set FGRCCOpnd:{}:$fd, (setueq:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setueq FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::CMP_ULE_D:
-      dbgs() << "CMP_ULE_D: 	(set FGRCCOpnd:{}:$fd, (setule:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setule FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::CMP_ULE_D_MMR6:
-      dbgs() << "CMP_ULE_D_MMR6: 	(set FGRCCOpnd:{}:$fd, (setule:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setule FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::CMP_ULE_S:
-      dbgs() << "CMP_ULE_S: 	(set FGRCCOpnd:{}:$fd, (setule:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setule FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::CMP_ULE_S_MMR6:
-      dbgs() << "CMP_ULE_S_MMR6: 	(set FGRCCOpnd:{}:$fd, (setule:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setule FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::CMP_ULT_D:
-      dbgs() << "CMP_ULT_D: 	(set FGRCCOpnd:{}:$fd, (setult:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setult FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::CMP_ULT_D_MMR6:
-      dbgs() << "CMP_ULT_D_MMR6: 	(set FGRCCOpnd:{}:$fd, (setult:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setult FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::CMP_ULT_S:
-      dbgs() << "CMP_ULT_S: 	(set FGRCCOpnd:{}:$fd, (setult:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setult FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::CMP_ULT_S_MMR6:
-      dbgs() << "CMP_ULT_S_MMR6: 	(set FGRCCOpnd:{}:$fd, (setult:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setult FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::CMP_UN_D:
-      dbgs() << "CMP_UN_D: 	(set FGRCCOpnd:{}:$fd, (setuo:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setuo FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::CMP_UN_D_MMR6:
-      dbgs() << "CMP_UN_D_MMR6: 	(set FGRCCOpnd:{}:$fd, (setuo:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setuo FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::CMP_UN_S:
-      dbgs() << "CMP_UN_S: 	(set FGRCCOpnd:{}:$fd, (setuo:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setuo FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::CMP_UN_S_MMR6:
-      dbgs() << "CMP_UN_S_MMR6: 	(set FGRCCOpnd:{}:$fd, (setuo:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGRCCOpnd:$fd, (setuo FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::COPY_FD_PSEUDO:
-      dbgs() << "COPY_FD_PSEUDO: 	(set FGR64:{}:$wd, (vector_extract:{} MSA128D:{ *:[v2f64] }:$ws, (immZExt1Ptr:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set FGR64:$wd, (vector_extract (v2f64 MSA128D:$ws), immZExt1Ptr:$n))]";
     case Mips::COPY_FW_PSEUDO:
-      dbgs() << "COPY_FW_PSEUDO: 	(set FGR32:{}:$wd, (vector_extract:{} MSA128W:{ *:[v4f32] }:$ws, (immZExt2Ptr:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set FGR32:$wd, (vector_extract (v4f32 MSA128W:$ws), immZExt2Ptr:$n))]";
     case Mips::COPY_S_B:
-      dbgs() << "COPY_S_B: 	(set GPR32Opnd:{}:$rd, (vextract_sext_i8:{} MSA128BOpnd:{ *:[v16i8] }:$ws, (immZExt4Ptr:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (vextract_sext_i8 (v16i8 MSA128BOpnd:$ws), immZExt4Ptr:$n))]";
     case Mips::COPY_S_D:
-      dbgs() << "COPY_S_D: 	(set GPR64Opnd:{}:$rd, (vextract_sext_i64:{} MSA128DOpnd:{ *:[v2i64] }:$ws, (immZExt1Ptr:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (vextract_sext_i64 (v2i64 MSA128DOpnd:$ws), immZExt1Ptr:$n))]";
     case Mips::COPY_S_H:
-      dbgs() << "COPY_S_H: 	(set GPR32Opnd:{}:$rd, (vextract_sext_i16:{} MSA128HOpnd:{ *:[v8i16] }:$ws, (immZExt3Ptr:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (vextract_sext_i16 (v8i16 MSA128HOpnd:$ws), immZExt3Ptr:$n))]";
     case Mips::COPY_S_W:
-      dbgs() << "COPY_S_W: 	(set GPR32Opnd:{}:$rd, (vextract_sext_i32:{} MSA128WOpnd:{ *:[v4i32] }:$ws, (immZExt2Ptr:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (vextract_sext_i32 (v4i32 MSA128WOpnd:$ws), immZExt2Ptr:$n))]";
     case Mips::COPY_U_B:
-      dbgs() << "COPY_U_B: 	(set GPR32Opnd:{}:$rd, (vextract_zext_i8:{} MSA128BOpnd:{ *:[v16i8] }:$ws, (immZExt4Ptr:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (vextract_zext_i8 (v16i8 MSA128BOpnd:$ws), immZExt4Ptr:$n))]";
     case Mips::COPY_U_H:
-      dbgs() << "COPY_U_H: 	(set GPR32Opnd:{}:$rd, (vextract_zext_i16:{} MSA128HOpnd:{ *:[v8i16] }:$ws, (immZExt3Ptr:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (vextract_zext_i16 (v8i16 MSA128HOpnd:$ws), immZExt3Ptr:$n))]";
     case Mips::COPY_U_W:
-      dbgs() << "COPY_U_W: 	(set GPR32Opnd:{}:$rd, (vextract_zext_i32:{} MSA128WOpnd:{ *:[v4i32] }:$ws, (immZExt2Ptr:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (vextract_zext_i32 (v4i32 MSA128WOpnd:$ws), immZExt2Ptr:$n))]";
+    case Mips::CTC1:
+    {
+      dbgs() << "[(set CCROpnd:$fs, (null_frag GPR32Opnd:$rt))]";
+    case Mips::CTC1_MM:
+    {
+      dbgs() << "[(set CCROpnd:$fs, (null_frag GPR32Opnd:$rt))]";
+    case Mips::CVT_D32_S:
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CVT_D32_S_MM:
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CVT_D32_W:
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CVT_D32_W_MM:
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CVT_D64_L:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::CVT_D64_S:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CVT_D64_S_MM:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CVT_D64_W:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CVT_D64_W_MM:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CVT_D_L_MMR6:
+    {
+      dbgs() << "[(set FGR64Opnd:$ft, (null_frag FGR64Opnd:$fs))]";
+    case Mips::CVT_L_D64:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::CVT_L_D64_MM:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::CVT_L_D_MMR6:
+    {
+      dbgs() << "[(set FGR64Opnd:$ft, (null_frag FGR64Opnd:$fs))]";
+    case Mips::CVT_L_S:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CVT_L_S_MM:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CVT_L_S_MMR6:
+    {
+      dbgs() << "[(set FGR64Opnd:$ft, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CVT_PS_PW64:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::CVT_PS_S64:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR32Opnd:$fs, FGR32Opnd:$ft))]";
+    case Mips::CVT_PW_PS64:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::CVT_S_D32:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::CVT_S_D32_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::CVT_S_D64:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::CVT_S_D64_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::CVT_S_L:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::CVT_S_L_MMR6:
+    {
+      dbgs() << "[(set FGR64Opnd:$ft, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CVT_S_PL64:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::CVT_S_PU64:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::CVT_S_W:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CVT_S_W_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CVT_S_W_MMR6:
+    {
+      dbgs() << "[(set FGR32Opnd:$ft, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CVT_W_D32:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::CVT_W_D32_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::CVT_W_D64:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::CVT_W_D64_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::CVT_W_S:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CVT_W_S_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::CVT_W_S_MMR6:
+    {
+      dbgs() << "[(set FGR32Opnd:$ft, (null_frag FGR32Opnd:$fs))]";
+    case Mips::DADD:
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (null_frag GPR64Opnd:$rs, GPR64Opnd:$rt))]";
+    case Mips::DADDi:
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (null_frag GPR64Opnd:$rs, null_frag:$imm16))]";
     case Mips::DADDiu:
-      dbgs() << "DADDiu: 	(set GPR64Opnd:{}:$rt, (add:{} GPR64Opnd:{}:$rs, (immSExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (add GPR64Opnd:$rs, immSExt16:$imm16))]";
     case Mips::DADDu:
-      dbgs() << "DADDu: 	(set GPR64Opnd:{}:$rd, (add:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (add GPR64Opnd:$rs, GPR64Opnd:$rt))]";
+      MachineRegister TmpRes = SimAdd(Inst);
       break;
+    }
     case Mips::DCLO:
-      dbgs() << "DCLO: 	(set GPR64Opnd:{}:$rd, (ctlz:{} (not:{} GPR64Opnd:{}:$rs)))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (ctlz (not GPR64Opnd:$rs)))]";
     case Mips::DCLO_R6:
-      dbgs() << "DCLO_R6: 	(set GPR64Opnd:{}:$rd, (ctlz:{} (not:{} GPR64Opnd:{}:$rs)))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (ctlz (not GPR64Opnd:$rs)))]";
     case Mips::DCLZ:
-      dbgs() << "DCLZ: 	(set GPR64Opnd:{}:$rd, (ctlz:{} GPR64Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (ctlz GPR64Opnd:$rs))]";
     case Mips::DCLZ_R6:
-      dbgs() << "DCLZ_R6: 	(set GPR64Opnd:{}:$rd, (ctlz:{} GPR64Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (ctlz GPR64Opnd:$rs))]";
     case Mips::DDIV:
-      dbgs() << "DDIV: 	(set GPR64Opnd:{}:$rd, (sdiv:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (sdiv GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::DDIVU:
-      dbgs() << "DDIVU: 	(set GPR64Opnd:{}:$rd, (udiv:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (udiv GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::DEXT:
-      dbgs() << "DEXT: 	(set GPR64Opnd:{}:$rt, (MipsExt:{} GPR64Opnd:{}:$rs, (immZExt5:{}):$pos, (immZExt5Plus1:{}):$size))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (MipsExt GPR64Opnd:$rs, immZExt5:$pos, immZExt5Plus1:$size))]";
     case Mips::DEXTM:
-      dbgs() << "DEXTM: 	(set GPR64Opnd:{}:$rt, (MipsExt:{} GPR64Opnd:{}:$rs, (immZExt5:{}):$pos, (immZExt5Plus33:{}):$size))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (MipsExt GPR64Opnd:$rs, immZExt5:$pos, immZExt5Plus33:$size))]";
     case Mips::DEXTU:
-      dbgs() << "DEXTU: 	(set GPR64Opnd:{}:$rt, (MipsExt:{} GPR64Opnd:{}:$rs, (immZExt5Plus32:{}):$pos, (immZExt5Plus1:{}):$size))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (MipsExt GPR64Opnd:$rs, immZExt5Plus32:$pos, immZExt5Plus1:$size))]";
+    case Mips::DINS:
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (null_frag GPR64Opnd:$rs, immZExt5:$pos, immZExt5Plus1:$size, GPR64Opnd:$src))]";
+    case Mips::DINSM:
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (null_frag GPR64Opnd:$rs, immZExt5:$pos, immZExtRange2To64:$size, GPR64Opnd:$src))]";
+    case Mips::DINSU:
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (null_frag GPR64Opnd:$rs, immZExt5Plus32:$pos, immZExt5Plus1:$size, GPR64Opnd:$src))]";
     case Mips::DIV:
-      dbgs() << "DIV: 	(set GPR32Opnd:{}:$rd, (sdiv:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (sdiv GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::DIVU:
-      dbgs() << "DIVU: 	(set GPR32Opnd:{}:$rd, (udiv:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (udiv GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::DIVU_MMR6:
-      dbgs() << "DIVU_MMR6: 	(set GPR32Opnd:{}:$rd, (udiv:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (udiv GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::DIV_MMR6:
-      dbgs() << "DIV_MMR6: 	(set GPR32Opnd:{}:$rd, (sdiv:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (sdiv GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::DIV_S_B:
-      dbgs() << "DIV_S_B: 	(set MSA128BOpnd:{}:$wd, (sdiv:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (sdiv MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::DIV_S_D:
-      dbgs() << "DIV_S_D: 	(set MSA128DOpnd:{}:$wd, (sdiv:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (sdiv MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::DIV_S_H:
-      dbgs() << "DIV_S_H: 	(set MSA128HOpnd:{}:$wd, (sdiv:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (sdiv MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::DIV_S_W:
-      dbgs() << "DIV_S_W: 	(set MSA128WOpnd:{}:$wd, (sdiv:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (sdiv MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::DIV_U_B:
-      dbgs() << "DIV_U_B: 	(set MSA128BOpnd:{}:$wd, (udiv:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (udiv MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::DIV_U_D:
-      dbgs() << "DIV_U_D: 	(set MSA128DOpnd:{}:$wd, (udiv:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (udiv MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::DIV_U_H:
-      dbgs() << "DIV_U_H: 	(set MSA128HOpnd:{}:$wd, (udiv:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (udiv MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::DIV_U_W:
-      dbgs() << "DIV_U_W: 	(set MSA128WOpnd:{}:$wd, (udiv:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (udiv MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::DLSA:
-      dbgs() << "DLSA: 	(set GPR64Opnd:{}:$rd, (add:{} GPR64Opnd:{}:$rt, (shl:{} GPR64Opnd:{}:$rs, (immZExt2Lsa:{}):$sa)))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (add GPR64Opnd:$rt, (shl GPR64Opnd:$rs, immZExt2Lsa:$sa)))]";
     case Mips::DMFC1:
-      dbgs() << "DMFC1: 	(set GPR64Opnd:{}:$rt, (bitconvert:{} FGR64Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (bitconvert FGR64Opnd:$fs))]";
     case Mips::DMOD:
-      dbgs() << "DMOD: 	(set GPR64Opnd:{}:$rd, (srem:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (srem GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::DMODU:
-      dbgs() << "DMODU: 	(set GPR64Opnd:{}:$rd, (urem:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (urem GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::DMTC1:
-      dbgs() << "DMTC1: 	(set FGR64Opnd:{}:$fs, (bitconvert:{} GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fs, (bitconvert GPR64Opnd:$rt))]";
     case Mips::DMUH:
-      dbgs() << "DMUH: 	(set GPR64Opnd:{}:$rd, (mulhs:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (mulhs GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::DMUHU:
-      dbgs() << "DMUHU: 	(set GPR64Opnd:{}:$rd, (mulhu:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (mulhu GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::DMUL:
-      dbgs() << "DMUL: 	(set GPR64Opnd:{}:$rd, (mul:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (mul GPR64Opnd:$rs, GPR64Opnd:$rt))]";
+    case Mips::DMULU:
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (null_frag GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::DMUL_R6:
-      dbgs() << "DMUL_R6: 	(set GPR64Opnd:{}:$rd, (mul:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (mul GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::DOTP_S_D:
-      dbgs() << "DOTP_S_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4244:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_dotp_s_d MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::DOTP_S_H:
-      dbgs() << "DOTP_S_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4245:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_dotp_s_h MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::DOTP_S_W:
-      dbgs() << "DOTP_S_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4246:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_dotp_s_w MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::DOTP_U_D:
-      dbgs() << "DOTP_U_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4247:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_dotp_u_d MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::DOTP_U_H:
-      dbgs() << "DOTP_U_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4248:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_dotp_u_h MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::DOTP_U_W:
-      dbgs() << "DOTP_U_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4249:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_dotp_u_w MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::DPADD_S_D:
-      dbgs() << "DPADD_S_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4251:{}, MSA128DOpnd:{}:$wd_in, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_dpadd_s_d MSA128DOpnd:$wd_in, MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::DPADD_S_H:
-      dbgs() << "DPADD_S_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4252:{}, MSA128HOpnd:{}:$wd_in, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_dpadd_s_h MSA128HOpnd:$wd_in, MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::DPADD_S_W:
-      dbgs() << "DPADD_S_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4253:{}, MSA128WOpnd:{}:$wd_in, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_dpadd_s_w MSA128WOpnd:$wd_in, MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::DPADD_U_D:
-      dbgs() << "DPADD_U_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4254:{}, MSA128DOpnd:{}:$wd_in, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_dpadd_u_d MSA128DOpnd:$wd_in, MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::DPADD_U_H:
-      dbgs() << "DPADD_U_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4255:{}, MSA128HOpnd:{}:$wd_in, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_dpadd_u_h MSA128HOpnd:$wd_in, MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::DPADD_U_W:
-      dbgs() << "DPADD_U_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4256:{}, MSA128WOpnd:{}:$wd_in, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_dpadd_u_w MSA128WOpnd:$wd_in, MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::DPAQX_SA_W_PH:
-      dbgs() << "DPAQX_SA_W_PH: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPAQX_SA_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPAQX_SA_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPAQX_SA_W_PH_MMR2:
-      dbgs() << "DPAQX_SA_W_PH_MMR2: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPAQX_SA_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPAQX_SA_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPAQX_S_W_PH:
-      dbgs() << "DPAQX_S_W_PH: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPAQX_S_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPAQX_S_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPAQX_S_W_PH_MMR2:
-      dbgs() << "DPAQX_S_W_PH_MMR2: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPAQX_S_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPAQX_S_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPAQ_SA_L_W:
-      dbgs() << "DPAQ_SA_L_W: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPAQ_SA_L_W:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPAQ_SA_L_W GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPAQ_SA_L_W_MM:
-      dbgs() << "DPAQ_SA_L_W_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPAQ_SA_L_W:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPAQ_SA_L_W GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPAQ_S_W_PH:
-      dbgs() << "DPAQ_S_W_PH: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPAQ_S_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPAQ_S_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPAQ_S_W_PH_MM:
-      dbgs() << "DPAQ_S_W_PH_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPAQ_S_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPAQ_S_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPAU_H_QBL:
-      dbgs() << "DPAU_H_QBL: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPAU_H_QBL:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPAU_H_QBL GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPAU_H_QBL_MM:
-      dbgs() << "DPAU_H_QBL_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPAU_H_QBL:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPAU_H_QBL GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPAU_H_QBR:
-      dbgs() << "DPAU_H_QBR: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPAU_H_QBR:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPAU_H_QBR GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPAU_H_QBR_MM:
-      dbgs() << "DPAU_H_QBR_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPAU_H_QBR:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPAU_H_QBR GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPAX_W_PH:
-      dbgs() << "DPAX_W_PH: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPAX_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPAX_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPAX_W_PH_MMR2:
-      dbgs() << "DPAX_W_PH_MMR2: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPAX_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPAX_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPA_W_PH:
-      dbgs() << "DPA_W_PH: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPA_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPA_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPA_W_PH_MMR2:
-      dbgs() << "DPA_W_PH_MMR2: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPA_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPA_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPOP:
-      dbgs() << "DPOP: 	(set GPR64Opnd:{}:$rd, (ctpop:{} GPR64Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (ctpop GPR64Opnd:$rs))]";
     case Mips::DPSQX_SA_W_PH:
-      dbgs() << "DPSQX_SA_W_PH: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPSQX_SA_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPSQX_SA_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPSQX_SA_W_PH_MMR2:
-      dbgs() << "DPSQX_SA_W_PH_MMR2: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPSQX_SA_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPSQX_SA_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPSQX_S_W_PH:
-      dbgs() << "DPSQX_S_W_PH: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPSQX_S_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPSQX_S_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPSQX_S_W_PH_MMR2:
-      dbgs() << "DPSQX_S_W_PH_MMR2: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPSQX_S_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPSQX_S_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPSQ_SA_L_W:
-      dbgs() << "DPSQ_SA_L_W: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPSQ_SA_L_W:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPSQ_SA_L_W GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPSQ_SA_L_W_MM:
-      dbgs() << "DPSQ_SA_L_W_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPSQ_SA_L_W:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPSQ_SA_L_W GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPSQ_S_W_PH:
-      dbgs() << "DPSQ_S_W_PH: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPSQ_S_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPSQ_S_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPSQ_S_W_PH_MM:
-      dbgs() << "DPSQ_S_W_PH_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPSQ_S_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPSQ_S_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPSUB_S_D:
-      dbgs() << "DPSUB_S_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4271:{}, MSA128DOpnd:{}:$wd_in, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_dpsub_s_d MSA128DOpnd:$wd_in, MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::DPSUB_S_H:
-      dbgs() << "DPSUB_S_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4272:{}, MSA128HOpnd:{}:$wd_in, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_dpsub_s_h MSA128HOpnd:$wd_in, MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::DPSUB_S_W:
-      dbgs() << "DPSUB_S_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4273:{}, MSA128WOpnd:{}:$wd_in, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_dpsub_s_w MSA128WOpnd:$wd_in, MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::DPSUB_U_D:
-      dbgs() << "DPSUB_U_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4274:{}, MSA128DOpnd:{}:$wd_in, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_dpsub_u_d MSA128DOpnd:$wd_in, MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::DPSUB_U_H:
-      dbgs() << "DPSUB_U_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4275:{}, MSA128HOpnd:{}:$wd_in, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_dpsub_u_h MSA128HOpnd:$wd_in, MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::DPSUB_U_W:
-      dbgs() << "DPSUB_U_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4276:{}, MSA128WOpnd:{}:$wd_in, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_dpsub_u_w MSA128WOpnd:$wd_in, MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::DPSU_H_QBL:
-      dbgs() << "DPSU_H_QBL: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPSU_H_QBL:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPSU_H_QBL GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPSU_H_QBL_MM:
-      dbgs() << "DPSU_H_QBL_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPSU_H_QBL:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPSU_H_QBL GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPSU_H_QBR:
-      dbgs() << "DPSU_H_QBR: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPSU_H_QBR:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPSU_H_QBR GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPSU_H_QBR_MM:
-      dbgs() << "DPSU_H_QBR_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPSU_H_QBR:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPSU_H_QBR GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPSX_W_PH:
-      dbgs() << "DPSX_W_PH: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPSX_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPSX_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPSX_W_PH_MMR2:
-      dbgs() << "DPSX_W_PH_MMR2: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPSX_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPSX_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPS_W_PH:
-      dbgs() << "DPS_W_PH: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPS_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPS_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DPS_W_PH_MMR2:
-      dbgs() << "DPS_W_PH_MMR2: 	(set ACC64DSPOpnd:{}:$ac, (MipsDPS_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsDPS_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::DROTR:
-      dbgs() << "DROTR: 	(set GPR64Opnd:{}:$rd, (rotr:{} GPR64Opnd:{}:$rt, (immZExt6:{}):$shamt))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (rotr GPR64Opnd:$rt, immZExt6:$shamt))]";
+    case Mips::DROTR32:
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (null_frag GPR64Opnd:$rt, null_frag:$shamt))]";
     case Mips::DROTRV:
-      dbgs() << "DROTRV: 	(set GPR64Opnd:{}:$rd, (rotr:{} GPR64Opnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (rotr GPR64Opnd:$rt, GPR32Opnd:$rs))]";
     case Mips::DSLL:
-      dbgs() << "DSLL: 	(set GPR64Opnd:{}:$rd, (shl:{} GPR64Opnd:{}:$rt, (immZExt6:{}):$shamt))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (shl GPR64Opnd:$rt, immZExt6:$shamt))]";
+    case Mips::DSLL32:
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (null_frag GPR64Opnd:$rt, null_frag:$shamt))]";
     case Mips::DSLLV:
-      dbgs() << "DSLLV: 	(set GPR64Opnd:{}:$rd, (shl:{} GPR64Opnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (shl GPR64Opnd:$rt, GPR32Opnd:$rs))]";
     case Mips::DSRA:
-      dbgs() << "DSRA: 	(set GPR64Opnd:{}:$rd, (sra:{} GPR64Opnd:{}:$rt, (immZExt6:{}):$shamt))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (sra GPR64Opnd:$rt, immZExt6:$shamt))]";
+    case Mips::DSRA32:
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (null_frag GPR64Opnd:$rt, null_frag:$shamt))]";
     case Mips::DSRAV:
-      dbgs() << "DSRAV: 	(set GPR64Opnd:{}:$rd, (sra:{} GPR64Opnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (sra GPR64Opnd:$rt, GPR32Opnd:$rs))]";
     case Mips::DSRL:
-      dbgs() << "DSRL: 	(set GPR64Opnd:{}:$rd, (srl:{} GPR64Opnd:{}:$rt, (immZExt6:{}):$shamt))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (srl GPR64Opnd:$rt, immZExt6:$shamt))]";
+    case Mips::DSRL32:
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (null_frag GPR64Opnd:$rt, null_frag:$shamt))]";
     case Mips::DSRLV:
-      dbgs() << "DSRLV: 	(set GPR64Opnd:{}:$rd, (srl:{} GPR64Opnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (srl GPR64Opnd:$rt, GPR32Opnd:$rs))]";
+    case Mips::DSUB:
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (null_frag GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::DSUBu:
-      dbgs() << "DSUBu: 	(set GPR64Opnd:{}:$rd, (sub:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (sub GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::ERet:
-      dbgs() << "ERet: 	(MipsERet)";
-      break;
+    {
+      dbgs() << "[(MipsERet)]";
     case Mips::EXT:
-      dbgs() << "EXT: 	(set GPR32Opnd:{}:$rt, (MipsExt:{} GPR32Opnd:{}:$rs, (immZExt5:{}):$pos, (immZExt5Plus1:{}):$size))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (MipsExt GPR32Opnd:$rs, immZExt5:$pos, immZExt5Plus1:$size))]";
+    case Mips::EXTS:
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (null_frag GPR64Opnd:$rs, immZExt5:$pos, imm:$lenm1))]";
+    case Mips::EXTS32:
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (null_frag GPR64Opnd:$rs, immZExt5Plus32:$pos, imm:$lenm1))]";
     case Mips::EXT_MM:
-      dbgs() << "EXT_MM: 	(set GPR32Opnd:{}:$rt, (MipsExt:{} GPR32Opnd:{}:$rs, (immZExt5:{}):$pos, (immZExt5Plus1:{}):$size))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (MipsExt GPR32Opnd:$rs, immZExt5:$pos, immZExt5Plus1:$size))]";
     case Mips::EXT_MMR6:
-      dbgs() << "EXT_MMR6: 	(set GPR32Opnd:{}:$rt, (MipsExt:{} GPR32Opnd:{}:$rs, (imm:{}):$pos, (imm:{}):$size))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (MipsExt GPR32Opnd:$rs, imm:$pos, imm:$size))]";
     case Mips::ExtractElementF64:
-      dbgs() << "ExtractElementF64: 	(set GPR32Opnd:{}:$dst, (MipsExtractElementF64:{} AFGR64Opnd:{}:$src, (imm:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$dst, (MipsExtractElementF64 AFGR64Opnd:$src, imm:$n))]";
     case Mips::ExtractElementF64_64:
-      dbgs() << "ExtractElementF64_64: 	(set GPR32Opnd:{}:$dst, (MipsExtractElementF64:{} FGR64Opnd:{}:$src, (imm:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$dst, (MipsExtractElementF64 FGR64Opnd:$src, imm:$n))]";
     case Mips::FABS_D:
-      dbgs() << "FABS_D: 	(set MSA128DOpnd:{}:$wd, (fabs:{} MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (fabs MSA128DOpnd:$ws))]";
     case Mips::FABS_D32:
-      dbgs() << "FABS_D32: 	(set AFGR64Opnd:{}:$fd, (fabs:{} AFGR64Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fabs AFGR64Opnd:$fs))]";
     case Mips::FABS_D32_MM:
-      dbgs() << "FABS_D32_MM: 	(set AFGR64Opnd:{}:$fd, (fabs:{} AFGR64Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fabs AFGR64Opnd:$fs))]";
     case Mips::FABS_D64:
-      dbgs() << "FABS_D64: 	(set FGR64Opnd:{}:$fd, (fabs:{} FGR64Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (fabs FGR64Opnd:$fs))]";
     case Mips::FABS_D64_MM:
-      dbgs() << "FABS_D64_MM: 	(set FGR64Opnd:{}:$fd, (fabs:{} FGR64Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (fabs FGR64Opnd:$fs))]";
     case Mips::FABS_S:
-      dbgs() << "FABS_S: 	(set FGR32Opnd:{}:$fd, (fabs:{} FGR32Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fabs FGR32Opnd:$fs))]";
     case Mips::FABS_S_MM:
-      dbgs() << "FABS_S_MM: 	(set FGR32Opnd:{}:$fd, (fabs:{} FGR32Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fabs FGR32Opnd:$fs))]";
     case Mips::FABS_W:
-      dbgs() << "FABS_W: 	(set MSA128WOpnd:{}:$wd, (fabs:{} MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (fabs MSA128WOpnd:$ws))]";
     case Mips::FADD_D:
-      dbgs() << "FADD_D: 	(set MSA128DOpnd:{}:$wd, (fadd:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (fadd MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FADD_D32:
-      dbgs() << "FADD_D32: 	(set AFGR64Opnd:{}:$fd, (fadd:{} AFGR64Opnd:{}:$fs, AFGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fadd AFGR64Opnd:$fs, AFGR64Opnd:$ft))]";
     case Mips::FADD_D32_MM:
-      dbgs() << "FADD_D32_MM: 	(set AFGR64Opnd:{}:$fd, (fadd:{} AFGR64Opnd:{}:$fs, AFGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fadd AFGR64Opnd:$fs, AFGR64Opnd:$ft))]";
     case Mips::FADD_D64:
-      dbgs() << "FADD_D64: 	(set FGR64Opnd:{}:$fd, (fadd:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (fadd FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::FADD_D64_MM:
-      dbgs() << "FADD_D64_MM: 	(set FGR64Opnd:{}:$fd, (fadd:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (fadd FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::FADD_S:
-      dbgs() << "FADD_S: 	(set FGR32Opnd:{}:$fd, (fadd:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fadd FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::FADD_S_MM:
-      dbgs() << "FADD_S_MM: 	(set FGR32Opnd:{}:$fd, (fadd:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fadd FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::FADD_S_MMR6:
-      dbgs() << "FADD_S_MMR6: 	(set FGR32Opnd:{}:$fd, (fadd:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fadd FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::FADD_W:
-      dbgs() << "FADD_W: 	(set MSA128WOpnd:{}:$wd, (fadd:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (fadd MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FCAF_D:
-      dbgs() << "FCAF_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4286:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fcaf_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FCAF_W:
-      dbgs() << "FCAF_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4287:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fcaf_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FCEQ_D:
-      dbgs() << "FCEQ_D: 	(set MSA128DOpnd:{}:$wd, (vfsetoeq_v2f64:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vfsetoeq_v2f64 MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FCEQ_W:
-      dbgs() << "FCEQ_W: 	(set MSA128WOpnd:{}:$wd, (vfsetoeq_v4f32:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vfsetoeq_v4f32 MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FCLASS_D:
-      dbgs() << "FCLASS_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4290:{}, MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fclass_d MSA128DOpnd:$ws))]";
     case Mips::FCLASS_W:
-      dbgs() << "FCLASS_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4291:{}, MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fclass_w MSA128WOpnd:$ws))]";
     case Mips::FCLE_D:
-      dbgs() << "FCLE_D: 	(set MSA128DOpnd:{}:$wd, (vfsetole_v2f64:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vfsetole_v2f64 MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FCLE_W:
-      dbgs() << "FCLE_W: 	(set MSA128WOpnd:{}:$wd, (vfsetole_v4f32:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vfsetole_v4f32 MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FCLT_D:
-      dbgs() << "FCLT_D: 	(set MSA128DOpnd:{}:$wd, (vfsetolt_v2f64:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vfsetolt_v2f64 MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FCLT_W:
-      dbgs() << "FCLT_W: 	(set MSA128WOpnd:{}:$wd, (vfsetolt_v4f32:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vfsetolt_v4f32 MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FCMP_D32:
-      dbgs() << "FCMP_D32: 	(MipsFPCmp AFGR64:{}:$fs, AFGR64:{}:$ft, (imm:{}):$cond)";
-      break;
+    {
+      dbgs() << "[(MipsFPCmp AFGR64:$fs, AFGR64:$ft, imm:$cond)]";
     case Mips::FCMP_D32_MM:
-      dbgs() << "FCMP_D32_MM: 	(MipsFPCmp AFGR64:{}:$fs, AFGR64:{}:$ft, (imm:{}):$cond)";
-      break;
+    {
+      dbgs() << "[(MipsFPCmp AFGR64:$fs, AFGR64:$ft, imm:$cond)]";
     case Mips::FCMP_D64:
-      dbgs() << "FCMP_D64: 	(MipsFPCmp FGR64:{}:$fs, FGR64:{}:$ft, (imm:{}):$cond)";
-      break;
+    {
+      dbgs() << "[(MipsFPCmp FGR64:$fs, FGR64:$ft, imm:$cond)]";
     case Mips::FCMP_S32:
-      dbgs() << "FCMP_S32: 	(MipsFPCmp FGR32:{}:$fs, FGR32:{}:$ft, (imm:{}):$cond)";
-      break;
+    {
+      dbgs() << "[(MipsFPCmp FGR32:$fs, FGR32:$ft, imm:$cond)]";
     case Mips::FCMP_S32_MM:
-      dbgs() << "FCMP_S32_MM: 	(MipsFPCmp FGR32:{}:$fs, FGR32:{}:$ft, (imm:{}):$cond)";
-      break;
+    {
+      dbgs() << "[(MipsFPCmp FGR32:$fs, FGR32:$ft, imm:$cond)]";
     case Mips::FCNE_D:
-      dbgs() << "FCNE_D: 	(set MSA128DOpnd:{}:$wd, (vfsetone_v2f64:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vfsetone_v2f64 MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FCNE_W:
-      dbgs() << "FCNE_W: 	(set MSA128WOpnd:{}:$wd, (vfsetone_v4f32:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vfsetone_v4f32 MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FCOR_D:
-      dbgs() << "FCOR_D: 	(set MSA128DOpnd:{}:$wd, (vfsetord_v2f64:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vfsetord_v2f64 MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FCOR_W:
-      dbgs() << "FCOR_W: 	(set MSA128WOpnd:{}:$wd, (vfsetord_v4f32:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vfsetord_v4f32 MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FCUEQ_D:
-      dbgs() << "FCUEQ_D: 	(set MSA128DOpnd:{}:$wd, (vfsetueq_v2f64:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vfsetueq_v2f64 MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FCUEQ_W:
-      dbgs() << "FCUEQ_W: 	(set MSA128WOpnd:{}:$wd, (vfsetueq_v4f32:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vfsetueq_v4f32 MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FCULE_D:
-      dbgs() << "FCULE_D: 	(set MSA128DOpnd:{}:$wd, (vfsetule_v2f64:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vfsetule_v2f64 MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FCULE_W:
-      dbgs() << "FCULE_W: 	(set MSA128WOpnd:{}:$wd, (vfsetule_v4f32:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vfsetule_v4f32 MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FCULT_D:
-      dbgs() << "FCULT_D: 	(set MSA128DOpnd:{}:$wd, (vfsetult_v2f64:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vfsetult_v2f64 MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FCULT_W:
-      dbgs() << "FCULT_W: 	(set MSA128WOpnd:{}:$wd, (vfsetult_v4f32:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vfsetult_v4f32 MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FCUNE_D:
-      dbgs() << "FCUNE_D: 	(set MSA128DOpnd:{}:$wd, (vfsetune_v2f64:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vfsetune_v2f64 MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FCUNE_W:
-      dbgs() << "FCUNE_W: 	(set MSA128WOpnd:{}:$wd, (vfsetune_v4f32:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vfsetune_v4f32 MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FCUN_D:
-      dbgs() << "FCUN_D: 	(set MSA128DOpnd:{}:$wd, (vfsetun_v2f64:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vfsetun_v2f64 MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FCUN_W:
-      dbgs() << "FCUN_W: 	(set MSA128WOpnd:{}:$wd, (vfsetun_v4f32:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vfsetun_v4f32 MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FDIV_D:
-      dbgs() << "FDIV_D: 	(set MSA128DOpnd:{}:$wd, (fdiv:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (fdiv MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FDIV_D32:
-      dbgs() << "FDIV_D32: 	(set AFGR64Opnd:{}:$fd, (fdiv:{} AFGR64Opnd:{}:$fs, AFGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fdiv AFGR64Opnd:$fs, AFGR64Opnd:$ft))]";
     case Mips::FDIV_D32_MM:
-      dbgs() << "FDIV_D32_MM: 	(set AFGR64Opnd:{}:$fd, (fdiv:{} AFGR64Opnd:{}:$fs, AFGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fdiv AFGR64Opnd:$fs, AFGR64Opnd:$ft))]";
     case Mips::FDIV_D64:
-      dbgs() << "FDIV_D64: 	(set FGR64Opnd:{}:$fd, (fdiv:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (fdiv FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::FDIV_D64_MM:
-      dbgs() << "FDIV_D64_MM: 	(set FGR64Opnd:{}:$fd, (fdiv:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (fdiv FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::FDIV_S:
-      dbgs() << "FDIV_S: 	(set FGR32Opnd:{}:$fd, (fdiv:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fdiv FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::FDIV_S_MM:
-      dbgs() << "FDIV_S_MM: 	(set FGR32Opnd:{}:$fd, (fdiv:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fdiv FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::FDIV_S_MMR6:
-      dbgs() << "FDIV_S_MMR6: 	(set FGR32Opnd:{}:$fd, (fdiv:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fdiv FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::FDIV_W:
-      dbgs() << "FDIV_W: 	(set MSA128WOpnd:{}:$wd, (fdiv:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (fdiv MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FEXDO_H:
-      dbgs() << "FEXDO_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4312:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_fexdo_h MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FEXDO_W:
-      dbgs() << "FEXDO_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4313:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fexdo_w MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FEXP2_D:
-      dbgs() << "FEXP2_D: 	(set MSA128DOpnd:{}:$wd, (mul_fexp2:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (mul_fexp2 MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FEXP2_D_1_PSEUDO:
-      dbgs() << "FEXP2_D_1_PSEUDO: 	(set MSA128D:{}:$wd, (fexp2:{} MSA128D:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128D:$wd, (fexp2 MSA128D:$ws))]";
     case Mips::FEXP2_W:
-      dbgs() << "FEXP2_W: 	(set MSA128WOpnd:{}:$wd, (mul_fexp2:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (mul_fexp2 MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FEXP2_W_1_PSEUDO:
-      dbgs() << "FEXP2_W_1_PSEUDO: 	(set MSA128W:{}:$wd, (fexp2:{} MSA128W:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128W:$wd, (fexp2 MSA128W:$ws))]";
     case Mips::FEXUPL_D:
-      dbgs() << "FEXUPL_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4316:{}, MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fexupl_d MSA128WOpnd:$ws))]";
     case Mips::FEXUPL_W:
-      dbgs() << "FEXUPL_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4317:{}, MSA128HOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fexupl_w MSA128HOpnd:$ws))]";
     case Mips::FEXUPR_D:
-      dbgs() << "FEXUPR_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4318:{}, MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fexupr_d MSA128WOpnd:$ws))]";
     case Mips::FEXUPR_W:
-      dbgs() << "FEXUPR_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4319:{}, MSA128HOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fexupr_w MSA128HOpnd:$ws))]";
     case Mips::FFINT_S_D:
-      dbgs() << "FFINT_S_D: 	(set MSA128DOpnd:{}:$wd, (sint_to_fp:{} MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (sint_to_fp MSA128DOpnd:$ws))]";
     case Mips::FFINT_S_W:
-      dbgs() << "FFINT_S_W: 	(set MSA128WOpnd:{}:$wd, (sint_to_fp:{} MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (sint_to_fp MSA128WOpnd:$ws))]";
     case Mips::FFINT_U_D:
-      dbgs() << "FFINT_U_D: 	(set MSA128DOpnd:{}:$wd, (uint_to_fp:{} MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (uint_to_fp MSA128DOpnd:$ws))]";
     case Mips::FFINT_U_W:
-      dbgs() << "FFINT_U_W: 	(set MSA128WOpnd:{}:$wd, (uint_to_fp:{} MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (uint_to_fp MSA128WOpnd:$ws))]";
     case Mips::FFQL_D:
-      dbgs() << "FFQL_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4324:{}, MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_ffql_d MSA128WOpnd:$ws))]";
     case Mips::FFQL_W:
-      dbgs() << "FFQL_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4325:{}, MSA128HOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_ffql_w MSA128HOpnd:$ws))]";
     case Mips::FFQR_D:
-      dbgs() << "FFQR_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4326:{}, MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_ffqr_d MSA128WOpnd:$ws))]";
     case Mips::FFQR_W:
-      dbgs() << "FFQR_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4327:{}, MSA128HOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_ffqr_w MSA128HOpnd:$ws))]";
     case Mips::FILL_B:
-      dbgs() << "FILL_B: 	(set MSA128BOpnd:{}:$wd, (vsplati8:{ *:[v16i8] } GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (v16i8 (vsplati8 GPR32Opnd:$rs)))]";
     case Mips::FILL_D:
-      dbgs() << "FILL_D: 	(set MSA128DOpnd:{}:$wd, (vsplati64:{ *:[v2i64] } GPR64Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (v2i64 (vsplati64 GPR64Opnd:$rs)))]";
     case Mips::FILL_FD_PSEUDO:
-      dbgs() << "FILL_FD_PSEUDO: 	(set MSA128D:{}:$wd, (vsplatf64:{} FGR64:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set MSA128D:$wd, (vsplatf64 FGR64:$fs))]";
     case Mips::FILL_FW_PSEUDO:
-      dbgs() << "FILL_FW_PSEUDO: 	(set MSA128W:{}:$wd, (vsplatf32:{} FGR32:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set MSA128W:$wd, (vsplatf32 FGR32:$fs))]";
     case Mips::FILL_H:
-      dbgs() << "FILL_H: 	(set MSA128HOpnd:{}:$wd, (vsplati16:{ *:[v8i16] } GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (v8i16 (vsplati16 GPR32Opnd:$rs)))]";
     case Mips::FILL_W:
-      dbgs() << "FILL_W: 	(set MSA128WOpnd:{}:$wd, (vsplati32:{ *:[v4i32] } GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (v4i32 (vsplati32 GPR32Opnd:$rs)))]";
     case Mips::FLOG2_D:
-      dbgs() << "FLOG2_D: 	(set MSA128DOpnd:{}:$wd, (flog2:{} MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (flog2 MSA128DOpnd:$ws))]";
     case Mips::FLOG2_W:
-      dbgs() << "FLOG2_W: 	(set MSA128WOpnd:{}:$wd, (flog2:{} MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (flog2 MSA128WOpnd:$ws))]";
+    case Mips::FLOOR_L_D64:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::FLOOR_L_D_MMR6:
+    {
+      dbgs() << "[(set FGR64Opnd:$ft, (null_frag FGR64Opnd:$fs))]";
+    case Mips::FLOOR_L_S:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::FLOOR_L_S_MMR6:
+    {
+      dbgs() << "[(set FGR64Opnd:$ft, (null_frag FGR32Opnd:$fs))]";
+    case Mips::FLOOR_W_D32:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::FLOOR_W_D64:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::FLOOR_W_D_MMR6:
+    {
+      dbgs() << "[(set FGR32Opnd:$ft, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::FLOOR_W_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::FLOOR_W_S:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::FLOOR_W_S_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::FLOOR_W_S_MMR6:
+    {
+      dbgs() << "[(set FGR32Opnd:$ft, (null_frag FGR32Opnd:$fs))]";
     case Mips::FMADD_D:
-      dbgs() << "FMADD_D: 	(set MSA128DOpnd:{}:$wd, (fma:{} MSA128DOpnd:{}:$wd_in, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (fma MSA128DOpnd:$wd_in, MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FMADD_W:
-      dbgs() << "FMADD_W: 	(set MSA128WOpnd:{}:$wd, (fma:{} MSA128WOpnd:{}:$wd_in, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (fma MSA128WOpnd:$wd_in, MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FMAX_A_D:
-      dbgs() << "FMAX_A_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4336:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fmax_a_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FMAX_A_W:
-      dbgs() << "FMAX_A_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4337:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fmax_a_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FMAX_D:
-      dbgs() << "FMAX_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4338:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fmax_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FMAX_W:
-      dbgs() << "FMAX_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4339:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fmax_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FMIN_A_D:
-      dbgs() << "FMIN_A_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4340:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fmin_a_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FMIN_A_W:
-      dbgs() << "FMIN_A_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4341:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fmin_a_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FMIN_D:
-      dbgs() << "FMIN_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4342:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fmin_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FMIN_W:
-      dbgs() << "FMIN_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4343:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fmin_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
+    case Mips::FMOV_D32:
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::FMOV_D32_MM:
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::FMOV_D64:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::FMOV_D64_MM:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::FMOV_D_MMR6:
+    {
+      dbgs() << "[(set FGR64Opnd:$ft, (null_frag FGR64Opnd:$fs))]";
+    case Mips::FMOV_S:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::FMOV_S_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::FMOV_S_MMR6:
+    {
+      dbgs() << "[(set FGR32Opnd:$ft, (null_frag FGR32Opnd:$fs))]";
     case Mips::FMSUB_D:
-      dbgs() << "FMSUB_D: 	(set MSA128DOpnd:{}:$wd, (MipsFMS:{} MSA128DOpnd:{}:$wd_in, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (MipsFMS MSA128DOpnd:$wd_in, MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FMSUB_W:
-      dbgs() << "FMSUB_W: 	(set MSA128WOpnd:{}:$wd, (MipsFMS:{} MSA128WOpnd:{}:$wd_in, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (MipsFMS MSA128WOpnd:$wd_in, MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FMUL_D:
-      dbgs() << "FMUL_D: 	(set MSA128DOpnd:{}:$wd, (fmul:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (fmul MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FMUL_D32:
-      dbgs() << "FMUL_D32: 	(set AFGR64Opnd:{}:$fd, (fmul:{} AFGR64Opnd:{}:$fs, AFGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fmul AFGR64Opnd:$fs, AFGR64Opnd:$ft))]";
     case Mips::FMUL_D32_MM:
-      dbgs() << "FMUL_D32_MM: 	(set AFGR64Opnd:{}:$fd, (fmul:{} AFGR64Opnd:{}:$fs, AFGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fmul AFGR64Opnd:$fs, AFGR64Opnd:$ft))]";
     case Mips::FMUL_D64:
-      dbgs() << "FMUL_D64: 	(set FGR64Opnd:{}:$fd, (fmul:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (fmul FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::FMUL_D64_MM:
-      dbgs() << "FMUL_D64_MM: 	(set FGR64Opnd:{}:$fd, (fmul:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (fmul FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::FMUL_S:
-      dbgs() << "FMUL_S: 	(set FGR32Opnd:{}:$fd, (fmul:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fmul FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::FMUL_S_MM:
-      dbgs() << "FMUL_S_MM: 	(set FGR32Opnd:{}:$fd, (fmul:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fmul FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::FMUL_S_MMR6:
-      dbgs() << "FMUL_S_MMR6: 	(set FGR32Opnd:{}:$fd, (fmul:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fmul FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::FMUL_W:
-      dbgs() << "FMUL_W: 	(set MSA128WOpnd:{}:$wd, (fmul:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (fmul MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FNEG_D32:
-      dbgs() << "FNEG_D32: 	(set AFGR64Opnd:{}:$fd, (fneg:{} AFGR64Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fneg AFGR64Opnd:$fs))]";
     case Mips::FNEG_D32_MM:
-      dbgs() << "FNEG_D32_MM: 	(set AFGR64Opnd:{}:$fd, (fneg:{} AFGR64Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fneg AFGR64Opnd:$fs))]";
     case Mips::FNEG_D64:
-      dbgs() << "FNEG_D64: 	(set FGR64Opnd:{}:$fd, (fneg:{} FGR64Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (fneg FGR64Opnd:$fs))]";
     case Mips::FNEG_D64_MM:
-      dbgs() << "FNEG_D64_MM: 	(set FGR64Opnd:{}:$fd, (fneg:{} FGR64Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (fneg FGR64Opnd:$fs))]";
     case Mips::FNEG_S:
-      dbgs() << "FNEG_S: 	(set FGR32Opnd:{}:$fd, (fneg:{} FGR32Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fneg FGR32Opnd:$fs))]";
     case Mips::FNEG_S_MM:
-      dbgs() << "FNEG_S_MM: 	(set FGR32Opnd:{}:$fd, (fneg:{} FGR32Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fneg FGR32Opnd:$fs))]";
     case Mips::FNEG_S_MMR6:
-      dbgs() << "FNEG_S_MMR6: 	(set FGR32Opnd:{}:$ft, (fneg:{} FGR32Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$ft, (fneg FGR32Opnd:$fs))]";
     case Mips::FRCP_D:
-      dbgs() << "FRCP_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4348:{}, MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_frcp_d MSA128DOpnd:$ws))]";
     case Mips::FRCP_W:
-      dbgs() << "FRCP_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4349:{}, MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_frcp_w MSA128WOpnd:$ws))]";
     case Mips::FRINT_D:
-      dbgs() << "FRINT_D: 	(set MSA128DOpnd:{}:$wd, (frint:{} MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (frint MSA128DOpnd:$ws))]";
     case Mips::FRINT_W:
-      dbgs() << "FRINT_W: 	(set MSA128WOpnd:{}:$wd, (frint:{} MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (frint MSA128WOpnd:$ws))]";
     case Mips::FRSQRT_D:
-      dbgs() << "FRSQRT_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4352:{}, MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_frsqrt_d MSA128DOpnd:$ws))]";
     case Mips::FRSQRT_W:
-      dbgs() << "FRSQRT_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4353:{}, MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_frsqrt_w MSA128WOpnd:$ws))]";
     case Mips::FSAF_D:
-      dbgs() << "FSAF_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4354:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fsaf_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FSAF_W:
-      dbgs() << "FSAF_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4355:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fsaf_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FSEQ_D:
-      dbgs() << "FSEQ_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4356:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fseq_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FSEQ_W:
-      dbgs() << "FSEQ_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4357:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fseq_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FSLE_D:
-      dbgs() << "FSLE_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4358:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fsle_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FSLE_W:
-      dbgs() << "FSLE_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4359:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fsle_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FSLT_D:
-      dbgs() << "FSLT_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4360:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fslt_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FSLT_W:
-      dbgs() << "FSLT_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4361:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fslt_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FSNE_D:
-      dbgs() << "FSNE_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4362:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fsne_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FSNE_W:
-      dbgs() << "FSNE_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4363:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fsne_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FSOR_D:
-      dbgs() << "FSOR_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4364:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fsor_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FSOR_W:
-      dbgs() << "FSOR_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4365:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fsor_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FSQRT_D:
-      dbgs() << "FSQRT_D: 	(set MSA128DOpnd:{}:$wd, (fsqrt:{} MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (fsqrt MSA128DOpnd:$ws))]";
     case Mips::FSQRT_D32:
-      dbgs() << "FSQRT_D32: 	(set AFGR64Opnd:{}:$fd, (fsqrt:{} AFGR64Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fsqrt AFGR64Opnd:$fs))]";
     case Mips::FSQRT_D32_MM:
-      dbgs() << "FSQRT_D32_MM: 	(set AFGR64Opnd:{}:$fd, (fsqrt:{} AFGR64Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fsqrt AFGR64Opnd:$fs))]";
     case Mips::FSQRT_D64:
-      dbgs() << "FSQRT_D64: 	(set FGR64Opnd:{}:$fd, (fsqrt:{} FGR64Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (fsqrt FGR64Opnd:$fs))]";
     case Mips::FSQRT_D64_MM:
-      dbgs() << "FSQRT_D64_MM: 	(set FGR64Opnd:{}:$fd, (fsqrt:{} FGR64Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (fsqrt FGR64Opnd:$fs))]";
     case Mips::FSQRT_S:
-      dbgs() << "FSQRT_S: 	(set FGR32Opnd:{}:$fd, (fsqrt:{} FGR32Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fsqrt FGR32Opnd:$fs))]";
     case Mips::FSQRT_S_MM:
-      dbgs() << "FSQRT_S_MM: 	(set FGR32Opnd:{}:$fd, (fsqrt:{} FGR32Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fsqrt FGR32Opnd:$fs))]";
     case Mips::FSQRT_W:
-      dbgs() << "FSQRT_W: 	(set MSA128WOpnd:{}:$wd, (fsqrt:{} MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (fsqrt MSA128WOpnd:$ws))]";
     case Mips::FSUB_D:
-      dbgs() << "FSUB_D: 	(set MSA128DOpnd:{}:$wd, (fsub:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (fsub MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FSUB_D32:
-      dbgs() << "FSUB_D32: 	(set AFGR64Opnd:{}:$fd, (fsub:{} AFGR64Opnd:{}:$fs, AFGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fsub AFGR64Opnd:$fs, AFGR64Opnd:$ft))]";
     case Mips::FSUB_D32_MM:
-      dbgs() << "FSUB_D32_MM: 	(set AFGR64Opnd:{}:$fd, (fsub:{} AFGR64Opnd:{}:$fs, AFGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fsub AFGR64Opnd:$fs, AFGR64Opnd:$ft))]";
     case Mips::FSUB_D64:
-      dbgs() << "FSUB_D64: 	(set FGR64Opnd:{}:$fd, (fsub:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (fsub FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::FSUB_D64_MM:
-      dbgs() << "FSUB_D64_MM: 	(set FGR64Opnd:{}:$fd, (fsub:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (fsub FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::FSUB_S:
-      dbgs() << "FSUB_S: 	(set FGR32Opnd:{}:$fd, (fsub:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fsub FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::FSUB_S_MM:
-      dbgs() << "FSUB_S_MM: 	(set FGR32Opnd:{}:$fd, (fsub:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fsub FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::FSUB_S_MMR6:
-      dbgs() << "FSUB_S_MMR6: 	(set FGR32Opnd:{}:$fd, (fsub:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fsub FGR32Opnd:$fs, FGR32Opnd:$ft))]";
     case Mips::FSUB_W:
-      dbgs() << "FSUB_W: 	(set MSA128WOpnd:{}:$wd, (fsub:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (fsub MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FSUEQ_D:
-      dbgs() << "FSUEQ_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4370:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fsueq_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FSUEQ_W:
-      dbgs() << "FSUEQ_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4371:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fsueq_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FSULE_D:
-      dbgs() << "FSULE_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4372:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fsule_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FSULE_W:
-      dbgs() << "FSULE_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4373:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fsule_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FSULT_D:
-      dbgs() << "FSULT_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4374:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fsult_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FSULT_W:
-      dbgs() << "FSULT_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4375:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fsult_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FSUNE_D:
-      dbgs() << "FSUNE_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4378:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fsune_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FSUNE_W:
-      dbgs() << "FSUNE_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4379:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fsune_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FSUN_D:
-      dbgs() << "FSUN_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4376:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_fsun_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FSUN_W:
-      dbgs() << "FSUN_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4377:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_fsun_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FTINT_S_D:
-      dbgs() << "FTINT_S_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4380:{}, MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_ftint_s_d MSA128DOpnd:$ws))]";
     case Mips::FTINT_S_W:
-      dbgs() << "FTINT_S_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4381:{}, MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_ftint_s_w MSA128WOpnd:$ws))]";
     case Mips::FTINT_U_D:
-      dbgs() << "FTINT_U_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4382:{}, MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_ftint_u_d MSA128DOpnd:$ws))]";
     case Mips::FTINT_U_W:
-      dbgs() << "FTINT_U_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4383:{}, MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_ftint_u_w MSA128WOpnd:$ws))]";
     case Mips::FTQ_H:
-      dbgs() << "FTQ_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4384:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_ftq_h MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::FTQ_W:
-      dbgs() << "FTQ_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4385:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_ftq_w MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::FTRUNC_S_D:
-      dbgs() << "FTRUNC_S_D: 	(set MSA128DOpnd:{}:$wd, (fp_to_sint:{} MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (fp_to_sint MSA128DOpnd:$ws))]";
     case Mips::FTRUNC_S_W:
-      dbgs() << "FTRUNC_S_W: 	(set MSA128WOpnd:{}:$wd, (fp_to_sint:{} MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (fp_to_sint MSA128WOpnd:$ws))]";
     case Mips::FTRUNC_U_D:
-      dbgs() << "FTRUNC_U_D: 	(set MSA128DOpnd:{}:$wd, (fp_to_uint:{} MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (fp_to_uint MSA128DOpnd:$ws))]";
     case Mips::FTRUNC_U_W:
-      dbgs() << "FTRUNC_U_W: 	(set MSA128WOpnd:{}:$wd, (fp_to_uint:{} MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (fp_to_uint MSA128WOpnd:$ws))]";
     case Mips::HADD_S_D:
-      dbgs() << "HADD_S_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4390:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_hadd_s_d MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::HADD_S_H:
-      dbgs() << "HADD_S_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4391:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_hadd_s_h MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::HADD_S_W:
-      dbgs() << "HADD_S_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4392:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_hadd_s_w MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::HADD_U_D:
-      dbgs() << "HADD_U_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4393:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_hadd_u_d MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::HADD_U_H:
-      dbgs() << "HADD_U_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4394:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_hadd_u_h MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::HADD_U_W:
-      dbgs() << "HADD_U_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4395:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_hadd_u_w MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::HSUB_S_D:
-      dbgs() << "HSUB_S_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4396:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_hsub_s_d MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::HSUB_S_H:
-      dbgs() << "HSUB_S_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4397:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_hsub_s_h MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::HSUB_S_W:
-      dbgs() << "HSUB_S_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4398:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_hsub_s_w MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::HSUB_U_D:
-      dbgs() << "HSUB_U_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4399:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_hsub_u_d MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::HSUB_U_H:
-      dbgs() << "HSUB_U_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4400:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_hsub_u_h MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::HSUB_U_W:
-      dbgs() << "HSUB_U_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4401:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_hsub_u_w MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::ILVEV_B:
-      dbgs() << "ILVEV_B: 	(set MSA128BOpnd:{}:$wd, (MipsILVEV:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (MipsILVEV MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::ILVEV_D:
-      dbgs() << "ILVEV_D: 	(set MSA128DOpnd:{}:$wd, (MipsILVEV:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (MipsILVEV MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::ILVEV_H:
-      dbgs() << "ILVEV_H: 	(set MSA128HOpnd:{}:$wd, (MipsILVEV:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (MipsILVEV MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::ILVEV_W:
-      dbgs() << "ILVEV_W: 	(set MSA128WOpnd:{}:$wd, (MipsILVEV:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (MipsILVEV MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::ILVL_B:
-      dbgs() << "ILVL_B: 	(set MSA128BOpnd:{}:$wd, (MipsILVL:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (MipsILVL MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::ILVL_D:
-      dbgs() << "ILVL_D: 	(set MSA128DOpnd:{}:$wd, (MipsILVL:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (MipsILVL MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::ILVL_H:
-      dbgs() << "ILVL_H: 	(set MSA128HOpnd:{}:$wd, (MipsILVL:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (MipsILVL MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::ILVL_W:
-      dbgs() << "ILVL_W: 	(set MSA128WOpnd:{}:$wd, (MipsILVL:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (MipsILVL MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::ILVOD_B:
-      dbgs() << "ILVOD_B: 	(set MSA128BOpnd:{}:$wd, (MipsILVOD:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (MipsILVOD MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::ILVOD_D:
-      dbgs() << "ILVOD_D: 	(set MSA128DOpnd:{}:$wd, (MipsILVOD:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (MipsILVOD MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::ILVOD_H:
-      dbgs() << "ILVOD_H: 	(set MSA128HOpnd:{}:$wd, (MipsILVOD:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (MipsILVOD MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::ILVOD_W:
-      dbgs() << "ILVOD_W: 	(set MSA128WOpnd:{}:$wd, (MipsILVOD:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (MipsILVOD MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::ILVR_B:
-      dbgs() << "ILVR_B: 	(set MSA128BOpnd:{}:$wd, (MipsILVR:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (MipsILVR MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::ILVR_D:
-      dbgs() << "ILVR_D: 	(set MSA128DOpnd:{}:$wd, (MipsILVR:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (MipsILVR MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::ILVR_H:
-      dbgs() << "ILVR_H: 	(set MSA128HOpnd:{}:$wd, (MipsILVR:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (MipsILVR MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::ILVR_W:
-      dbgs() << "ILVR_W: 	(set MSA128WOpnd:{}:$wd, (MipsILVR:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (MipsILVR MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
+    case Mips::INS:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag GPR32Opnd:$rs, immZExt5:$pos, immZExt5Plus1:$size, GPR32Opnd:$src))]";
     case Mips::INSERT_B:
-      dbgs() << "INSERT_B: 	(set MSA128BOpnd:{}:$wd, (vinsert_v16i8:{} MSA128BOpnd:{}:$wd_in, GPR32Opnd:{}:$rs, (immZExt4Ptr:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vinsert_v16i8 MSA128BOpnd:$wd_in, GPR32Opnd:$rs, immZExt4Ptr:$n))]";
     case Mips::INSERT_B_VIDX64_PSEUDO:
-      dbgs() << "INSERT_B_VIDX64_PSEUDO: 	(set MSA128BOpnd:{}:$wd, (vector_insert:{} MSA128BOpnd:{ *:[v16i8] }:$wd_in, GPR32Opnd:{}:$fs, GPR64Opnd:{}:$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vector_insert (v16i8 MSA128BOpnd:$wd_in), GPR32Opnd:$fs, GPR64Opnd:$n))]";
     case Mips::INSERT_B_VIDX_PSEUDO:
-      dbgs() << "INSERT_B_VIDX_PSEUDO: 	(set MSA128BOpnd:{}:$wd, (vector_insert:{} MSA128BOpnd:{ *:[v16i8] }:$wd_in, GPR32Opnd:{}:$fs, GPR32Opnd:{}:$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vector_insert (v16i8 MSA128BOpnd:$wd_in), GPR32Opnd:$fs, GPR32Opnd:$n))]";
     case Mips::INSERT_D:
-      dbgs() << "INSERT_D: 	(set MSA128DOpnd:{}:$wd, (vinsert_v2i64:{} MSA128DOpnd:{}:$wd_in, GPR64Opnd:{}:$rs, (immZExt1Ptr:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vinsert_v2i64 MSA128DOpnd:$wd_in, GPR64Opnd:$rs, immZExt1Ptr:$n))]";
     case Mips::INSERT_D_VIDX64_PSEUDO:
-      dbgs() << "INSERT_D_VIDX64_PSEUDO: 	(set MSA128DOpnd:{}:$wd, (vector_insert:{} MSA128DOpnd:{ *:[v2i64] }:$wd_in, GPR64Opnd:{}:$fs, GPR64Opnd:{}:$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vector_insert (v2i64 MSA128DOpnd:$wd_in), GPR64Opnd:$fs, GPR64Opnd:$n))]";
     case Mips::INSERT_D_VIDX_PSEUDO:
-      dbgs() << "INSERT_D_VIDX_PSEUDO: 	(set MSA128DOpnd:{}:$wd, (vector_insert:{} MSA128DOpnd:{ *:[v2i64] }:$wd_in, GPR64Opnd:{}:$fs, GPR32Opnd:{}:$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vector_insert (v2i64 MSA128DOpnd:$wd_in), GPR64Opnd:$fs, GPR32Opnd:$n))]";
     case Mips::INSERT_FD_PSEUDO:
-      dbgs() << "INSERT_FD_PSEUDO: 	(set MSA128DOpnd:{}:$wd, (vector_insert:{} MSA128DOpnd:{ *:[v2f64] }:$wd_in, FGR64Opnd:{}:$fs, (immZExt1Ptr:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vector_insert (v2f64 MSA128DOpnd:$wd_in), FGR64Opnd:$fs, immZExt1Ptr:$n))]";
     case Mips::INSERT_FD_VIDX64_PSEUDO:
-      dbgs() << "INSERT_FD_VIDX64_PSEUDO: 	(set MSA128DOpnd:{}:$wd, (vector_insert:{} MSA128DOpnd:{ *:[v2f64] }:$wd_in, FGR64Opnd:{}:$fs, GPR64Opnd:{}:$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vector_insert (v2f64 MSA128DOpnd:$wd_in), FGR64Opnd:$fs, GPR64Opnd:$n))]";
     case Mips::INSERT_FD_VIDX_PSEUDO:
-      dbgs() << "INSERT_FD_VIDX_PSEUDO: 	(set MSA128DOpnd:{}:$wd, (vector_insert:{} MSA128DOpnd:{ *:[v2f64] }:$wd_in, FGR64Opnd:{}:$fs, GPR32Opnd:{}:$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vector_insert (v2f64 MSA128DOpnd:$wd_in), FGR64Opnd:$fs, GPR32Opnd:$n))]";
     case Mips::INSERT_FW_PSEUDO:
-      dbgs() << "INSERT_FW_PSEUDO: 	(set MSA128WOpnd:{}:$wd, (vector_insert:{} MSA128WOpnd:{ *:[v4f32] }:$wd_in, FGR32Opnd:{}:$fs, (immZExt2Ptr:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vector_insert (v4f32 MSA128WOpnd:$wd_in), FGR32Opnd:$fs, immZExt2Ptr:$n))]";
     case Mips::INSERT_FW_VIDX64_PSEUDO:
-      dbgs() << "INSERT_FW_VIDX64_PSEUDO: 	(set MSA128WOpnd:{}:$wd, (vector_insert:{} MSA128WOpnd:{ *:[v4f32] }:$wd_in, FGR32Opnd:{}:$fs, GPR64Opnd:{}:$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vector_insert (v4f32 MSA128WOpnd:$wd_in), FGR32Opnd:$fs, GPR64Opnd:$n))]";
     case Mips::INSERT_FW_VIDX_PSEUDO:
-      dbgs() << "INSERT_FW_VIDX_PSEUDO: 	(set MSA128WOpnd:{}:$wd, (vector_insert:{} MSA128WOpnd:{ *:[v4f32] }:$wd_in, FGR32Opnd:{}:$fs, GPR32Opnd:{}:$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vector_insert (v4f32 MSA128WOpnd:$wd_in), FGR32Opnd:$fs, GPR32Opnd:$n))]";
     case Mips::INSERT_H:
-      dbgs() << "INSERT_H: 	(set MSA128HOpnd:{}:$wd, (vinsert_v8i16:{} MSA128HOpnd:{}:$wd_in, GPR32Opnd:{}:$rs, (immZExt3Ptr:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vinsert_v8i16 MSA128HOpnd:$wd_in, GPR32Opnd:$rs, immZExt3Ptr:$n))]";
     case Mips::INSERT_H_VIDX64_PSEUDO:
-      dbgs() << "INSERT_H_VIDX64_PSEUDO: 	(set MSA128HOpnd:{}:$wd, (vector_insert:{} MSA128HOpnd:{ *:[v8i16] }:$wd_in, GPR32Opnd:{}:$fs, GPR64Opnd:{}:$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vector_insert (v8i16 MSA128HOpnd:$wd_in), GPR32Opnd:$fs, GPR64Opnd:$n))]";
     case Mips::INSERT_H_VIDX_PSEUDO:
-      dbgs() << "INSERT_H_VIDX_PSEUDO: 	(set MSA128HOpnd:{}:$wd, (vector_insert:{} MSA128HOpnd:{ *:[v8i16] }:$wd_in, GPR32Opnd:{}:$fs, GPR32Opnd:{}:$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vector_insert (v8i16 MSA128HOpnd:$wd_in), GPR32Opnd:$fs, GPR32Opnd:$n))]";
     case Mips::INSERT_W:
-      dbgs() << "INSERT_W: 	(set MSA128WOpnd:{}:$wd, (vinsert_v4i32:{} MSA128WOpnd:{}:$wd_in, GPR32Opnd:{}:$rs, (immZExt2Ptr:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vinsert_v4i32 MSA128WOpnd:$wd_in, GPR32Opnd:$rs, immZExt2Ptr:$n))]";
     case Mips::INSERT_W_VIDX64_PSEUDO:
-      dbgs() << "INSERT_W_VIDX64_PSEUDO: 	(set MSA128WOpnd:{}:$wd, (vector_insert:{} MSA128WOpnd:{ *:[v4i32] }:$wd_in, GPR32Opnd:{}:$fs, GPR64Opnd:{}:$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vector_insert (v4i32 MSA128WOpnd:$wd_in), GPR32Opnd:$fs, GPR64Opnd:$n))]";
     case Mips::INSERT_W_VIDX_PSEUDO:
-      dbgs() << "INSERT_W_VIDX_PSEUDO: 	(set MSA128WOpnd:{}:$wd, (vector_insert:{} MSA128WOpnd:{ *:[v4i32] }:$wd_in, GPR32Opnd:{}:$fs, GPR32Opnd:{}:$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vector_insert (v4i32 MSA128WOpnd:$wd_in), GPR32Opnd:$fs, GPR32Opnd:$n))]";
     case Mips::INSV:
-      dbgs() << "INSV: 	(set GPR32Opnd:{}:$rt, (intrinsic_w_chain:{} 4422:{}, GPR32Opnd:{}:$src, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (int_mips_insv GPR32Opnd:$src, GPR32Opnd:$rs))]";
     case Mips::INSVE_B:
-      dbgs() << "INSVE_B: 	(set MSA128BOpnd:{}:$wd, (insve_v16i8:{} MSA128BOpnd:{}:$wd_in, (timmZExt4:{}):$n, MSA128BOpnd:{}:$ws, (immz:{}):$n2))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (insve_v16i8 MSA128BOpnd:$wd_in, timmZExt4:$n, MSA128BOpnd:$ws, immz:$n2))]";
     case Mips::INSVE_D:
-      dbgs() << "INSVE_D: 	(set MSA128DOpnd:{}:$wd, (insve_v2i64:{} MSA128DOpnd:{}:$wd_in, (timmZExt1:{}):$n, MSA128DOpnd:{}:$ws, (immz:{}):$n2))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (insve_v2i64 MSA128DOpnd:$wd_in, timmZExt1:$n, MSA128DOpnd:$ws, immz:$n2))]";
     case Mips::INSVE_H:
-      dbgs() << "INSVE_H: 	(set MSA128HOpnd:{}:$wd, (insve_v8i16:{} MSA128HOpnd:{}:$wd_in, (timmZExt3:{}):$n, MSA128HOpnd:{}:$ws, (immz:{}):$n2))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (insve_v8i16 MSA128HOpnd:$wd_in, timmZExt3:$n, MSA128HOpnd:$ws, immz:$n2))]";
     case Mips::INSVE_W:
-      dbgs() << "INSVE_W: 	(set MSA128WOpnd:{}:$wd, (insve_v4i32:{} MSA128WOpnd:{}:$wd_in, (timmZExt2:{}):$n, MSA128WOpnd:{}:$ws, (immz:{}):$n2))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (insve_v4i32 MSA128WOpnd:$wd_in, timmZExt2:$n, MSA128WOpnd:$ws, immz:$n2))]";
     case Mips::INSV_MM:
-      dbgs() << "INSV_MM: 	(set GPR32Opnd:{}:$rt, (intrinsic_w_chain:{} 4422:{}, GPR32Opnd:{}:$src, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (int_mips_insv GPR32Opnd:$src, GPR32Opnd:$rs))]";
+    case Mips::INS_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag GPR32Opnd:$rs, immZExt5:$pos, immZExt5Plus1:$size, GPR32Opnd:$src))]";
     case Mips::INS_MMR6:
-      dbgs() << "INS_MMR6: 	(set GPR32Opnd:{}:$rt, (MipsIns:{} GPR32Opnd:{}:$rs, (imm:{}):$pos, (imm:{}):$size, GPR32Opnd:{}:$src))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (MipsIns GPR32Opnd:$rs, imm:$pos, imm:$size, GPR32Opnd:$src))]";
     case Mips::J:
-      dbgs() << "J: 	(br (bb:{}):$target)";
-      break;
+    {
+      dbgs() << "[(br bb:$target)]";
     case Mips::JAL:
-      dbgs() << "JAL: 	(MipsJmpLink (tglobaladdr:{}):$target)";
-      break;
+    {
+      dbgs() << "[(MipsJmpLink tglobaladdr:$target)]";
     case Mips::JALR16_MM:
-      dbgs() << "JALR16_MM: 	(MipsJmpLink GPR32Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(MipsJmpLink GPR32Opnd:$rs)]";
     case Mips::JALR64Pseudo:
-      dbgs() << "JALR64Pseudo: 	(MipsJmpLink GPR64Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(MipsJmpLink GPR64Opnd:$rs)]";
     case Mips::JALRC16_MMR6:
-      dbgs() << "JALRC16_MMR6: 	(MipsJmpLink GPR32Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(MipsJmpLink GPR32Opnd:$rs)]";
     case Mips::JALRHB64Pseudo:
-      dbgs() << "JALRHB64Pseudo: 	(MipsJmpLink GPR64Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(MipsJmpLink GPR64Opnd:$rs)]";
     case Mips::JALRHBPseudo:
-      dbgs() << "JALRHBPseudo: 	(MipsJmpLink GPR32Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(MipsJmpLink GPR32Opnd:$rs)]";
     case Mips::JALRPseudo:
-      dbgs() << "JALRPseudo: 	(MipsJmpLink GPR32Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(MipsJmpLink GPR32Opnd:$rs)]";
     case Mips::JALX:
-      dbgs() << "JALX: 	(MipsJmpLink (tglobaladdr:{}):$target)";
-      break;
+    {
+      dbgs() << "[(MipsJmpLink tglobaladdr:$target)]";
     case Mips::JALX_MM:
-      dbgs() << "JALX_MM: 	(MipsJmpLink (tglobaladdr:{}):$target)";
-      break;
+    {
+      dbgs() << "[(MipsJmpLink tglobaladdr:$target)]";
     case Mips::JAL_MM:
-      dbgs() << "JAL_MM: 	(MipsJmpLink (tglobaladdr:{}):$target)";
-      break;
+    {
+      dbgs() << "[(MipsJmpLink tglobaladdr:$target)]";
+    case Mips::JR:
+    {
+      dbgs() << "[(null_frag GPR32Opnd:$rs)]";
+    case Mips::JR64:
+    {
+      dbgs() << "[(null_frag GPR64Opnd:$rs)]";
+    case Mips::JR_MM:
+    {
+      dbgs() << "[(null_frag GPR32Opnd:$rs)]";
     case Mips::J_MM:
-      dbgs() << "J_MM: 	(br (bb:{}):$target)";
-      break;
+    {
+      dbgs() << "[(br bb:$target)]";
     case Mips::JumpLinkReg16:
-      dbgs() << "JumpLinkReg16: 	(MipsJmpLink CPU16Regs:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(MipsJmpLink CPU16Regs:$rs)]";
     case Mips::LB:
-      dbgs() << "LB: 	(set GPR32Opnd:{}:$rt, (sextloadi8:{} addr:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (sextloadi8 addr:$addr))]";
     case Mips::LB64:
-      dbgs() << "LB64: 	(set GPR64Opnd:{}:$rt, (sextloadi8:{} addr:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (sextloadi8 addr:$addr))]";
+    case Mips::LBE_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag addr:$addr))]";
     case Mips::LBUX:
-      dbgs() << "LBUX: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4427:{}, iPTR:{}:$base, iPTR:{}:$index))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_lbux iPTR:$base, iPTR:$index))]";
     case Mips::LBUX_MM:
-      dbgs() << "LBUX_MM: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4427:{}, iPTR:{}:$base, iPTR:{}:$index))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_lbux iPTR:$base, iPTR:$index))]";
     case Mips::LB_MM:
-      dbgs() << "LB_MM: 	(set GPR32Opnd:{}:$rt, (sextloadi8:{} addr:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (sextloadi8 addr:$addr))]";
     case Mips::LBu:
-      dbgs() << "LBu: 	(set GPR32Opnd:{}:$rt, (zextloadi8:{} addrDefault:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (zextloadi8 addrDefault:$addr))]";
     case Mips::LBu64:
-      dbgs() << "LBu64: 	(set GPR64Opnd:{}:$rt, (zextloadi8:{} addr:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (zextloadi8 addr:$addr))]";
+    case Mips::LBuE_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag addr:$addr))]";
     case Mips::LBu_MM:
-      dbgs() << "LBu_MM: 	(set GPR32Opnd:{}:$rt, (zextloadi8:{} addr:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (zextloadi8 addr:$addr))]";
     case Mips::LD:
-      dbgs() << "LD: 	(set GPR64Opnd:{}:$rt, (load:{} addr:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (load addr:$addr))]";
     case Mips::LDC1:
-      dbgs() << "LDC1: 	(set AFGR64Opnd:{}:$rt, (load:{} addrDefault:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$rt, (load addrDefault:$addr))]";
     case Mips::LDC164:
-      dbgs() << "LDC164: 	(set FGR64Opnd:{}:$rt, (load:{} addrDefault:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$rt, (load addrDefault:$addr))]";
     case Mips::LDC1_D64_MMR6:
-      dbgs() << "LDC1_D64_MMR6: 	(set FGR64Opnd:{}:$ft, (load:{} addrimm16:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$ft, (load addrimm16:$addr))]";
     case Mips::LDC1_MM:
-      dbgs() << "LDC1_MM: 	(set AFGR64Opnd:{}:$rt, (load:{} addrDefault:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$rt, (load addrDefault:$addr))]";
     case Mips::LDC2:
-      dbgs() << "LDC2: 	(set COP2Opnd:{}:$rt, (load:{} addrDefault:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set COP2Opnd:$rt, (load addrDefault:$addr))]";
     case Mips::LDC2_MMR6:
-      dbgs() << "LDC2_MMR6: 	(set COP2Opnd:{}:$rt, (load:{} addrimm11:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set COP2Opnd:$rt, (load addrimm11:$addr))]";
     case Mips::LDC3:
-      dbgs() << "LDC3: 	(set COP3Opnd:{}:$rt, (load:{} addrDefault:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set COP3Opnd:$rt, (load addrDefault:$addr))]";
     case Mips::LDL:
-      dbgs() << "LDL: 	(set GPR64Opnd:{}:$rt, (MipsLDL:{} addr:{}:$addr, GPR64Opnd:{}:$src))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (MipsLDL addr:$addr, GPR64Opnd:$src))]";
     case Mips::LDR:
-      dbgs() << "LDR: 	(set GPR64Opnd:{}:$rt, (MipsLDR:{} addr:{}:$addr, GPR64Opnd:{}:$src))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (MipsLDR addr:$addr, GPR64Opnd:$src))]";
     case Mips::LDR_D:
-      dbgs() << "LDR_D: 	(set MSA128DOpnd:{}:$dst, (intrinsic_w_chain:{} 4436:{}, iPTR:{}:$ptr, GPR32:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$dst, (int_mips_ldr_d iPTR:$ptr, GPR32:$imm))]";
     case Mips::LDR_W:
-      dbgs() << "LDR_W: 	(set MSA128WOpnd:{}:$dst, (intrinsic_w_chain:{} 4437:{}, iPTR:{}:$ptr, GPR32:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$dst, (int_mips_ldr_w iPTR:$ptr, GPR32:$imm))]";
     case Mips::LDXC1:
-      dbgs() << "LDXC1: 	(set AFGR64Opnd:{}:$fd, (load:{} (add:{} iPTR:{}:$base, iPTR:{}:$index)))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (load (add iPTR:$base, iPTR:$index)))]";
     case Mips::LDXC164:
-      dbgs() << "LDXC164: 	(set FGR64Opnd:{}:$fd, (load:{} (add:{} iPTR:{}:$base, iPTR:{}:$index)))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (load (add iPTR:$base, iPTR:$index)))]";
     case Mips::LD_B:
-      dbgs() << "LD_B: 	(set MSA128BOpnd:{}:$wd, (load:{ *:[v16i8] } addrimm10:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (v16i8 (load addrimm10:$addr)))]";
     case Mips::LD_D:
-      dbgs() << "LD_D: 	(set MSA128DOpnd:{}:$wd, (load:{ *:[v2i64] } addrimm10lsl3:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (v2i64 (load addrimm10lsl3:$addr)))]";
     case Mips::LD_F16:
-      dbgs() << "LD_F16: 	(set MSA128F16:{}:$ws, (load:{ *:[f16] } addrimm10:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set MSA128F16:$ws, (f16 (load addrimm10:$addr)))]";
     case Mips::LD_H:
-      dbgs() << "LD_H: 	(set MSA128HOpnd:{}:$wd, (load:{ *:[v8i16] } addrimm10lsl1:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (v8i16 (load addrimm10lsl1:$addr)))]";
     case Mips::LD_W:
-      dbgs() << "LD_W: 	(set MSA128WOpnd:{}:$wd, (load:{ *:[v4i32] } addrimm10lsl2:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (v4i32 (load addrimm10lsl2:$addr)))]";
     case Mips::LEA_ADDiu:
-      dbgs() << "LEA_ADDiu: 	(set GPR32Opnd:{}:$rt, addr:{}:$addr)";
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, addr:$addr)]";
+      MachineRegister TmpRes = SimAdd(Inst);
       break;
+    }
     case Mips::LEA_ADDiu64:
-      dbgs() << "LEA_ADDiu64: 	(set GPR64Opnd:{}:$rt, addr:{}:$addr)";
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, addr:$addr)]";
+      MachineRegister TmpRes = SimAdd(Inst);
       break;
+    }
     case Mips::LEA_ADDiu_MM:
-      dbgs() << "LEA_ADDiu_MM: 	(set GPR32Opnd:{}:$rt, addr:{}:$addr)";
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, addr:$addr)]";
+      MachineRegister TmpRes = SimAdd(Inst);
       break;
+    }
     case Mips::LH:
-      dbgs() << "LH: 	(set GPR32Opnd:{}:$rt, (sextloadi16:{} addrDefault:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (sextloadi16 addrDefault:$addr))]";
     case Mips::LH64:
-      dbgs() << "LH64: 	(set GPR64Opnd:{}:$rt, (sextloadi16:{} addr:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (sextloadi16 addr:$addr))]";
+    case Mips::LHE_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag addr:$addr))]";
     case Mips::LHX:
-      dbgs() << "LHX: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4438:{}, iPTR:{}:$base, iPTR:{}:$index))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_lhx iPTR:$base, iPTR:$index))]";
     case Mips::LHX_MM:
-      dbgs() << "LHX_MM: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4438:{}, iPTR:{}:$base, iPTR:{}:$index))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_lhx iPTR:$base, iPTR:$index))]";
     case Mips::LH_MM:
-      dbgs() << "LH_MM: 	(set GPR32Opnd:{}:$rt, (sextloadi16:{} addrDefault:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (sextloadi16 addrDefault:$addr))]";
     case Mips::LHu:
-      dbgs() << "LHu: 	(set GPR32Opnd:{}:$rt, (zextloadi16:{} addr:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (zextloadi16 addr:$addr))]";
     case Mips::LHu64:
-      dbgs() << "LHu64: 	(set GPR64Opnd:{}:$rt, (zextloadi16:{} addr:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (zextloadi16 addr:$addr))]";
+    case Mips::LHuE_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag addr:$addr))]";
     case Mips::LHu_MM:
-      dbgs() << "LHu_MM: 	(set GPR32Opnd:{}:$rt, (zextloadi16:{} addr:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (zextloadi16 addr:$addr))]";
+    case Mips::LOAD_ACC128:
+    {
+      dbgs() << "[(set ACC128:$rt, (null_frag addr:$addr))]";
+    case Mips::LOAD_ACC64:
+    {
+      dbgs() << "[(set ACC64:$rt, (null_frag addr:$addr))]";
+    case Mips::LOAD_ACC64DSP:
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$rt, (null_frag addr:$addr))]";
+    case Mips::LOAD_CCOND_DSP:
+    {
+      dbgs() << "[(set DSPCC:$rt, (null_frag addr:$addr))]";
     case Mips::LSA:
-      dbgs() << "LSA: 	(set GPR32Opnd:{}:$rd, (add:{} GPR32Opnd:{}:$rt, (shl:{} GPR32Opnd:{}:$rs, (immZExt2Lsa:{}):$sa)))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (add GPR32Opnd:$rt, (shl GPR32Opnd:$rs, immZExt2Lsa:$sa)))]";
+    case Mips::LUXC1:
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (null_frag (add iPTR:$base, iPTR:$index)))]";
+    case Mips::LUXC164:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag (add iPTR:$base, iPTR:$index)))]";
+    case Mips::LUXC1_MM:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag (add iPTR:$base, iPTR:$index)))]";
     case Mips::LW:
-      dbgs() << "LW: 	(set GPR32Opnd:{}:$rt, (load:{} addrDefault:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (load addrDefault:$addr))]";
     case Mips::LW64:
-      dbgs() << "LW64: 	(set GPR64Opnd:{}:$rt, (sextloadi32:{} addr:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (sextloadi32 addr:$addr))]";
     case Mips::LWC1:
-      dbgs() << "LWC1: 	(set FGR32Opnd:{}:$rt, (load:{} addrDefault:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$rt, (load addrDefault:$addr))]";
     case Mips::LWC1_MM:
-      dbgs() << "LWC1_MM: 	(set FGR32Opnd:{}:$rt, (load:{} addrDefault:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$rt, (load addrDefault:$addr))]";
     case Mips::LWC2:
-      dbgs() << "LWC2: 	(set COP2Opnd:{}:$rt, (load:{} addrDefault:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set COP2Opnd:$rt, (load addrDefault:$addr))]";
     case Mips::LWC2_MMR6:
-      dbgs() << "LWC2_MMR6: 	(set COP2Opnd:{}:$rt, (load:{} addrimm11:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set COP2Opnd:$rt, (load addrimm11:$addr))]";
     case Mips::LWC3:
-      dbgs() << "LWC3: 	(set COP3Opnd:{}:$rt, (load:{} addrDefault:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set COP3Opnd:$rt, (load addrDefault:$addr))]";
+    case Mips::LWDSP:
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (null_frag addr:$addr))]";
+    case Mips::LWDSP_MM:
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (null_frag addr:$addr))]";
+    case Mips::LWE_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag addr:$addr))]";
     case Mips::LWL:
-      dbgs() << "LWL: 	(set GPR32Opnd:{}:$rt, (MipsLWL:{} addr:{}:$addr, GPR32Opnd:{}:$src))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (MipsLWL addr:$addr, GPR32Opnd:$src))]";
     case Mips::LWL64:
-      dbgs() << "LWL64: 	(set GPR64Opnd:{}:$rt, (MipsLWL:{} addr:{}:$addr, GPR64Opnd:{}:$src))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (MipsLWL addr:$addr, GPR64Opnd:$src))]";
     case Mips::LWLE_MM:
-      dbgs() << "LWLE_MM: 	(set GPR32Opnd:{}:$rt, (MipsLWL:{} addrimm12:{}:$addr, GPR32Opnd:{}:$src))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (MipsLWL addrimm12:$addr, GPR32Opnd:$src))]";
     case Mips::LWL_MM:
-      dbgs() << "LWL_MM: 	(set GPR32Opnd:{}:$rt, (MipsLWL:{} addrimm12:{}:$addr, GPR32Opnd:{}:$src))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (MipsLWL addrimm12:$addr, GPR32Opnd:$src))]";
     case Mips::LWR:
-      dbgs() << "LWR: 	(set GPR32Opnd:{}:$rt, (MipsLWR:{} addr:{}:$addr, GPR32Opnd:{}:$src))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (MipsLWR addr:$addr, GPR32Opnd:$src))]";
     case Mips::LWR64:
-      dbgs() << "LWR64: 	(set GPR64Opnd:{}:$rt, (MipsLWR:{} addr:{}:$addr, GPR64Opnd:{}:$src))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (MipsLWR addr:$addr, GPR64Opnd:$src))]";
     case Mips::LWRE_MM:
-      dbgs() << "LWRE_MM: 	(set GPR32Opnd:{}:$rt, (MipsLWR:{} addrimm12:{}:$addr, GPR32Opnd:{}:$src))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (MipsLWR addrimm12:$addr, GPR32Opnd:$src))]";
     case Mips::LWR_MM:
-      dbgs() << "LWR_MM: 	(set GPR32Opnd:{}:$rt, (MipsLWR:{} addrimm12:{}:$addr, GPR32Opnd:{}:$src))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (MipsLWR addrimm12:$addr, GPR32Opnd:$src))]";
     case Mips::LWU_MM:
-      dbgs() << "LWU_MM: 	(set GPR32Opnd:{}:$rt, (zextloadi32:{} addrimm12:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (zextloadi32 addrimm12:$addr))]";
     case Mips::LWX:
-      dbgs() << "LWX: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4440:{}, iPTR:{}:$base, iPTR:{}:$index))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_lwx iPTR:$base, iPTR:$index))]";
     case Mips::LWXC1:
-      dbgs() << "LWXC1: 	(set FGR32Opnd:{}:$fd, (load:{} (add:{} iPTR:{}:$base, iPTR:{}:$index)))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (load (add iPTR:$base, iPTR:$index)))]";
     case Mips::LWXC1_MM:
-      dbgs() << "LWXC1_MM: 	(set FGR32Opnd:{}:$fd, (load:{} (add:{} iPTR:{}:$base, iPTR:{}:$index)))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (load (add iPTR:$base, iPTR:$index)))]";
     case Mips::LWX_MM:
-      dbgs() << "LWX_MM: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4440:{}, iPTR:{}:$base, iPTR:{}:$index))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_lwx iPTR:$base, iPTR:$index))]";
+    case Mips::LW_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag addr:$addr))]";
     case Mips::LW_MMR6:
-      dbgs() << "LW_MMR6: 	(set GPR32Opnd:{}:$rt, (load:{} addrDefault:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (load addrDefault:$addr))]";
     case Mips::LWu:
-      dbgs() << "LWu: 	(set GPR64Opnd:{}:$rt, (zextloadi32:{} addr:{}:$addr))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (zextloadi32 addr:$addr))]";
     case Mips::MADDR_Q_H:
-      dbgs() << "MADDR_Q_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4444:{}, MSA128HOpnd:{}:$wd_in, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_maddr_q_h MSA128HOpnd:$wd_in, MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::MADDR_Q_W:
-      dbgs() << "MADDR_Q_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4445:{}, MSA128WOpnd:{}:$wd_in, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_maddr_q_w MSA128WOpnd:$wd_in, MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::MADDU_DSP:
-      dbgs() << "MADDU_DSP: 	(set ACC64DSPOpnd:{}:$ac, (MipsMAddu:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMAddu GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MADDU_DSP_MM:
-      dbgs() << "MADDU_DSP_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsMAddu:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMAddu GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MADDV_B:
-      dbgs() << "MADDV_B: 	(set MSA128BOpnd:{}:$wd, (muladd:{} MSA128BOpnd:{}:$wd_in, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (muladd MSA128BOpnd:$wd_in, MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::MADDV_D:
-      dbgs() << "MADDV_D: 	(set MSA128DOpnd:{}:$wd, (muladd:{} MSA128DOpnd:{}:$wd_in, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (muladd MSA128DOpnd:$wd_in, MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::MADDV_H:
-      dbgs() << "MADDV_H: 	(set MSA128HOpnd:{}:$wd, (muladd:{} MSA128HOpnd:{}:$wd_in, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (muladd MSA128HOpnd:$wd_in, MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::MADDV_W:
-      dbgs() << "MADDV_W: 	(set MSA128WOpnd:{}:$wd, (muladd:{} MSA128WOpnd:{}:$wd_in, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (muladd MSA128WOpnd:$wd_in, MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::MADD_D32:
-      dbgs() << "MADD_D32: 	(set AFGR64Opnd:{}:$fd, (fadd:{} (fmul:{} AFGR64Opnd:{}:$fs, AFGR64Opnd:{}:$ft), AFGR64Opnd:{}:$fr))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fadd (fmul AFGR64Opnd:$fs, AFGR64Opnd:$ft), AFGR64Opnd:$fr))]";
+    case Mips::MADD_D32_MM:
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (null_frag (fmul AFGR64Opnd:$fs, AFGR64Opnd:$ft), AFGR64Opnd:$fr))]";
     case Mips::MADD_D64:
-      dbgs() << "MADD_D64: 	(set FGR64Opnd:{}:$fd, (fadd:{} (fmul:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft), FGR64Opnd:{}:$fr))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (fadd (fmul FGR64Opnd:$fs, FGR64Opnd:$ft), FGR64Opnd:$fr))]";
     case Mips::MADD_DSP:
-      dbgs() << "MADD_DSP: 	(set ACC64DSPOpnd:{}:$ac, (MipsMAdd:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMAdd GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MADD_DSP_MM:
-      dbgs() << "MADD_DSP_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsMAdd:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMAdd GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MADD_Q_H:
-      dbgs() << "MADD_Q_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4442:{}, MSA128HOpnd:{}:$wd_in, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_madd_q_h MSA128HOpnd:$wd_in, MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::MADD_Q_W:
-      dbgs() << "MADD_Q_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4443:{}, MSA128WOpnd:{}:$wd_in, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_madd_q_w MSA128WOpnd:$wd_in, MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::MADD_S:
-      dbgs() << "MADD_S: 	(set FGR32Opnd:{}:$fd, (fadd:{} (fmul:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft), FGR32Opnd:{}:$fr))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fadd (fmul FGR32Opnd:$fs, FGR32Opnd:$ft), FGR32Opnd:$fr))]";
+    case Mips::MADD_S_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag (fmul FGR32Opnd:$fs, FGR32Opnd:$ft), FGR32Opnd:$fr))]";
     case Mips::MAQ_SA_W_PHL:
-      dbgs() << "MAQ_SA_W_PHL: 	(set ACC64DSPOpnd:{}:$ac, (MipsMAQ_SA_W_PHL:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMAQ_SA_W_PHL GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MAQ_SA_W_PHL_MM:
-      dbgs() << "MAQ_SA_W_PHL_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsMAQ_SA_W_PHL:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMAQ_SA_W_PHL GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MAQ_SA_W_PHR:
-      dbgs() << "MAQ_SA_W_PHR: 	(set ACC64DSPOpnd:{}:$ac, (MipsMAQ_SA_W_PHR:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMAQ_SA_W_PHR GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MAQ_SA_W_PHR_MM:
-      dbgs() << "MAQ_SA_W_PHR_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsMAQ_SA_W_PHR:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMAQ_SA_W_PHR GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MAQ_S_W_PHL:
-      dbgs() << "MAQ_S_W_PHL: 	(set ACC64DSPOpnd:{}:$ac, (MipsMAQ_S_W_PHL:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMAQ_S_W_PHL GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MAQ_S_W_PHL_MM:
-      dbgs() << "MAQ_S_W_PHL_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsMAQ_S_W_PHL:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMAQ_S_W_PHL GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MAQ_S_W_PHR:
-      dbgs() << "MAQ_S_W_PHR: 	(set ACC64DSPOpnd:{}:$ac, (MipsMAQ_S_W_PHR:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMAQ_S_W_PHR GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MAQ_S_W_PHR_MM:
-      dbgs() << "MAQ_S_W_PHR_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsMAQ_S_W_PHR:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMAQ_S_W_PHR GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MAXI_S_B:
-      dbgs() << "MAXI_S_B: 	(set MSA128BOpnd:{}:$wd, (smax:{} MSA128BOpnd:{}:$ws, vsplati8_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (smax MSA128BOpnd:$ws, vsplati8_simm5:$imm))]";
     case Mips::MAXI_S_D:
-      dbgs() << "MAXI_S_D: 	(set MSA128DOpnd:{}:$wd, (smax:{} MSA128DOpnd:{}:$ws, vsplati64_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (smax MSA128DOpnd:$ws, vsplati64_simm5:$imm))]";
     case Mips::MAXI_S_H:
-      dbgs() << "MAXI_S_H: 	(set MSA128HOpnd:{}:$wd, (smax:{} MSA128HOpnd:{}:$ws, vsplati16_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (smax MSA128HOpnd:$ws, vsplati16_simm5:$imm))]";
     case Mips::MAXI_S_W:
-      dbgs() << "MAXI_S_W: 	(set MSA128WOpnd:{}:$wd, (smax:{} MSA128WOpnd:{}:$ws, vsplati32_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (smax MSA128WOpnd:$ws, vsplati32_simm5:$imm))]";
     case Mips::MAXI_U_B:
-      dbgs() << "MAXI_U_B: 	(set MSA128BOpnd:{}:$wd, (umax:{} MSA128BOpnd:{}:$ws, vsplati8_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (umax MSA128BOpnd:$ws, vsplati8_uimm5:$imm))]";
     case Mips::MAXI_U_D:
-      dbgs() << "MAXI_U_D: 	(set MSA128DOpnd:{}:$wd, (umax:{} MSA128DOpnd:{}:$ws, vsplati64_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (umax MSA128DOpnd:$ws, vsplati64_uimm5:$imm))]";
     case Mips::MAXI_U_H:
-      dbgs() << "MAXI_U_H: 	(set MSA128HOpnd:{}:$wd, (umax:{} MSA128HOpnd:{}:$ws, vsplati16_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (umax MSA128HOpnd:$ws, vsplati16_uimm5:$imm))]";
     case Mips::MAXI_U_W:
-      dbgs() << "MAXI_U_W: 	(set MSA128WOpnd:{}:$wd, (umax:{} MSA128WOpnd:{}:$ws, vsplati32_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (umax MSA128WOpnd:$ws, vsplati32_uimm5:$imm))]";
     case Mips::MAX_A_B:
-      dbgs() << "MAX_A_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4455:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_max_a_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::MAX_A_D:
-      dbgs() << "MAX_A_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4456:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_max_a_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::MAX_A_H:
-      dbgs() << "MAX_A_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4457:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_max_a_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::MAX_A_W:
-      dbgs() << "MAX_A_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4458:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_max_a_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::MAX_S_B:
-      dbgs() << "MAX_S_B: 	(set MSA128BOpnd:{}:$wd, (smax:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (smax MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::MAX_S_D:
-      dbgs() << "MAX_S_D: 	(set MSA128DOpnd:{}:$wd, (smax:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (smax MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::MAX_S_H:
-      dbgs() << "MAX_S_H: 	(set MSA128HOpnd:{}:$wd, (smax:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (smax MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::MAX_S_W:
-      dbgs() << "MAX_S_W: 	(set MSA128WOpnd:{}:$wd, (smax:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (smax MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::MAX_U_B:
-      dbgs() << "MAX_U_B: 	(set MSA128BOpnd:{}:$wd, (umax:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (umax MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::MAX_U_D:
-      dbgs() << "MAX_U_D: 	(set MSA128DOpnd:{}:$wd, (umax:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (umax MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::MAX_U_H:
-      dbgs() << "MAX_U_H: 	(set MSA128HOpnd:{}:$wd, (umax:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (umax MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::MAX_U_W:
-      dbgs() << "MAX_U_W: 	(set MSA128WOpnd:{}:$wd, (umax:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (umax MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::MFC1:
-      dbgs() << "MFC1: 	(set GPR32Opnd:{}:$rt, (bitconvert:{} FGR32Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (bitconvert FGR32Opnd:$fs))]";
+    case Mips::MFC1_D64:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag FGR64Opnd:$fs))]";
     case Mips::MFC1_MM:
-      dbgs() << "MFC1_MM: 	(set GPR32Opnd:{}:$rt, (bitconvert:{} FGR32Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (bitconvert FGR32Opnd:$fs))]";
     case Mips::MFC1_MMR6:
-      dbgs() << "MFC1_MMR6: 	(set GPR32Opnd:{}:$rt, (bitconvert:{} FGR32Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (bitconvert FGR32Opnd:$fs))]";
+    case Mips::MFHC1_D32:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::MFHC1_D32_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::MFHC1_D64:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag FGR64Opnd:$fs))]";
+    case Mips::MFHC1_D64_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (null_frag FGR64Opnd:$fs))]";
     case Mips::MFHI_DSP:
-      dbgs() << "MFHI_DSP: 	(set GPR32Opnd:{}:$rd, (MipsMFHI:{} ACC64DSPOpnd:{}:$ac))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (MipsMFHI ACC64DSPOpnd:$ac))]";
     case Mips::MFHI_DSP_MM:
-      dbgs() << "MFHI_DSP_MM: 	(set GPR32Opnd:{}:$rs, (MipsMFHI:{} ACC64DSPOpnd:{}:$ac))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rs, (MipsMFHI ACC64DSPOpnd:$ac))]";
     case Mips::MFLO_DSP:
-      dbgs() << "MFLO_DSP: 	(set GPR32Opnd:{}:$rd, (MipsMFLO:{} ACC64DSPOpnd:{}:$ac))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (MipsMFLO ACC64DSPOpnd:$ac))]";
     case Mips::MFLO_DSP_MM:
-      dbgs() << "MFLO_DSP_MM: 	(set GPR32Opnd:{}:$rs, (MipsMFLO:{} ACC64DSPOpnd:{}:$ac))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rs, (MipsMFLO ACC64DSPOpnd:$ac))]";
     case Mips::MINI_S_B:
-      dbgs() << "MINI_S_B: 	(set MSA128BOpnd:{}:$wd, (smin:{} MSA128BOpnd:{}:$ws, vsplati8_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (smin MSA128BOpnd:$ws, vsplati8_simm5:$imm))]";
     case Mips::MINI_S_D:
-      dbgs() << "MINI_S_D: 	(set MSA128DOpnd:{}:$wd, (smin:{} MSA128DOpnd:{}:$ws, vsplati64_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (smin MSA128DOpnd:$ws, vsplati64_simm5:$imm))]";
     case Mips::MINI_S_H:
-      dbgs() << "MINI_S_H: 	(set MSA128HOpnd:{}:$wd, (smin:{} MSA128HOpnd:{}:$ws, vsplati16_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (smin MSA128HOpnd:$ws, vsplati16_simm5:$imm))]";
     case Mips::MINI_S_W:
-      dbgs() << "MINI_S_W: 	(set MSA128WOpnd:{}:$wd, (smin:{} MSA128WOpnd:{}:$ws, vsplati32_simm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (smin MSA128WOpnd:$ws, vsplati32_simm5:$imm))]";
     case Mips::MINI_U_B:
-      dbgs() << "MINI_U_B: 	(set MSA128BOpnd:{}:$wd, (umin:{} MSA128BOpnd:{}:$ws, vsplati8_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (umin MSA128BOpnd:$ws, vsplati8_uimm5:$imm))]";
     case Mips::MINI_U_D:
-      dbgs() << "MINI_U_D: 	(set MSA128DOpnd:{}:$wd, (umin:{} MSA128DOpnd:{}:$ws, vsplati64_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (umin MSA128DOpnd:$ws, vsplati64_uimm5:$imm))]";
     case Mips::MINI_U_H:
-      dbgs() << "MINI_U_H: 	(set MSA128HOpnd:{}:$wd, (umin:{} MSA128HOpnd:{}:$ws, vsplati16_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (umin MSA128HOpnd:$ws, vsplati16_uimm5:$imm))]";
     case Mips::MINI_U_W:
-      dbgs() << "MINI_U_W: 	(set MSA128WOpnd:{}:$wd, (umin:{} MSA128WOpnd:{}:$ws, vsplati32_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (umin MSA128WOpnd:$ws, vsplati32_uimm5:$imm))]";
     case Mips::MIN_A_B:
-      dbgs() << "MIN_A_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4475:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_min_a_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::MIN_A_D:
-      dbgs() << "MIN_A_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4476:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_min_a_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::MIN_A_H:
-      dbgs() << "MIN_A_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4477:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_min_a_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::MIN_A_W:
-      dbgs() << "MIN_A_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4478:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_min_a_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::MIN_S_B:
-      dbgs() << "MIN_S_B: 	(set MSA128BOpnd:{}:$wd, (smin:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (smin MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::MIN_S_D:
-      dbgs() << "MIN_S_D: 	(set MSA128DOpnd:{}:$wd, (smin:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (smin MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::MIN_S_H:
-      dbgs() << "MIN_S_H: 	(set MSA128HOpnd:{}:$wd, (smin:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (smin MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::MIN_S_W:
-      dbgs() << "MIN_S_W: 	(set MSA128WOpnd:{}:$wd, (smin:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (smin MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::MIN_U_B:
-      dbgs() << "MIN_U_B: 	(set MSA128BOpnd:{}:$wd, (umin:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (umin MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::MIN_U_D:
-      dbgs() << "MIN_U_D: 	(set MSA128DOpnd:{}:$wd, (umin:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (umin MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::MIN_U_H:
-      dbgs() << "MIN_U_H: 	(set MSA128HOpnd:{}:$wd, (umin:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (umin MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::MIN_U_W:
-      dbgs() << "MIN_U_W: 	(set MSA128WOpnd:{}:$wd, (umin:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (umin MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::MIPSeh_return32:
-      dbgs() << "MIPSeh_return32: 	(MIPSehret GPR32:{}:$spoff, GPR32:{}:$dst)";
-      break;
+    {
+      dbgs() << "[(MIPSehret GPR32:$spoff, GPR32:$dst)]";
     case Mips::MIPSeh_return64:
-      dbgs() << "MIPSeh_return64: 	(MIPSehret GPR64:{}:$spoff, GPR64:{}:$dst)";
-      break;
+    {
+      dbgs() << "[(MIPSehret GPR64:$spoff, GPR64:$dst)]";
     case Mips::MOD:
-      dbgs() << "MOD: 	(set GPR32Opnd:{}:$rd, (srem:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (srem GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MODSUB:
-      dbgs() << "MODSUB: 	(set GPR32Opnd:{}:$rd, (intrinsic_wo_chain:{} 4503:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_modsub GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MODSUB_MM:
-      dbgs() << "MODSUB_MM: 	(set GPR32Opnd:{}:$rd, (intrinsic_wo_chain:{} 4503:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_modsub GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MODU:
-      dbgs() << "MODU: 	(set GPR32Opnd:{}:$rd, (urem:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (urem GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MODU_MMR6:
-      dbgs() << "MODU_MMR6: 	(set GPR32Opnd:{}:$rd, (urem:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (urem GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MOD_MMR6:
-      dbgs() << "MOD_MMR6: 	(set GPR32Opnd:{}:$rd, (srem:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (srem GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MOD_S_B:
-      dbgs() << "MOD_S_B: 	(set MSA128BOpnd:{}:$wd, (srem:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (srem MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::MOD_S_D:
-      dbgs() << "MOD_S_D: 	(set MSA128DOpnd:{}:$wd, (srem:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (srem MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::MOD_S_H:
-      dbgs() << "MOD_S_H: 	(set MSA128HOpnd:{}:$wd, (srem:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (srem MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::MOD_S_W:
-      dbgs() << "MOD_S_W: 	(set MSA128WOpnd:{}:$wd, (srem:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (srem MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::MOD_U_B:
-      dbgs() << "MOD_U_B: 	(set MSA128BOpnd:{}:$wd, (urem:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (urem MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::MOD_U_D:
-      dbgs() << "MOD_U_D: 	(set MSA128DOpnd:{}:$wd, (urem:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (urem MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::MOD_U_H:
-      dbgs() << "MOD_U_H: 	(set MSA128HOpnd:{}:$wd, (urem:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (urem MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::MOD_U_W:
-      dbgs() << "MOD_U_W: 	(set MSA128WOpnd:{}:$wd, (urem:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (urem MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::MOVF_D32:
-      dbgs() << "MOVF_D32: 	(set AFGR64Opnd:{}:$fd, (MipsCMovFP_F:{} AFGR64Opnd:{}:$fs, FCCRegsOpnd:{}:$fcc, AFGR64Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (MipsCMovFP_F AFGR64Opnd:$fs, FCCRegsOpnd:$fcc, AFGR64Opnd:$F))]";
     case Mips::MOVF_D32_MM:
-      dbgs() << "MOVF_D32_MM: 	(set AFGR64Opnd:{}:$fd, (MipsCMovFP_F:{} AFGR64Opnd:{}:$fs, FCCRegsOpnd:{}:$fcc, AFGR64Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (MipsCMovFP_F AFGR64Opnd:$fs, FCCRegsOpnd:$fcc, AFGR64Opnd:$F))]";
     case Mips::MOVF_D64:
-      dbgs() << "MOVF_D64: 	(set FGR64Opnd:{}:$fd, (MipsCMovFP_F:{} FGR64Opnd:{}:$fs, FCCRegsOpnd:{}:$fcc, FGR64Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (MipsCMovFP_F FGR64Opnd:$fs, FCCRegsOpnd:$fcc, FGR64Opnd:$F))]";
     case Mips::MOVF_I:
-      dbgs() << "MOVF_I: 	(set GPR32Opnd:{}:$rd, (MipsCMovFP_F:{} GPR32Opnd:{}:$rs, FCCRegsOpnd:{}:$fcc, GPR32Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (MipsCMovFP_F GPR32Opnd:$rs, FCCRegsOpnd:$fcc, GPR32Opnd:$F))]";
     case Mips::MOVF_I64:
-      dbgs() << "MOVF_I64: 	(set GPR64Opnd:{}:$rd, (MipsCMovFP_F:{} GPR64Opnd:{}:$rs, FCCRegsOpnd:{}:$fcc, GPR64Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (MipsCMovFP_F GPR64Opnd:$rs, FCCRegsOpnd:$fcc, GPR64Opnd:$F))]";
     case Mips::MOVF_I_MM:
-      dbgs() << "MOVF_I_MM: 	(set GPR32Opnd:{}:$rd, (MipsCMovFP_F:{} GPR32Opnd:{}:$rs, FCCRegsOpnd:{}:$fcc, GPR32Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (MipsCMovFP_F GPR32Opnd:$rs, FCCRegsOpnd:$fcc, GPR32Opnd:$F))]";
     case Mips::MOVF_S:
-      dbgs() << "MOVF_S: 	(set FGR32Opnd:{}:$fd, (MipsCMovFP_F:{} FGR32Opnd:{}:$fs, FCCRegsOpnd:{}:$fcc, FGR32Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (MipsCMovFP_F FGR32Opnd:$fs, FCCRegsOpnd:$fcc, FGR32Opnd:$F))]";
     case Mips::MOVF_S_MM:
-      dbgs() << "MOVF_S_MM: 	(set FGR32Opnd:{}:$fd, (MipsCMovFP_F:{} FGR32Opnd:{}:$fs, FCCRegsOpnd:{}:$fcc, FGR32Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (MipsCMovFP_F FGR32Opnd:$fs, FCCRegsOpnd:$fcc, FGR32Opnd:$F))]";
     case Mips::MOVT_D32:
-      dbgs() << "MOVT_D32: 	(set AFGR64Opnd:{}:$fd, (MipsCMovFP_T:{} AFGR64Opnd:{}:$fs, FCCRegsOpnd:{}:$fcc, AFGR64Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (MipsCMovFP_T AFGR64Opnd:$fs, FCCRegsOpnd:$fcc, AFGR64Opnd:$F))]";
     case Mips::MOVT_D32_MM:
-      dbgs() << "MOVT_D32_MM: 	(set AFGR64Opnd:{}:$fd, (MipsCMovFP_T:{} AFGR64Opnd:{}:$fs, FCCRegsOpnd:{}:$fcc, AFGR64Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (MipsCMovFP_T AFGR64Opnd:$fs, FCCRegsOpnd:$fcc, AFGR64Opnd:$F))]";
     case Mips::MOVT_D64:
-      dbgs() << "MOVT_D64: 	(set FGR64Opnd:{}:$fd, (MipsCMovFP_T:{} FGR64Opnd:{}:$fs, FCCRegsOpnd:{}:$fcc, FGR64Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (MipsCMovFP_T FGR64Opnd:$fs, FCCRegsOpnd:$fcc, FGR64Opnd:$F))]";
     case Mips::MOVT_I:
-      dbgs() << "MOVT_I: 	(set GPR32Opnd:{}:$rd, (MipsCMovFP_T:{} GPR32Opnd:{}:$rs, FCCRegsOpnd:{}:$fcc, GPR32Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (MipsCMovFP_T GPR32Opnd:$rs, FCCRegsOpnd:$fcc, GPR32Opnd:$F))]";
     case Mips::MOVT_I64:
-      dbgs() << "MOVT_I64: 	(set GPR64Opnd:{}:$rd, (MipsCMovFP_T:{} GPR64Opnd:{}:$rs, FCCRegsOpnd:{}:$fcc, GPR64Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (MipsCMovFP_T GPR64Opnd:$rs, FCCRegsOpnd:$fcc, GPR64Opnd:$F))]";
     case Mips::MOVT_I_MM:
-      dbgs() << "MOVT_I_MM: 	(set GPR32Opnd:{}:$rd, (MipsCMovFP_T:{} GPR32Opnd:{}:$rs, FCCRegsOpnd:{}:$fcc, GPR32Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (MipsCMovFP_T GPR32Opnd:$rs, FCCRegsOpnd:$fcc, GPR32Opnd:$F))]";
     case Mips::MOVT_S:
-      dbgs() << "MOVT_S: 	(set FGR32Opnd:{}:$fd, (MipsCMovFP_T:{} FGR32Opnd:{}:$fs, FCCRegsOpnd:{}:$fcc, FGR32Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (MipsCMovFP_T FGR32Opnd:$fs, FCCRegsOpnd:$fcc, FGR32Opnd:$F))]";
     case Mips::MOVT_S_MM:
-      dbgs() << "MOVT_S_MM: 	(set FGR32Opnd:{}:$fd, (MipsCMovFP_T:{} FGR32Opnd:{}:$fs, FCCRegsOpnd:{}:$fcc, FGR32Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (MipsCMovFP_T FGR32Opnd:$fs, FCCRegsOpnd:$fcc, FGR32Opnd:$F))]";
     case Mips::MSA_FP_EXTEND_D_PSEUDO:
-      dbgs() << "MSA_FP_EXTEND_D_PSEUDO: 	(set FGR64Opnd:{}:$fd, (fpextend:{ *:[f64] } MSA128F16:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (f64 (fpextend MSA128F16:$ws)))]";
     case Mips::MSA_FP_EXTEND_W_PSEUDO:
-      dbgs() << "MSA_FP_EXTEND_W_PSEUDO: 	(set FGR32Opnd:{}:$fd, (fpextend:{ *:[f32] } MSA128F16:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (f32 (fpextend MSA128F16:$ws)))]";
     case Mips::MSA_FP_ROUND_D_PSEUDO:
-      dbgs() << "MSA_FP_ROUND_D_PSEUDO: 	(set MSA128F16:{}:$wd, (fpround:{ *:[f16] } FGR64Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set MSA128F16:$wd, (f16 (fpround FGR64Opnd:$fs)))]";
     case Mips::MSA_FP_ROUND_W_PSEUDO:
-      dbgs() << "MSA_FP_ROUND_W_PSEUDO: 	(set MSA128F16:{}:$wd, (fpround:{ *:[f16] } FGR32Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set MSA128F16:$wd, (f16 (fpround FGR32Opnd:$fs)))]";
     case Mips::MSUBR_Q_H:
-      dbgs() << "MSUBR_Q_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4508:{}, MSA128HOpnd:{}:$wd_in, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_msubr_q_h MSA128HOpnd:$wd_in, MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::MSUBR_Q_W:
-      dbgs() << "MSUBR_Q_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4509:{}, MSA128WOpnd:{}:$wd_in, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_msubr_q_w MSA128WOpnd:$wd_in, MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::MSUBU_DSP:
-      dbgs() << "MSUBU_DSP: 	(set ACC64DSPOpnd:{}:$ac, (MipsMSubu:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMSubu GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MSUBU_DSP_MM:
-      dbgs() << "MSUBU_DSP_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsMSubu:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMSubu GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MSUBV_B:
-      dbgs() << "MSUBV_B: 	(set MSA128BOpnd:{}:$wd, (mulsub:{} MSA128BOpnd:{}:$wd_in, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (mulsub MSA128BOpnd:$wd_in, MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::MSUBV_D:
-      dbgs() << "MSUBV_D: 	(set MSA128DOpnd:{}:$wd, (mulsub:{} MSA128DOpnd:{}:$wd_in, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (mulsub MSA128DOpnd:$wd_in, MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::MSUBV_H:
-      dbgs() << "MSUBV_H: 	(set MSA128HOpnd:{}:$wd, (mulsub:{} MSA128HOpnd:{}:$wd_in, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (mulsub MSA128HOpnd:$wd_in, MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::MSUBV_W:
-      dbgs() << "MSUBV_W: 	(set MSA128WOpnd:{}:$wd, (mulsub:{} MSA128WOpnd:{}:$wd_in, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (mulsub MSA128WOpnd:$wd_in, MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::MSUB_D32:
-      dbgs() << "MSUB_D32: 	(set AFGR64Opnd:{}:$fd, (fsub:{} (fmul:{} AFGR64Opnd:{}:$fs, AFGR64Opnd:{}:$ft), AFGR64Opnd:{}:$fr))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fsub (fmul AFGR64Opnd:$fs, AFGR64Opnd:$ft), AFGR64Opnd:$fr))]";
+    case Mips::MSUB_D32_MM:
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (null_frag (fmul AFGR64Opnd:$fs, AFGR64Opnd:$ft), AFGR64Opnd:$fr))]";
     case Mips::MSUB_D64:
-      dbgs() << "MSUB_D64: 	(set FGR64Opnd:{}:$fd, (fsub:{} (fmul:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft), FGR64Opnd:{}:$fr))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (fsub (fmul FGR64Opnd:$fs, FGR64Opnd:$ft), FGR64Opnd:$fr))]";
     case Mips::MSUB_DSP:
-      dbgs() << "MSUB_DSP: 	(set ACC64DSPOpnd:{}:$ac, (MipsMSub:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMSub GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MSUB_DSP_MM:
-      dbgs() << "MSUB_DSP_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsMSub:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMSub GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MSUB_Q_H:
-      dbgs() << "MSUB_Q_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4506:{}, MSA128HOpnd:{}:$wd_in, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_msub_q_h MSA128HOpnd:$wd_in, MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::MSUB_Q_W:
-      dbgs() << "MSUB_Q_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4507:{}, MSA128WOpnd:{}:$wd_in, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_msub_q_w MSA128WOpnd:$wd_in, MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::MSUB_S:
-      dbgs() << "MSUB_S: 	(set FGR32Opnd:{}:$fd, (fsub:{} (fmul:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft), FGR32Opnd:{}:$fr))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fsub (fmul FGR32Opnd:$fs, FGR32Opnd:$ft), FGR32Opnd:$fr))]";
+    case Mips::MSUB_S_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag (fmul FGR32Opnd:$fs, FGR32Opnd:$ft), FGR32Opnd:$fr))]";
     case Mips::MTC1:
-      dbgs() << "MTC1: 	(set FGR32Opnd:{}:$fs, (bitconvert:{} GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fs, (bitconvert GPR32Opnd:$rt))]";
+    case Mips::MTC1_D64:
+    {
+      dbgs() << "[(set FGR64Opnd:$fs, (null_frag GPR32Opnd:$rt))]";
+    case Mips::MTC1_D64_MM:
+    {
+      dbgs() << "[(set FGR64Opnd:$fs, (null_frag GPR32Opnd:$rt))]";
     case Mips::MTC1_MM:
-      dbgs() << "MTC1_MM: 	(set FGR32Opnd:{}:$fs, (bitconvert:{} GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fs, (bitconvert GPR32Opnd:$rt))]";
     case Mips::MTC1_MMR6:
-      dbgs() << "MTC1_MMR6: 	(set FGR32Opnd:{}:$fs, (bitconvert:{} GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fs, (bitconvert GPR32Opnd:$rt))]";
     case Mips::MTHLIP:
-      dbgs() << "MTHLIP: 	(set ACC64DSPOpnd:{}:$ac, (MipsMTHLIP:{} GPR32Opnd:{}:$rs, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMTHLIP GPR32Opnd:$rs, ACC64DSPOpnd:$acin))]";
     case Mips::MTHLIP_MM:
-      dbgs() << "MTHLIP_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsMTHLIP:{} GPR32Opnd:{}:$rs, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMTHLIP GPR32Opnd:$rs, ACC64DSPOpnd:$acin))]";
     case Mips::MUH:
-      dbgs() << "MUH: 	(set GPR32Opnd:{}:$rd, (mulhs:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (mulhs GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MUHU:
-      dbgs() << "MUHU: 	(set GPR32Opnd:{}:$rd, (mulhu:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (mulhu GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MUHU_MMR6:
-      dbgs() << "MUHU_MMR6: 	(set GPR32Opnd:{}:$rd, (mulhu:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (mulhu GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MUH_MMR6:
-      dbgs() << "MUH_MMR6: 	(set GPR32Opnd:{}:$rd, (mulhs:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (mulhs GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MUL:
-      dbgs() << "MUL: 	(set GPR32Opnd:{}:$rd, (mul:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (mul GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MULEQ_S_W_PHL:
-      dbgs() << "MULEQ_S_W_PHL: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4520:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_muleq_s_w_phl DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::MULEQ_S_W_PHL_MM:
-      dbgs() << "MULEQ_S_W_PHL_MM: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4520:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_muleq_s_w_phl DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::MULEQ_S_W_PHR:
-      dbgs() << "MULEQ_S_W_PHR: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4521:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_muleq_s_w_phr DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::MULEQ_S_W_PHR_MM:
-      dbgs() << "MULEQ_S_W_PHR_MM: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4521:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_muleq_s_w_phr DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::MULEU_S_PH_QBL:
-      dbgs() << "MULEU_S_PH_QBL: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4522:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_muleu_s_ph_qbl DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::MULEU_S_PH_QBL_MM:
-      dbgs() << "MULEU_S_PH_QBL_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4522:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_muleu_s_ph_qbl DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::MULEU_S_PH_QBR:
-      dbgs() << "MULEU_S_PH_QBR: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4523:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_muleu_s_ph_qbr DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::MULEU_S_PH_QBR_MM:
-      dbgs() << "MULEU_S_PH_QBR_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4523:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_muleu_s_ph_qbr DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::MULQ_RS_PH:
-      dbgs() << "MULQ_RS_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4524:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_mulq_rs_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::MULQ_RS_PH_MM:
-      dbgs() << "MULQ_RS_PH_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4524:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_mulq_rs_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::MULQ_RS_W:
-      dbgs() << "MULQ_RS_W: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4525:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_mulq_rs_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MULQ_RS_W_MMR2:
-      dbgs() << "MULQ_RS_W_MMR2: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4525:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_mulq_rs_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MULQ_S_PH:
-      dbgs() << "MULQ_S_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4526:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_mulq_s_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::MULQ_S_PH_MMR2:
-      dbgs() << "MULQ_S_PH_MMR2: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4526:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_mulq_s_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::MULQ_S_W:
-      dbgs() << "MULQ_S_W: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4527:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_mulq_s_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MULQ_S_W_MMR2:
-      dbgs() << "MULQ_S_W_MMR2: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4527:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_mulq_s_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
+    case Mips::MULR_PS64:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::MULR_Q_H:
-      dbgs() << "MULR_Q_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4528:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_mulr_q_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::MULR_Q_W:
-      dbgs() << "MULR_Q_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4529:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_mulr_q_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::MULSAQ_S_W_PH:
-      dbgs() << "MULSAQ_S_W_PH: 	(set ACC64DSPOpnd:{}:$ac, (MipsMULSAQ_S_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMULSAQ_S_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MULSAQ_S_W_PH_MM:
-      dbgs() << "MULSAQ_S_W_PH_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsMULSAQ_S_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMULSAQ_S_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MULSA_W_PH:
-      dbgs() << "MULSA_W_PH: 	(set ACC64DSPOpnd:{}:$ac, (MipsMULSA_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMULSA_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MULSA_W_PH_MMR2:
-      dbgs() << "MULSA_W_PH_MMR2: 	(set ACC64DSPOpnd:{}:$ac, (MipsMULSA_W_PH:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMULSA_W_PH GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64DSPOpnd:$acin))]";
     case Mips::MULTU_DSP:
-      dbgs() << "MULTU_DSP: 	(set ACC64DSPOpnd:{}:$ac, (MipsMultu:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMultu GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MULTU_DSP_MM:
-      dbgs() << "MULTU_DSP_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsMultu:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMultu GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MULT_DSP:
-      dbgs() << "MULT_DSP: 	(set ACC64DSPOpnd:{}:$ac, (MipsMult:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMult GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MULT_DSP_MM:
-      dbgs() << "MULT_DSP_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsMult:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsMult GPR32Opnd:$rs, GPR32Opnd:$rt))]";
+    case Mips::MULU:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rs, GPR32Opnd:$rt))]";
+    case Mips::MULU_MMR6:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MULV_B:
-      dbgs() << "MULV_B: 	(set MSA128BOpnd:{}:$wd, (mul:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (mul MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::MULV_D:
-      dbgs() << "MULV_D: 	(set MSA128DOpnd:{}:$wd, (mul:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (mul MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::MULV_H:
-      dbgs() << "MULV_H: 	(set MSA128HOpnd:{}:$wd, (mul:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (mul MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::MULV_W:
-      dbgs() << "MULV_W: 	(set MSA128WOpnd:{}:$wd, (mul:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (mul MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::MUL_MM:
-      dbgs() << "MUL_MM: 	(set GPR32Opnd:{}:$rd, (mul:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (mul GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MUL_MMR6:
-      dbgs() << "MUL_MMR6: 	(set GPR32Opnd:{}:$rd, (mul:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (mul GPR32Opnd:$rs, GPR32Opnd:$rt))]";
+    case Mips::MUL_PH:
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (null_frag DSPROpnd:$rs, DSPROpnd:$rt))]";
+    case Mips::MUL_PH_MMR2:
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (null_frag DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::MUL_Q_H:
-      dbgs() << "MUL_Q_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4517:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_mul_q_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::MUL_Q_W:
-      dbgs() << "MUL_Q_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4518:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_mul_q_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::MUL_R6:
-      dbgs() << "MUL_R6: 	(set GPR32Opnd:{}:$rd, (mul:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (mul GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::MUL_S_PH:
-      dbgs() << "MUL_S_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4519:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_mul_s_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::MUL_S_PH_MMR2:
-      dbgs() << "MUL_S_PH_MMR2: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4519:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_mul_s_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::NLOC_B:
-      dbgs() << "NLOC_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4538:{}, MSA128BOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_nloc_b MSA128BOpnd:$ws))]";
     case Mips::NLOC_D:
-      dbgs() << "NLOC_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4539:{}, MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_nloc_d MSA128DOpnd:$ws))]";
     case Mips::NLOC_H:
-      dbgs() << "NLOC_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4540:{}, MSA128HOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_nloc_h MSA128HOpnd:$ws))]";
     case Mips::NLOC_W:
-      dbgs() << "NLOC_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4541:{}, MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_nloc_w MSA128WOpnd:$ws))]";
     case Mips::NLZC_B:
-      dbgs() << "NLZC_B: 	(set MSA128BOpnd:{}:$wd, (ctlz:{} MSA128BOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (ctlz MSA128BOpnd:$ws))]";
     case Mips::NLZC_D:
-      dbgs() << "NLZC_D: 	(set MSA128DOpnd:{}:$wd, (ctlz:{} MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (ctlz MSA128DOpnd:$ws))]";
     case Mips::NLZC_H:
-      dbgs() << "NLZC_H: 	(set MSA128HOpnd:{}:$wd, (ctlz:{} MSA128HOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (ctlz MSA128HOpnd:$ws))]";
     case Mips::NLZC_W:
-      dbgs() << "NLZC_W: 	(set MSA128WOpnd:{}:$wd, (ctlz:{} MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (ctlz MSA128WOpnd:$ws))]";
     case Mips::NMADD_D32:
-      dbgs() << "NMADD_D32: 	(set AFGR64Opnd:{}:$fd, (fsub:{} (fpimm0:{}), (fadd:{} (fmul:{} AFGR64Opnd:{}:$fs, AFGR64Opnd:{}:$ft), AFGR64Opnd:{}:$fr)))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fsub fpimm0, (fadd (fmul AFGR64Opnd:$fs, AFGR64Opnd:$ft), AFGR64Opnd:$fr)))]";
+    case Mips::NMADD_D32_MM:
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fsub fpimm0, (null_frag (fmul AFGR64Opnd:$fs, AFGR64Opnd:$ft), AFGR64Opnd:$fr)))]";
     case Mips::NMADD_D64:
-      dbgs() << "NMADD_D64: 	(set FGR64Opnd:{}:$fd, (fsub:{} (fpimm0:{}), (fadd:{} (fmul:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft), FGR64Opnd:{}:$fr)))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (fsub fpimm0, (fadd (fmul FGR64Opnd:$fs, FGR64Opnd:$ft), FGR64Opnd:$fr)))]";
     case Mips::NMADD_S:
-      dbgs() << "NMADD_S: 	(set FGR32Opnd:{}:$fd, (fsub:{} (fpimm0:{}), (fadd:{} (fmul:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft), FGR32Opnd:{}:$fr)))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fsub fpimm0, (fadd (fmul FGR32Opnd:$fs, FGR32Opnd:$ft), FGR32Opnd:$fr)))]";
+    case Mips::NMADD_S_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fsub fpimm0, (null_frag (fmul FGR32Opnd:$fs, FGR32Opnd:$ft), FGR32Opnd:$fr)))]";
     case Mips::NMSUB_D32:
-      dbgs() << "NMSUB_D32: 	(set AFGR64Opnd:{}:$fd, (fsub:{} (fpimm0:{}), (fsub:{} (fmul:{} AFGR64Opnd:{}:$fs, AFGR64Opnd:{}:$ft), AFGR64Opnd:{}:$fr)))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fsub fpimm0, (fsub (fmul AFGR64Opnd:$fs, AFGR64Opnd:$ft), AFGR64Opnd:$fr)))]";
+    case Mips::NMSUB_D32_MM:
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (fsub fpimm0, (null_frag (fmul AFGR64Opnd:$fs, AFGR64Opnd:$ft), AFGR64Opnd:$fr)))]";
     case Mips::NMSUB_D64:
-      dbgs() << "NMSUB_D64: 	(set FGR64Opnd:{}:$fd, (fsub:{} (fpimm0:{}), (fsub:{} (fmul:{} FGR64Opnd:{}:$fs, FGR64Opnd:{}:$ft), FGR64Opnd:{}:$fr)))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (fsub fpimm0, (fsub (fmul FGR64Opnd:$fs, FGR64Opnd:$ft), FGR64Opnd:$fr)))]";
     case Mips::NMSUB_S:
-      dbgs() << "NMSUB_S: 	(set FGR32Opnd:{}:$fd, (fsub:{} (fpimm0:{}), (fsub:{} (fmul:{} FGR32Opnd:{}:$fs, FGR32Opnd:{}:$ft), FGR32Opnd:{}:$fr)))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fsub fpimm0, (fsub (fmul FGR32Opnd:$fs, FGR32Opnd:$ft), FGR32Opnd:$fr)))]";
+    case Mips::NMSUB_S_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (fsub fpimm0, (null_frag (fmul FGR32Opnd:$fs, FGR32Opnd:$ft), FGR32Opnd:$fr)))]";
     case Mips::NOR:
-      dbgs() << "NOR: 	(set GPR32Opnd:{}:$rd, (not:{} (or:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt)))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (not (or GPR32Opnd:$rs, GPR32Opnd:$rt)))]";
     case Mips::NOR64:
-      dbgs() << "NOR64: 	(set GPR64Opnd:{}:$rd, (not:{} (or:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt)))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (not (or GPR64Opnd:$rs, GPR64Opnd:$rt)))]";
     case Mips::NORI_B:
-      dbgs() << "NORI_B: 	(set MSA128BOpnd:{}:$wd, (MipsVNOR:{} MSA128BOpnd:{}:$ws, vsplati8_uimm8:{}:$u8))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (MipsVNOR MSA128BOpnd:$ws, vsplati8_uimm8:$u8))]";
     case Mips::NOR_MM:
-      dbgs() << "NOR_MM: 	(set GPR32Opnd:{}:$rd, (not:{} (or:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt)))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (not (or GPR32Opnd:$rs, GPR32Opnd:$rt)))]";
     case Mips::NOR_MMR6:
-      dbgs() << "NOR_MMR6: 	(set GPR32Opnd:{}:$rd, (not:{} (or:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt)))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (not (or GPR32Opnd:$rs, GPR32Opnd:$rt)))]";
     case Mips::NOR_V:
-      dbgs() << "NOR_V: 	(set MSA128BOpnd:{}:$wd, (MipsVNOR:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (MipsVNOR MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::NOR_V_D_PSEUDO:
-      dbgs() << "NOR_V_D_PSEUDO: 	(set MSA128DOpnd:{}:$wd, (MipsVNOR:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (MipsVNOR MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::NOR_V_H_PSEUDO:
-      dbgs() << "NOR_V_H_PSEUDO: 	(set MSA128HOpnd:{}:$wd, (MipsVNOR:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (MipsVNOR MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::NOR_V_W_PSEUDO:
-      dbgs() << "NOR_V_W_PSEUDO: 	(set MSA128WOpnd:{}:$wd, (MipsVNOR:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (MipsVNOR MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::NOT16_MM:
-      dbgs() << "NOT16_MM: 	(set GPRMM16Opnd:{}:$rt, (not:{} GPRMM16Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPRMM16Opnd:$rt, (not GPRMM16Opnd:$rs))]";
     case Mips::NOT16_MMR6:
-      dbgs() << "NOT16_MMR6: 	(set GPRMM16Opnd:{}:$rt, (not:{} GPRMM16Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPRMM16Opnd:$rt, (not GPRMM16Opnd:$rs))]";
     case Mips::OR:
-      dbgs() << "OR: 	(set GPR32Opnd:{}:$rd, (or:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (or GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::OR16_MM:
-      dbgs() << "OR16_MM: 	(set GPRMM16Opnd:{}:$dst, (or:{} GPRMM16Opnd:{}:$rs, GPRMM16Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPRMM16Opnd:$dst, (or GPRMM16Opnd:$rs, GPRMM16Opnd:$rt))]";
+    case Mips::OR16_MMR6:
+    {
+      dbgs() << "[(set GPRMM16Opnd:$dst, (null_frag GPRMM16Opnd:$rs, GPRMM16Opnd:$rt))]";
     case Mips::OR64:
-      dbgs() << "OR64: 	(set GPR64Opnd:{}:$rd, (or:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (or GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::ORI_B:
-      dbgs() << "ORI_B: 	(set MSA128BOpnd:{}:$wd, (or:{} MSA128BOpnd:{}:$ws, vsplati8_uimm8:{}:$u8))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (or MSA128BOpnd:$ws, vsplati8_uimm8:$u8))]";
     case Mips::ORI_MMR6:
-      dbgs() << "ORI_MMR6: 	(set GPR32Opnd:{}:$rt, (or:{} GPR32Opnd:{}:$rs, (immZExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (or GPR32Opnd:$rs, immZExt16:$imm16))]";
     case Mips::OR_MM:
-      dbgs() << "OR_MM: 	(set GPR32Opnd:{}:$rd, (or:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (or GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::OR_MMR6:
-      dbgs() << "OR_MMR6: 	(set GPR32Opnd:{}:$rd, (or:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (or GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::OR_V:
-      dbgs() << "OR_V: 	(set MSA128BOpnd:{}:$wd, (or:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (or MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::OR_V_D_PSEUDO:
-      dbgs() << "OR_V_D_PSEUDO: 	(set MSA128DOpnd:{}:$wd, (or:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (or MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::OR_V_H_PSEUDO:
-      dbgs() << "OR_V_H_PSEUDO: 	(set MSA128HOpnd:{}:$wd, (or:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (or MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::OR_V_W_PSEUDO:
-      dbgs() << "OR_V_W_PSEUDO: 	(set MSA128WOpnd:{}:$wd, (or:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (or MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::ORi:
-      dbgs() << "ORi: 	(set GPR32Opnd:{}:$rt, (or:{} GPR32Opnd:{}:$rs, (imm32ZExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (or GPR32Opnd:$rs, imm32ZExt16:$imm16))]";
     case Mips::ORi64:
-      dbgs() << "ORi64: 	(set GPR64Opnd:{}:$rt, (or:{} GPR64Opnd:{}:$rs, (immZExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (or GPR64Opnd:$rs, immZExt16:$imm16))]";
     case Mips::ORi_MM:
-      dbgs() << "ORi_MM: 	(set GPR32Opnd:{}:$rt, (or:{} GPR32Opnd:{}:$rs, (immZExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (or GPR32Opnd:$rs, immZExt16:$imm16))]";
     case Mips::PACKRL_PH:
-      dbgs() << "PACKRL_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4550:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_packrl_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::PACKRL_PH_MM:
-      dbgs() << "PACKRL_PH_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4550:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_packrl_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::PCKEV_B:
-      dbgs() << "PCKEV_B: 	(set MSA128BOpnd:{}:$wd, (MipsPCKEV:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (MipsPCKEV MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::PCKEV_D:
-      dbgs() << "PCKEV_D: 	(set MSA128DOpnd:{}:$wd, (MipsPCKEV:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (MipsPCKEV MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::PCKEV_H:
-      dbgs() << "PCKEV_H: 	(set MSA128HOpnd:{}:$wd, (MipsPCKEV:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (MipsPCKEV MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::PCKEV_W:
-      dbgs() << "PCKEV_W: 	(set MSA128WOpnd:{}:$wd, (MipsPCKEV:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (MipsPCKEV MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::PCKOD_B:
-      dbgs() << "PCKOD_B: 	(set MSA128BOpnd:{}:$wd, (MipsPCKOD:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (MipsPCKOD MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::PCKOD_D:
-      dbgs() << "PCKOD_D: 	(set MSA128DOpnd:{}:$wd, (MipsPCKOD:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (MipsPCKOD MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::PCKOD_H:
-      dbgs() << "PCKOD_H: 	(set MSA128HOpnd:{}:$wd, (MipsPCKOD:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (MipsPCKOD MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::PCKOD_W:
-      dbgs() << "PCKOD_W: 	(set MSA128WOpnd:{}:$wd, (MipsPCKOD:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (MipsPCKOD MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::PCNT_B:
-      dbgs() << "PCNT_B: 	(set MSA128BOpnd:{}:$wd, (ctpop:{} MSA128BOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (ctpop MSA128BOpnd:$ws))]";
     case Mips::PCNT_D:
-      dbgs() << "PCNT_D: 	(set MSA128DOpnd:{}:$wd, (ctpop:{} MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (ctpop MSA128DOpnd:$ws))]";
     case Mips::PCNT_H:
-      dbgs() << "PCNT_H: 	(set MSA128HOpnd:{}:$wd, (ctpop:{} MSA128HOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (ctpop MSA128HOpnd:$ws))]";
     case Mips::PCNT_W:
-      dbgs() << "PCNT_W: 	(set MSA128WOpnd:{}:$wd, (ctpop:{} MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (ctpop MSA128WOpnd:$ws))]";
     case Mips::PICK_PH:
-      dbgs() << "PICK_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4563:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_pick_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::PICK_PH_MM:
-      dbgs() << "PICK_PH_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4563:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_pick_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::PICK_QB:
-      dbgs() << "PICK_QB: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4564:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_pick_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::PICK_QB_MM:
-      dbgs() << "PICK_QB_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4564:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_pick_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
+    case Mips::PLL_PS64:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::PLU_PS64:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
     case Mips::POP:
-      dbgs() << "POP: 	(set GPR32Opnd:{}:$rd, (ctpop:{} GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (ctpop GPR32Opnd:$rs))]";
     case Mips::PRECEQU_PH_QBL:
-      dbgs() << "PRECEQU_PH_QBL: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4567:{}, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_precequ_ph_qbl DSPROpnd:$rt))]";
     case Mips::PRECEQU_PH_QBLA:
-      dbgs() << "PRECEQU_PH_QBLA: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4568:{}, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_precequ_ph_qbla DSPROpnd:$rt))]";
     case Mips::PRECEQU_PH_QBLA_MM:
-      dbgs() << "PRECEQU_PH_QBLA_MM: 	(set DSPROpnd:{}:$rt, (intrinsic_wo_chain:{} 4568:{}, DSPROpnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_precequ_ph_qbla DSPROpnd:$rs))]";
     case Mips::PRECEQU_PH_QBL_MM:
-      dbgs() << "PRECEQU_PH_QBL_MM: 	(set DSPROpnd:{}:$rt, (intrinsic_wo_chain:{} 4567:{}, DSPROpnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_precequ_ph_qbl DSPROpnd:$rs))]";
     case Mips::PRECEQU_PH_QBR:
-      dbgs() << "PRECEQU_PH_QBR: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4569:{}, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_precequ_ph_qbr DSPROpnd:$rt))]";
     case Mips::PRECEQU_PH_QBRA:
-      dbgs() << "PRECEQU_PH_QBRA: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4570:{}, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_precequ_ph_qbra DSPROpnd:$rt))]";
     case Mips::PRECEQU_PH_QBRA_MM:
-      dbgs() << "PRECEQU_PH_QBRA_MM: 	(set DSPROpnd:{}:$rt, (intrinsic_wo_chain:{} 4570:{}, DSPROpnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_precequ_ph_qbra DSPROpnd:$rs))]";
     case Mips::PRECEQU_PH_QBR_MM:
-      dbgs() << "PRECEQU_PH_QBR_MM: 	(set DSPROpnd:{}:$rt, (intrinsic_wo_chain:{} 4569:{}, DSPROpnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_precequ_ph_qbr DSPROpnd:$rs))]";
     case Mips::PRECEQ_W_PHL:
-      dbgs() << "PRECEQ_W_PHL: 	(set GPR32Opnd:{}:$rd, (intrinsic_wo_chain:{} 4565:{}, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_preceq_w_phl DSPROpnd:$rt))]";
     case Mips::PRECEQ_W_PHL_MM:
-      dbgs() << "PRECEQ_W_PHL_MM: 	(set GPR32Opnd:{}:$rt, (intrinsic_wo_chain:{} 4565:{}, DSPROpnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (int_mips_preceq_w_phl DSPROpnd:$rs))]";
     case Mips::PRECEQ_W_PHR:
-      dbgs() << "PRECEQ_W_PHR: 	(set GPR32Opnd:{}:$rd, (intrinsic_wo_chain:{} 4566:{}, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_preceq_w_phr DSPROpnd:$rt))]";
     case Mips::PRECEQ_W_PHR_MM:
-      dbgs() << "PRECEQ_W_PHR_MM: 	(set GPR32Opnd:{}:$rt, (intrinsic_wo_chain:{} 4566:{}, DSPROpnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (int_mips_preceq_w_phr DSPROpnd:$rs))]";
     case Mips::PRECEU_PH_QBL:
-      dbgs() << "PRECEU_PH_QBL: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4571:{}, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_preceu_ph_qbl DSPROpnd:$rt))]";
     case Mips::PRECEU_PH_QBLA:
-      dbgs() << "PRECEU_PH_QBLA: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4572:{}, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_preceu_ph_qbla DSPROpnd:$rt))]";
     case Mips::PRECEU_PH_QBLA_MM:
-      dbgs() << "PRECEU_PH_QBLA_MM: 	(set DSPROpnd:{}:$rt, (intrinsic_wo_chain:{} 4572:{}, DSPROpnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_preceu_ph_qbla DSPROpnd:$rs))]";
     case Mips::PRECEU_PH_QBL_MM:
-      dbgs() << "PRECEU_PH_QBL_MM: 	(set DSPROpnd:{}:$rt, (intrinsic_wo_chain:{} 4571:{}, DSPROpnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_preceu_ph_qbl DSPROpnd:$rs))]";
     case Mips::PRECEU_PH_QBR:
-      dbgs() << "PRECEU_PH_QBR: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4573:{}, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_preceu_ph_qbr DSPROpnd:$rt))]";
     case Mips::PRECEU_PH_QBRA:
-      dbgs() << "PRECEU_PH_QBRA: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4574:{}, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_preceu_ph_qbra DSPROpnd:$rt))]";
     case Mips::PRECEU_PH_QBRA_MM:
-      dbgs() << "PRECEU_PH_QBRA_MM: 	(set DSPROpnd:{}:$rt, (intrinsic_wo_chain:{} 4574:{}, DSPROpnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_preceu_ph_qbra DSPROpnd:$rs))]";
     case Mips::PRECEU_PH_QBR_MM:
-      dbgs() << "PRECEU_PH_QBR_MM: 	(set DSPROpnd:{}:$rt, (intrinsic_wo_chain:{} 4573:{}, DSPROpnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_preceu_ph_qbr DSPROpnd:$rs))]";
     case Mips::PRECRQU_S_QB_PH:
-      dbgs() << "PRECRQU_S_QB_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4581:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_precrqu_s_qb_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::PRECRQU_S_QB_PH_MM:
-      dbgs() << "PRECRQU_S_QB_PH_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4581:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_precrqu_s_qb_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::PRECRQ_PH_W:
-      dbgs() << "PRECRQ_PH_W: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4578:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_precrq_ph_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::PRECRQ_PH_W_MM:
-      dbgs() << "PRECRQ_PH_W_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4578:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_precrq_ph_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::PRECRQ_QB_PH:
-      dbgs() << "PRECRQ_QB_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4579:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_precrq_qb_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::PRECRQ_QB_PH_MM:
-      dbgs() << "PRECRQ_QB_PH_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4579:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_precrq_qb_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::PRECRQ_RS_PH_W:
-      dbgs() << "PRECRQ_RS_PH_W: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4580:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_precrq_rs_ph_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::PRECRQ_RS_PH_W_MM:
-      dbgs() << "PRECRQ_RS_PH_W_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4580:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_precrq_rs_ph_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::PRECR_QB_PH:
-      dbgs() << "PRECR_QB_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4575:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_precr_qb_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::PRECR_QB_PH_MMR2:
-      dbgs() << "PRECR_QB_PH_MMR2: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4575:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_precr_qb_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::PRECR_SRA_PH_W:
-      dbgs() << "PRECR_SRA_PH_W: 	(set DSPROpnd:{}:$rt, (intrinsic_wo_chain:{} 4576:{}, GPR32Opnd:{}:$src, GPR32Opnd:{}:$rs, (timmZExt5:{}):$sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_precr_sra_ph_w GPR32Opnd:$src, GPR32Opnd:$rs, timmZExt5:$sa))]";
     case Mips::PRECR_SRA_PH_W_MMR2:
-      dbgs() << "PRECR_SRA_PH_W_MMR2: 	(set DSPROpnd:{}:$rt, (intrinsic_wo_chain:{} 4576:{}, GPR32Opnd:{}:$src, GPR32Opnd:{}:$rs, (timmZExt5:{}):$sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_precr_sra_ph_w GPR32Opnd:$src, GPR32Opnd:$rs, timmZExt5:$sa))]";
     case Mips::PRECR_SRA_R_PH_W:
-      dbgs() << "PRECR_SRA_R_PH_W: 	(set DSPROpnd:{}:$rt, (intrinsic_wo_chain:{} 4577:{}, GPR32Opnd:{}:$src, GPR32Opnd:{}:$rs, (timmZExt5:{}):$sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_precr_sra_r_ph_w GPR32Opnd:$src, GPR32Opnd:$rs, timmZExt5:$sa))]";
     case Mips::PRECR_SRA_R_PH_W_MMR2:
-      dbgs() << "PRECR_SRA_R_PH_W_MMR2: 	(set DSPROpnd:{}:$rt, (intrinsic_wo_chain:{} 4577:{}, GPR32Opnd:{}:$src, GPR32Opnd:{}:$rs, (timmZExt5:{}):$sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_precr_sra_r_ph_w GPR32Opnd:$src, GPR32Opnd:$rs, timmZExt5:$sa))]";
     case Mips::PREPEND:
-      dbgs() << "PREPEND: 	(set GPR32Opnd:{}:$rt, (intrinsic_wo_chain:{} 4582:{}, GPR32Opnd:{}:$src, GPR32Opnd:{}:$rs, (timmZExt5:{}):$sa))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (int_mips_prepend GPR32Opnd:$src, GPR32Opnd:$rs, timmZExt5:$sa))]";
     case Mips::PREPEND_MMR2:
-      dbgs() << "PREPEND_MMR2: 	(set GPR32Opnd:{}:$rt, (intrinsic_wo_chain:{} 4582:{}, GPR32Opnd:{}:$src, GPR32Opnd:{}:$rs, (timmZExt5:{}):$sa))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (int_mips_prepend GPR32Opnd:$src, GPR32Opnd:$rs, timmZExt5:$sa))]";
+    case Mips::PUL_PS64:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::PUU_PS64:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs, FGR64Opnd:$ft))]";
+    case Mips::PseudoCVT_D32_W:
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (null_frag GPR32Opnd:$fs))]";
+    case Mips::PseudoCVT_D64_L:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag GPR64Opnd:$fs))]";
+    case Mips::PseudoCVT_D64_W:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag GPR32Opnd:$fs))]";
+    case Mips::PseudoCVT_S_L:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag GPR64Opnd:$fs))]";
+    case Mips::PseudoCVT_S_W:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag GPR32Opnd:$fs))]";
     case Mips::PseudoDMULT:
-      dbgs() << "PseudoDMULT: 	(set ACC128:{}:$ac, (MipsMult:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set ACC128:$ac, (MipsMult GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::PseudoDMULTu:
-      dbgs() << "PseudoDMULTu: 	(set ACC128:{}:$ac, (MipsMultu:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set ACC128:$ac, (MipsMultu GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::PseudoDSDIV:
-      dbgs() << "PseudoDSDIV: 	(set ACC128:{}:$ac, (MipsDivRem:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set ACC128:$ac, (MipsDivRem GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::PseudoDUDIV:
-      dbgs() << "PseudoDUDIV: 	(set ACC128:{}:$ac, (MipsDivRemU:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set ACC128:$ac, (MipsDivRemU GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::PseudoIndirectBranch:
-      dbgs() << "PseudoIndirectBranch: 	(brind GPR32Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(brind GPR32Opnd:$rs)]";
     case Mips::PseudoIndirectBranch64:
-      dbgs() << "PseudoIndirectBranch64: 	(brind GPR64Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(brind GPR64Opnd:$rs)]";
     case Mips::PseudoIndirectBranch64R6:
-      dbgs() << "PseudoIndirectBranch64R6: 	(brind GPR64Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(brind GPR64Opnd:$rs)]";
     case Mips::PseudoIndirectBranchR6:
-      dbgs() << "PseudoIndirectBranchR6: 	(brind GPR32Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(brind GPR32Opnd:$rs)]";
     case Mips::PseudoIndirectBranch_MM:
-      dbgs() << "PseudoIndirectBranch_MM: 	(brind GPR32Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(brind GPR32Opnd:$rs)]";
     case Mips::PseudoIndirectBranch_MMR6:
-      dbgs() << "PseudoIndirectBranch_MMR6: 	(brind GPR32Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(brind GPR32Opnd:$rs)]";
     case Mips::PseudoIndirectHazardBranch:
-      dbgs() << "PseudoIndirectHazardBranch: 	(brind GPR32Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(brind GPR32Opnd:$rs)]";
     case Mips::PseudoIndirectHazardBranch64:
-      dbgs() << "PseudoIndirectHazardBranch64: 	(brind GPR64Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(brind GPR64Opnd:$rs)]";
     case Mips::PseudoIndrectHazardBranch64R6:
-      dbgs() << "PseudoIndrectHazardBranch64R6: 	(brind GPR64Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(brind GPR64Opnd:$rs)]";
     case Mips::PseudoIndrectHazardBranchR6:
-      dbgs() << "PseudoIndrectHazardBranchR6: 	(brind GPR32Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(brind GPR32Opnd:$rs)]";
     case Mips::PseudoMADD:
-      dbgs() << "PseudoMADD: 	(set ACC64:{}:$ac, (MipsMAdd:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64:$ac, (MipsMAdd GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64:$acin))]";
     case Mips::PseudoMADDU:
-      dbgs() << "PseudoMADDU: 	(set ACC64:{}:$ac, (MipsMAddu:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64:$ac, (MipsMAddu GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64:$acin))]";
     case Mips::PseudoMADDU_MM:
-      dbgs() << "PseudoMADDU_MM: 	(set ACC64:{}:$ac, (MipsMAddu:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64:$ac, (MipsMAddu GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64:$acin))]";
     case Mips::PseudoMADD_MM:
-      dbgs() << "PseudoMADD_MM: 	(set ACC64:{}:$ac, (MipsMAdd:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64:$ac, (MipsMAdd GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64:$acin))]";
     case Mips::PseudoMFHI:
-      dbgs() << "PseudoMFHI: 	(set GPR32:{}:$rd, (MipsMFHI:{} ACC64:{}:$hilo))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$rd, (MipsMFHI ACC64:$hilo))]";
     case Mips::PseudoMFHI64:
-      dbgs() << "PseudoMFHI64: 	(set GPR64:{}:$rd, (MipsMFHI:{} ACC128:{}:$hilo))";
-      break;
+    {
+      dbgs() << "[(set GPR64:$rd, (MipsMFHI ACC128:$hilo))]";
     case Mips::PseudoMFHI_MM:
-      dbgs() << "PseudoMFHI_MM: 	(set GPR32:{}:$rd, (MipsMFHI:{} ACC64:{}:$hilo))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$rd, (MipsMFHI ACC64:$hilo))]";
     case Mips::PseudoMFLO:
-      dbgs() << "PseudoMFLO: 	(set GPR32:{}:$rd, (MipsMFLO:{} ACC64:{}:$hilo))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$rd, (MipsMFLO ACC64:$hilo))]";
     case Mips::PseudoMFLO64:
-      dbgs() << "PseudoMFLO64: 	(set GPR64:{}:$rd, (MipsMFLO:{} ACC128:{}:$hilo))";
-      break;
+    {
+      dbgs() << "[(set GPR64:$rd, (MipsMFLO ACC128:$hilo))]";
     case Mips::PseudoMFLO_MM:
-      dbgs() << "PseudoMFLO_MM: 	(set GPR32:{}:$rd, (MipsMFLO:{} ACC64:{}:$hilo))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$rd, (MipsMFLO ACC64:$hilo))]";
     case Mips::PseudoMSUB:
-      dbgs() << "PseudoMSUB: 	(set ACC64:{}:$ac, (MipsMSub:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64:$ac, (MipsMSub GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64:$acin))]";
     case Mips::PseudoMSUBU:
-      dbgs() << "PseudoMSUBU: 	(set ACC64:{}:$ac, (MipsMSubu:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64:$ac, (MipsMSubu GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64:$acin))]";
     case Mips::PseudoMSUBU_MM:
-      dbgs() << "PseudoMSUBU_MM: 	(set ACC64:{}:$ac, (MipsMSubu:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64:$ac, (MipsMSubu GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64:$acin))]";
     case Mips::PseudoMSUB_MM:
-      dbgs() << "PseudoMSUB_MM: 	(set ACC64:{}:$ac, (MipsMSub:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt, ACC64:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64:$ac, (MipsMSub GPR32Opnd:$rs, GPR32Opnd:$rt, ACC64:$acin))]";
     case Mips::PseudoMTLOHI:
-      dbgs() << "PseudoMTLOHI: 	(set ACC64:{}:$lohi, (MipsMTLOHI:{} GPR32:{}:$lo, GPR32:{}:$hi))";
-      break;
+    {
+      dbgs() << "[(set ACC64:$lohi, (MipsMTLOHI GPR32:$lo, GPR32:$hi))]";
     case Mips::PseudoMTLOHI64:
-      dbgs() << "PseudoMTLOHI64: 	(set ACC128:{}:$lohi, (MipsMTLOHI:{} GPR64:{}:$lo, GPR64:{}:$hi))";
-      break;
+    {
+      dbgs() << "[(set ACC128:$lohi, (MipsMTLOHI GPR64:$lo, GPR64:$hi))]";
     case Mips::PseudoMTLOHI_DSP:
-      dbgs() << "PseudoMTLOHI_DSP: 	(set ACC64DSP:{}:$lohi, (MipsMTLOHI:{} GPR32:{}:$lo, GPR32:{}:$hi))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSP:$lohi, (MipsMTLOHI GPR32:$lo, GPR32:$hi))]";
     case Mips::PseudoMTLOHI_MM:
-      dbgs() << "PseudoMTLOHI_MM: 	(set ACC64:{}:$lohi, (MipsMTLOHI:{} GPR32:{}:$lo, GPR32:{}:$hi))";
-      break;
+    {
+      dbgs() << "[(set ACC64:$lohi, (MipsMTLOHI GPR32:$lo, GPR32:$hi))]";
     case Mips::PseudoMULT:
-      dbgs() << "PseudoMULT: 	(set ACC64:{}:$ac, (MipsMult:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set ACC64:$ac, (MipsMult GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::PseudoMULT_MM:
-      dbgs() << "PseudoMULT_MM: 	(set ACC64:{}:$ac, (MipsMult:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set ACC64:$ac, (MipsMult GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::PseudoMULTu:
-      dbgs() << "PseudoMULTu: 	(set ACC64:{}:$ac, (MipsMultu:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set ACC64:$ac, (MipsMultu GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::PseudoMULTu_MM:
-      dbgs() << "PseudoMULTu_MM: 	(set ACC64:{}:$ac, (MipsMultu:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set ACC64:$ac, (MipsMultu GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::PseudoSDIV:
-      dbgs() << "PseudoSDIV: 	(set ACC64:{}:$ac, (MipsDivRem:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set ACC64:$ac, (MipsDivRem GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::PseudoSELECTFP_F_D32:
-      dbgs() << "PseudoSELECTFP_F_D32: 	(set AFGR64Opnd:{}:$dst, (MipsCMovFP_F:{} AFGR64Opnd:{}:$T, FCCRegsOpnd:{}:$cond, AFGR64Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$dst, (MipsCMovFP_F AFGR64Opnd:$T, FCCRegsOpnd:$cond, AFGR64Opnd:$F))]";
     case Mips::PseudoSELECTFP_F_D64:
-      dbgs() << "PseudoSELECTFP_F_D64: 	(set FGR64Opnd:{}:$dst, (MipsCMovFP_F:{} FGR64Opnd:{}:$T, FCCRegsOpnd:{}:$cond, FGR64Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$dst, (MipsCMovFP_F FGR64Opnd:$T, FCCRegsOpnd:$cond, FGR64Opnd:$F))]";
     case Mips::PseudoSELECTFP_F_I:
-      dbgs() << "PseudoSELECTFP_F_I: 	(set GPR32Opnd:{}:$dst, (MipsCMovFP_F:{} GPR32Opnd:{}:$T, FCCRegsOpnd:{}:$cond, GPR32Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$dst, (MipsCMovFP_F GPR32Opnd:$T, FCCRegsOpnd:$cond, GPR32Opnd:$F))]";
     case Mips::PseudoSELECTFP_F_I64:
-      dbgs() << "PseudoSELECTFP_F_I64: 	(set GPR64Opnd:{}:$dst, (MipsCMovFP_F:{} GPR64Opnd:{}:$T, FCCRegsOpnd:{}:$cond, GPR64Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$dst, (MipsCMovFP_F GPR64Opnd:$T, FCCRegsOpnd:$cond, GPR64Opnd:$F))]";
     case Mips::PseudoSELECTFP_F_S:
-      dbgs() << "PseudoSELECTFP_F_S: 	(set FGR32Opnd:{}:$dst, (MipsCMovFP_F:{} FGR32Opnd:{}:$T, FCCRegsOpnd:{}:$cond, FGR32Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$dst, (MipsCMovFP_F FGR32Opnd:$T, FCCRegsOpnd:$cond, FGR32Opnd:$F))]";
     case Mips::PseudoSELECTFP_T_D32:
-      dbgs() << "PseudoSELECTFP_T_D32: 	(set AFGR64Opnd:{}:$dst, (MipsCMovFP_T:{} AFGR64Opnd:{}:$T, FCCRegsOpnd:{}:$cond, AFGR64Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$dst, (MipsCMovFP_T AFGR64Opnd:$T, FCCRegsOpnd:$cond, AFGR64Opnd:$F))]";
     case Mips::PseudoSELECTFP_T_D64:
-      dbgs() << "PseudoSELECTFP_T_D64: 	(set FGR64Opnd:{}:$dst, (MipsCMovFP_T:{} FGR64Opnd:{}:$T, FCCRegsOpnd:{}:$cond, FGR64Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$dst, (MipsCMovFP_T FGR64Opnd:$T, FCCRegsOpnd:$cond, FGR64Opnd:$F))]";
     case Mips::PseudoSELECTFP_T_I:
-      dbgs() << "PseudoSELECTFP_T_I: 	(set GPR32Opnd:{}:$dst, (MipsCMovFP_T:{} GPR32Opnd:{}:$T, FCCRegsOpnd:{}:$cond, GPR32Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$dst, (MipsCMovFP_T GPR32Opnd:$T, FCCRegsOpnd:$cond, GPR32Opnd:$F))]";
     case Mips::PseudoSELECTFP_T_I64:
-      dbgs() << "PseudoSELECTFP_T_I64: 	(set GPR64Opnd:{}:$dst, (MipsCMovFP_T:{} GPR64Opnd:{}:$T, FCCRegsOpnd:{}:$cond, GPR64Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$dst, (MipsCMovFP_T GPR64Opnd:$T, FCCRegsOpnd:$cond, GPR64Opnd:$F))]";
     case Mips::PseudoSELECTFP_T_S:
-      dbgs() << "PseudoSELECTFP_T_S: 	(set FGR32Opnd:{}:$dst, (MipsCMovFP_T:{} FGR32Opnd:{}:$T, FCCRegsOpnd:{}:$cond, FGR32Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$dst, (MipsCMovFP_T FGR32Opnd:$T, FCCRegsOpnd:$cond, FGR32Opnd:$F))]";
     case Mips::PseudoSELECT_D32:
-      dbgs() << "PseudoSELECT_D32: 	(set AFGR64Opnd:{}:$dst, (select:{} GPR32Opnd:{}:$cond, AFGR64Opnd:{}:$T, AFGR64Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set AFGR64Opnd:$dst, (select GPR32Opnd:$cond, AFGR64Opnd:$T, AFGR64Opnd:$F))]";
     case Mips::PseudoSELECT_D64:
-      dbgs() << "PseudoSELECT_D64: 	(set FGR64Opnd:{}:$dst, (select:{} GPR32Opnd:{}:$cond, FGR64Opnd:{}:$T, FGR64Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$dst, (select GPR32Opnd:$cond, FGR64Opnd:$T, FGR64Opnd:$F))]";
     case Mips::PseudoSELECT_I:
-      dbgs() << "PseudoSELECT_I: 	(set GPR32Opnd:{}:$dst, (select:{} GPR32Opnd:{}:$cond, GPR32Opnd:{}:$T, GPR32Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$dst, (select GPR32Opnd:$cond, GPR32Opnd:$T, GPR32Opnd:$F))]";
     case Mips::PseudoSELECT_I64:
-      dbgs() << "PseudoSELECT_I64: 	(set GPR64Opnd:{}:$dst, (select:{} GPR32Opnd:{}:$cond, GPR64Opnd:{}:$T, GPR64Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$dst, (select GPR32Opnd:$cond, GPR64Opnd:$T, GPR64Opnd:$F))]";
     case Mips::PseudoSELECT_S:
-      dbgs() << "PseudoSELECT_S: 	(set FGR32Opnd:{}:$dst, (select:{} GPR32Opnd:{}:$cond, FGR32Opnd:{}:$T, FGR32Opnd:{}:$F))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$dst, (select GPR32Opnd:$cond, FGR32Opnd:$T, FGR32Opnd:$F))]";
     case Mips::PseudoUDIV:
-      dbgs() << "PseudoUDIV: 	(set ACC64:{}:$ac, (MipsDivRemU:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set ACC64:$ac, (MipsDivRemU GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::RADDU_W_QB:
-      dbgs() << "RADDU_W_QB: 	(set GPR32Opnd:{}:$rd, (intrinsic_wo_chain:{} 4583:{}, DSPROpnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_raddu_w_qb DSPROpnd:$rs))]";
     case Mips::RADDU_W_QB_MM:
-      dbgs() << "RADDU_W_QB_MM: 	(set GPR32Opnd:{}:$rt, (intrinsic_wo_chain:{} 4583:{}, DSPROpnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (int_mips_raddu_w_qb DSPROpnd:$rs))]";
     case Mips::RDDSP:
-      dbgs() << "RDDSP: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4584:{}, (timmZExt10:{}):$mask))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_rddsp timmZExt10:$mask))]";
     case Mips::RDDSP_MM:
-      dbgs() << "RDDSP_MM: 	(set GPR32Opnd:{}:$rt, (intrinsic_w_chain:{} 4584:{}, (timmZExt7:{}):$mask))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (int_mips_rddsp timmZExt7:$mask))]";
+    case Mips::RECIP_D32:
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::RECIP_D32_MM:
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::RECIP_D64:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::RECIP_D64_MM:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::RECIP_S:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::RECIP_S_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
     case Mips::REPLV_PH:
-      dbgs() << "REPLV_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4585:{}, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_repl_ph GPR32Opnd:$rt))]";
     case Mips::REPLV_PH_MM:
-      dbgs() << "REPLV_PH_MM: 	(set DSPROpnd:{}:$rt, (intrinsic_wo_chain:{} 4585:{}, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_repl_ph GPR32Opnd:$rs))]";
     case Mips::REPLV_QB:
-      dbgs() << "REPLV_QB: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4586:{}, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_repl_qb GPR32Opnd:$rt))]";
     case Mips::REPLV_QB_MM:
-      dbgs() << "REPLV_QB_MM: 	(set DSPROpnd:{}:$rt, (intrinsic_wo_chain:{} 4586:{}, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_repl_qb GPR32Opnd:$rs))]";
     case Mips::REPL_PH:
-      dbgs() << "REPL_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4585:{}, (immSExt10:{}):$imm))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_repl_ph immSExt10:$imm))]";
     case Mips::REPL_PH_MM:
-      dbgs() << "REPL_PH_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4585:{}, (immSExt10:{}):$imm))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_repl_ph immSExt10:$imm))]";
     case Mips::REPL_QB:
-      dbgs() << "REPL_QB: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4586:{}, (immZExt8:{}):$imm))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_repl_qb immZExt8:$imm))]";
     case Mips::REPL_QB_MM:
-      dbgs() << "REPL_QB_MM: 	(set DSPROpnd:{}:$rt, (intrinsic_wo_chain:{} 4586:{}, (immZExt8:{}):$imm))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_repl_qb immZExt8:$imm))]";
     case Mips::ROTR:
-      dbgs() << "ROTR: 	(set GPR32Opnd:{}:$rd, (rotr:{} GPR32Opnd:{}:$rt, (immZExt5:{}):$shamt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (rotr GPR32Opnd:$rt, immZExt5:$shamt))]";
     case Mips::ROTRV:
-      dbgs() << "ROTRV: 	(set GPR32Opnd:{}:$rd, (rotr:{} GPR32Opnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (rotr GPR32Opnd:$rt, GPR32Opnd:$rs))]";
     case Mips::ROTRV_MM:
-      dbgs() << "ROTRV_MM: 	(set GPR32Opnd:{}:$rd, (rotr:{} GPR32Opnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (rotr GPR32Opnd:$rt, GPR32Opnd:$rs))]";
     case Mips::ROTR_MM:
-      dbgs() << "ROTR_MM: 	(set GPR32Opnd:{}:$rd, (rotr:{} GPR32Opnd:{}:$rt, (immZExt5:{}):$shamt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (rotr GPR32Opnd:$rt, immZExt5:$shamt))]";
+    case Mips::ROUND_L_D64:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::ROUND_L_D_MMR6:
+    {
+      dbgs() << "[(set FGR64Opnd:$ft, (null_frag FGR64Opnd:$fs))]";
+    case Mips::ROUND_L_S:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::ROUND_L_S_MMR6:
+    {
+      dbgs() << "[(set FGR64Opnd:$ft, (null_frag FGR32Opnd:$fs))]";
+    case Mips::ROUND_W_D32:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::ROUND_W_D64:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::ROUND_W_D_MMR6:
+    {
+      dbgs() << "[(set FGR64Opnd:$ft, (null_frag FGR64Opnd:$fs))]";
+    case Mips::ROUND_W_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::ROUND_W_S:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::ROUND_W_S_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::ROUND_W_S_MMR6:
+    {
+      dbgs() << "[(set FGR32Opnd:$ft, (null_frag FGR32Opnd:$fs))]";
+    case Mips::RSQRT_D32:
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::RSQRT_D32_MM:
+    {
+      dbgs() << "[(set AFGR64Opnd:$fd, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::RSQRT_D64:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::RSQRT_D64_MM:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::RSQRT_S:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::RSQRT_S_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
     case Mips::RetRA:
-      dbgs() << "RetRA: 	(MipsRet)";
-      break;
+    {
+      dbgs() << "[(MipsRet)]";
     case Mips::RetRA16:
-      dbgs() << "RetRA16: 	(MipsRet)";
-      break;
+    {
+      dbgs() << "[(MipsRet)]";
     case Mips::SAT_S_B:
-      dbgs() << "SAT_S_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4587:{}, MSA128BOpnd:{}:$ws, (timmZExt3:{}):$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_sat_s_b MSA128BOpnd:$ws, timmZExt3:$m))]";
     case Mips::SAT_S_D:
-      dbgs() << "SAT_S_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4588:{}, MSA128DOpnd:{}:$ws, (timmZExt6:{}):$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_sat_s_d MSA128DOpnd:$ws, timmZExt6:$m))]";
     case Mips::SAT_S_H:
-      dbgs() << "SAT_S_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4589:{}, MSA128HOpnd:{}:$ws, (timmZExt4:{}):$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_sat_s_h MSA128HOpnd:$ws, timmZExt4:$m))]";
     case Mips::SAT_S_W:
-      dbgs() << "SAT_S_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4590:{}, MSA128WOpnd:{}:$ws, (timmZExt5:{}):$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_sat_s_w MSA128WOpnd:$ws, timmZExt5:$m))]";
     case Mips::SAT_U_B:
-      dbgs() << "SAT_U_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4591:{}, MSA128BOpnd:{}:$ws, (timmZExt3:{}):$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_sat_u_b MSA128BOpnd:$ws, timmZExt3:$m))]";
     case Mips::SAT_U_D:
-      dbgs() << "SAT_U_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4592:{}, MSA128DOpnd:{}:$ws, (timmZExt6:{}):$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_sat_u_d MSA128DOpnd:$ws, timmZExt6:$m))]";
     case Mips::SAT_U_H:
-      dbgs() << "SAT_U_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4593:{}, MSA128HOpnd:{}:$ws, (timmZExt4:{}):$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_sat_u_h MSA128HOpnd:$ws, timmZExt4:$m))]";
     case Mips::SAT_U_W:
-      dbgs() << "SAT_U_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4594:{}, MSA128WOpnd:{}:$ws, (timmZExt5:{}):$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_sat_u_w MSA128WOpnd:$ws, timmZExt5:$m))]";
     case Mips::SB:
-      dbgs() << "SB: 	(truncstorei8 GPR32Opnd:{}:$rt, addr:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(truncstorei8 GPR32Opnd:$rt, addr:$addr)]";
     case Mips::SB64:
-      dbgs() << "SB64: 	(truncstorei8 GPR64Opnd:{}:$rt, addr:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(truncstorei8 GPR64Opnd:$rt, addr:$addr)]";
+    case Mips::SBE_MM:
+    {
+      dbgs() << "[(null_frag GPR32Opnd:$rt, addr:$addr)]";
     case Mips::SB_MM:
-      dbgs() << "SB_MM: 	(truncstorei8 GPR32Opnd:{}:$rt, addr:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(truncstorei8 GPR32Opnd:$rt, addr:$addr)]";
+    case Mips::SB_MMR6:
+    {
+      dbgs() << "[(null_frag GPR32Opnd:$rt, addr:$addr)]";
     case Mips::SD:
-      dbgs() << "SD: 	(store GPR64Opnd:{}:$rt, addr:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(store GPR64Opnd:$rt, addr:$addr)]";
     case Mips::SDC1:
-      dbgs() << "SDC1: 	(store AFGR64Opnd:{}:$rt, addrDefault:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(store AFGR64Opnd:$rt, addrDefault:$addr)]";
     case Mips::SDC164:
-      dbgs() << "SDC164: 	(store FGR64Opnd:{}:$rt, addrDefault:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(store FGR64Opnd:$rt, addrDefault:$addr)]";
     case Mips::SDC1_D64_MMR6:
-      dbgs() << "SDC1_D64_MMR6: 	(store FGR64Opnd:{}:$ft, addrimm16:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(store FGR64Opnd:$ft, addrimm16:$addr)]";
     case Mips::SDC1_MM:
-      dbgs() << "SDC1_MM: 	(store AFGR64Opnd:{}:$rt, addrDefault:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(store AFGR64Opnd:$rt, addrDefault:$addr)]";
     case Mips::SDC2:
-      dbgs() << "SDC2: 	(store COP2Opnd:{}:$rt, addrDefault:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(store COP2Opnd:$rt, addrDefault:$addr)]";
     case Mips::SDC2_MMR6:
-      dbgs() << "SDC2_MMR6: 	(store COP2Opnd:{}:$rt, addrimm11:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(store COP2Opnd:$rt, addrimm11:$addr)]";
     case Mips::SDC3:
-      dbgs() << "SDC3: 	(store COP3Opnd:{}:$rt, addrDefault:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(store COP3Opnd:$rt, addrDefault:$addr)]";
     case Mips::SDIV_MM_Pseudo:
-      dbgs() << "SDIV_MM_Pseudo: 	(set ACC64:{}:$ac, (MipsDivRem:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set ACC64:$ac, (MipsDivRem GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::SDL:
-      dbgs() << "SDL: 	(MipsSDL GPR64Opnd:{}:$rt, addr:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(MipsSDL GPR64Opnd:$rt, addr:$addr)]";
     case Mips::SDR:
-      dbgs() << "SDR: 	(MipsSDR GPR64Opnd:{}:$rt, addr:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(MipsSDR GPR64Opnd:$rt, addr:$addr)]";
     case Mips::SDXC1:
-      dbgs() << "SDXC1: 	(store AFGR64Opnd:{}:$fs, (add:{} iPTR:{}:$base, iPTR:{}:$index))";
-      break;
+    {
+      dbgs() << "[(store AFGR64Opnd:$fs, (add iPTR:$base, iPTR:$index))]";
     case Mips::SDXC164:
-      dbgs() << "SDXC164: 	(store FGR64Opnd:{}:$fs, (add:{} iPTR:{}:$base, iPTR:{}:$index))";
-      break;
+    {
+      dbgs() << "[(store FGR64Opnd:$fs, (add iPTR:$base, iPTR:$index))]";
     case Mips::SEB:
-      dbgs() << "SEB: 	(set GPR32Opnd:{}:$rd, (sext_inreg:{} GPR32Opnd:{}:$rt, i8:{}))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (sext_inreg GPR32Opnd:$rt, i8))]";
     case Mips::SEB64:
-      dbgs() << "SEB64: 	(set GPR64Opnd:{}:$rd, (sext_inreg:{} GPR64Opnd:{}:$rt, i8:{}))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (sext_inreg GPR64Opnd:$rt, i8))]";
     case Mips::SEB_MM:
-      dbgs() << "SEB_MM: 	(set GPR32Opnd:{}:$rd, (sext_inreg:{} GPR32Opnd:{}:$rt, i8:{}))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (sext_inreg GPR32Opnd:$rt, i8))]";
     case Mips::SEH:
-      dbgs() << "SEH: 	(set GPR32Opnd:{}:$rd, (sext_inreg:{} GPR32Opnd:{}:$rt, i16:{}))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (sext_inreg GPR32Opnd:$rt, i16))]";
     case Mips::SEH64:
-      dbgs() << "SEH64: 	(set GPR64Opnd:{}:$rd, (sext_inreg:{} GPR64Opnd:{}:$rt, i16:{}))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (sext_inreg GPR64Opnd:$rt, i16))]";
     case Mips::SEH_MM:
-      dbgs() << "SEH_MM: 	(set GPR32Opnd:{}:$rd, (sext_inreg:{} GPR32Opnd:{}:$rt, i16:{}))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (sext_inreg GPR32Opnd:$rt, i16))]";
     case Mips::SEL_D:
-      dbgs() << "SEL_D: 	(set FGR64Opnd:{}:$fd, (MipsFSelect:{} FGR64Opnd:{}:$fd_in, FGR64Opnd:{}:$ft, FGR64Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (MipsFSelect FGR64Opnd:$fd_in, FGR64Opnd:$ft, FGR64Opnd:$fs))]";
     case Mips::SEL_D_MMR6:
-      dbgs() << "SEL_D_MMR6: 	(set FGR64Opnd:{}:$fd, (MipsFSelect:{} FGR64Opnd:{}:$fd_in, FGR64Opnd:{}:$ft, FGR64Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (MipsFSelect FGR64Opnd:$fd_in, FGR64Opnd:$ft, FGR64Opnd:$fs))]";
     case Mips::SEL_S:
-      dbgs() << "SEL_S: 	(set FGR32Opnd:{}:$fd, (select:{} FGRCCOpnd:{}:$fd_in, FGR32Opnd:{}:$ft, FGR32Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (select FGRCCOpnd:$fd_in, FGR32Opnd:$ft, FGR32Opnd:$fs))]";
     case Mips::SEL_S_MMR6:
-      dbgs() << "SEL_S_MMR6: 	(set FGR32Opnd:{}:$fd, (select:{} FGRCCOpnd:{}:$fd_in, FGR32Opnd:{}:$ft, FGR32Opnd:{}:$fs))";
-      break;
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (select FGRCCOpnd:$fd_in, FGR32Opnd:$ft, FGR32Opnd:$fs))]";
     case Mips::SEQ:
-      dbgs() << "SEQ: 	(set GPR64Opnd:{}:$rd, (zext:{} (seteq:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt)))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (zext (seteq GPR64Opnd:$rs, GPR64Opnd:$rt)))]";
     case Mips::SEQi:
-      dbgs() << "SEQi: 	(set GPR64Opnd:{}:$rt, (zext:{} (seteq:{} GPR64Opnd:{}:$rs, (immSExt10_64:{}):$imm10)))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (zext (seteq GPR64Opnd:$rs, immSExt10_64:$imm10)))]";
     case Mips::SH:
-      dbgs() << "SH: 	(truncstorei16 GPR32Opnd:{}:$rt, addr:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(truncstorei16 GPR32Opnd:$rt, addr:$addr)]";
     case Mips::SH64:
-      dbgs() << "SH64: 	(truncstorei16 GPR64Opnd:{}:$rt, addr:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(truncstorei16 GPR64Opnd:$rt, addr:$addr)]";
+    case Mips::SHE_MM:
+    {
+      dbgs() << "[(null_frag GPR32Opnd:$rt, addr:$addr)]";
     case Mips::SHF_B:
-      dbgs() << "SHF_B: 	(set MSA128BOpnd:{}:$wd, (MipsSHF:{} (timmZExt8:{}):$u8, MSA128BOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (MipsSHF timmZExt8:$u8, MSA128BOpnd:$ws))]";
     case Mips::SHF_H:
-      dbgs() << "SHF_H: 	(set MSA128HOpnd:{}:$wd, (MipsSHF:{} (timmZExt8:{}):$u8, MSA128HOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (MipsSHF timmZExt8:$u8, MSA128HOpnd:$ws))]";
     case Mips::SHF_W:
-      dbgs() << "SHF_W: 	(set MSA128WOpnd:{}:$wd, (MipsSHF:{} (timmZExt8:{}):$u8, MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (MipsSHF timmZExt8:$u8, MSA128WOpnd:$ws))]";
     case Mips::SHILO:
-      dbgs() << "SHILO: 	(set ACC64DSPOpnd:{}:$ac, (MipsSHILO:{} (immSExt6:{}):$shift, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsSHILO immSExt6:$shift, ACC64DSPOpnd:$acin))]";
     case Mips::SHILOV:
-      dbgs() << "SHILOV: 	(set ACC64DSPOpnd:{}:$ac, (MipsSHILO:{} GPR32Opnd:{}:$rs, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsSHILO GPR32Opnd:$rs, ACC64DSPOpnd:$acin))]";
     case Mips::SHILOV_MM:
-      dbgs() << "SHILOV_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsSHILO:{} GPR32Opnd:{}:$rs, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsSHILO GPR32Opnd:$rs, ACC64DSPOpnd:$acin))]";
     case Mips::SHILO_MM:
-      dbgs() << "SHILO_MM: 	(set ACC64DSPOpnd:{}:$ac, (MipsSHILO:{} (immSExt6:{}):$shift, ACC64DSPOpnd:{}:$acin))";
-      break;
+    {
+      dbgs() << "[(set ACC64DSPOpnd:$ac, (MipsSHILO immSExt6:$shift, ACC64DSPOpnd:$acin))]";
     case Mips::SHLLV_PH:
-      dbgs() << "SHLLV_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4599:{}, DSPROpnd:{}:$rt, GPR32Opnd:{}:$rs_sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shll_ph DSPROpnd:$rt, GPR32Opnd:$rs_sa))]";
     case Mips::SHLLV_PH_MM:
-      dbgs() << "SHLLV_PH_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4599:{}, DSPROpnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shll_ph DSPROpnd:$rt, GPR32Opnd:$rs))]";
     case Mips::SHLLV_QB:
-      dbgs() << "SHLLV_QB: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4600:{}, DSPROpnd:{}:$rt, GPR32Opnd:{}:$rs_sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shll_qb DSPROpnd:$rt, GPR32Opnd:$rs_sa))]";
     case Mips::SHLLV_QB_MM:
-      dbgs() << "SHLLV_QB_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4600:{}, DSPROpnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shll_qb DSPROpnd:$rt, GPR32Opnd:$rs))]";
     case Mips::SHLLV_S_PH:
-      dbgs() << "SHLLV_S_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4601:{}, DSPROpnd:{}:$rt, GPR32Opnd:{}:$rs_sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shll_s_ph DSPROpnd:$rt, GPR32Opnd:$rs_sa))]";
     case Mips::SHLLV_S_PH_MM:
-      dbgs() << "SHLLV_S_PH_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4601:{}, DSPROpnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shll_s_ph DSPROpnd:$rt, GPR32Opnd:$rs))]";
     case Mips::SHLLV_S_W:
-      dbgs() << "SHLLV_S_W: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4602:{}, GPR32Opnd:{}:$rt, GPR32Opnd:{}:$rs_sa))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_shll_s_w GPR32Opnd:$rt, GPR32Opnd:$rs_sa))]";
     case Mips::SHLLV_S_W_MM:
-      dbgs() << "SHLLV_S_W_MM: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4602:{}, GPR32Opnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_shll_s_w GPR32Opnd:$rt, GPR32Opnd:$rs))]";
+    case Mips::SHLL_PH:
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (null_frag DSPROpnd:$rt, immZExt4:$rs_sa))]";
+    case Mips::SHLL_PH_MM:
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (null_frag DSPROpnd:$rs, immZExt4:$sa))]";
+    case Mips::SHLL_QB:
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (null_frag DSPROpnd:$rt, immZExt3:$rs_sa))]";
+    case Mips::SHLL_QB_MM:
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (null_frag DSPROpnd:$rs, immZExt3:$sa))]";
     case Mips::SHLL_S_PH:
-      dbgs() << "SHLL_S_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4601:{}, DSPROpnd:{}:$rt, (immZExt4:{}):$rs_sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shll_s_ph DSPROpnd:$rt, immZExt4:$rs_sa))]";
     case Mips::SHLL_S_PH_MM:
-      dbgs() << "SHLL_S_PH_MM: 	(set DSPROpnd:{}:$rt, (intrinsic_w_chain:{} 4601:{}, DSPROpnd:{}:$rs, (immZExt4:{}):$sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_shll_s_ph DSPROpnd:$rs, immZExt4:$sa))]";
     case Mips::SHLL_S_W:
-      dbgs() << "SHLL_S_W: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4602:{}, GPR32Opnd:{}:$rt, (immZExt5:{}):$rs_sa))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_shll_s_w GPR32Opnd:$rt, immZExt5:$rs_sa))]";
     case Mips::SHLL_S_W_MM:
-      dbgs() << "SHLL_S_W_MM: 	(set GPR32Opnd:{}:$rt, (intrinsic_w_chain:{} 4602:{}, GPR32Opnd:{}:$rs, (immZExt5:{}):$sa))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (int_mips_shll_s_w GPR32Opnd:$rs, immZExt5:$sa))]";
     case Mips::SHRAV_PH:
-      dbgs() << "SHRAV_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4603:{}, DSPROpnd:{}:$rt, GPR32Opnd:{}:$rs_sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shra_ph DSPROpnd:$rt, GPR32Opnd:$rs_sa))]";
     case Mips::SHRAV_PH_MM:
-      dbgs() << "SHRAV_PH_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4603:{}, DSPROpnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shra_ph DSPROpnd:$rt, GPR32Opnd:$rs))]";
     case Mips::SHRAV_QB:
-      dbgs() << "SHRAV_QB: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4604:{}, DSPROpnd:{}:$rt, GPR32Opnd:{}:$rs_sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shra_qb DSPROpnd:$rt, GPR32Opnd:$rs_sa))]";
     case Mips::SHRAV_QB_MMR2:
-      dbgs() << "SHRAV_QB_MMR2: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4604:{}, DSPROpnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shra_qb DSPROpnd:$rt, GPR32Opnd:$rs))]";
     case Mips::SHRAV_R_PH:
-      dbgs() << "SHRAV_R_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4605:{}, DSPROpnd:{}:$rt, GPR32Opnd:{}:$rs_sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shra_r_ph DSPROpnd:$rt, GPR32Opnd:$rs_sa))]";
     case Mips::SHRAV_R_PH_MM:
-      dbgs() << "SHRAV_R_PH_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4605:{}, DSPROpnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shra_r_ph DSPROpnd:$rt, GPR32Opnd:$rs))]";
     case Mips::SHRAV_R_QB:
-      dbgs() << "SHRAV_R_QB: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4606:{}, DSPROpnd:{}:$rt, GPR32Opnd:{}:$rs_sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shra_r_qb DSPROpnd:$rt, GPR32Opnd:$rs_sa))]";
     case Mips::SHRAV_R_QB_MMR2:
-      dbgs() << "SHRAV_R_QB_MMR2: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4606:{}, DSPROpnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shra_r_qb DSPROpnd:$rt, GPR32Opnd:$rs))]";
     case Mips::SHRAV_R_W:
-      dbgs() << "SHRAV_R_W: 	(set GPR32Opnd:{}:$rd, (intrinsic_wo_chain:{} 4607:{}, GPR32Opnd:{}:$rt, GPR32Opnd:{}:$rs_sa))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_shra_r_w GPR32Opnd:$rt, GPR32Opnd:$rs_sa))]";
     case Mips::SHRAV_R_W_MM:
-      dbgs() << "SHRAV_R_W_MM: 	(set GPR32Opnd:{}:$rd, (intrinsic_wo_chain:{} 4607:{}, GPR32Opnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_shra_r_w GPR32Opnd:$rt, GPR32Opnd:$rs))]";
+    case Mips::SHRA_PH:
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (null_frag DSPROpnd:$rt, immZExt4:$rs_sa))]";
+    case Mips::SHRA_PH_MM:
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (null_frag DSPROpnd:$rs, immZExt4:$sa))]";
+    case Mips::SHRA_QB:
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (null_frag DSPROpnd:$rt, immZExt3:$rs_sa))]";
+    case Mips::SHRA_QB_MMR2:
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (null_frag DSPROpnd:$rs, immZExt3:$sa))]";
     case Mips::SHRA_R_PH:
-      dbgs() << "SHRA_R_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4605:{}, DSPROpnd:{}:$rt, (immZExt4:{}):$rs_sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shra_r_ph DSPROpnd:$rt, immZExt4:$rs_sa))]";
     case Mips::SHRA_R_PH_MM:
-      dbgs() << "SHRA_R_PH_MM: 	(set DSPROpnd:{}:$rt, (intrinsic_wo_chain:{} 4605:{}, DSPROpnd:{}:$rs, (immZExt4:{}):$sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_shra_r_ph DSPROpnd:$rs, immZExt4:$sa))]";
     case Mips::SHRA_R_QB:
-      dbgs() << "SHRA_R_QB: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4606:{}, DSPROpnd:{}:$rt, (immZExt3:{}):$rs_sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shra_r_qb DSPROpnd:$rt, immZExt3:$rs_sa))]";
     case Mips::SHRA_R_QB_MMR2:
-      dbgs() << "SHRA_R_QB_MMR2: 	(set DSPROpnd:{}:$rt, (intrinsic_wo_chain:{} 4606:{}, DSPROpnd:{}:$rs, (immZExt3:{}):$sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (int_mips_shra_r_qb DSPROpnd:$rs, immZExt3:$sa))]";
     case Mips::SHRA_R_W:
-      dbgs() << "SHRA_R_W: 	(set GPR32Opnd:{}:$rd, (intrinsic_wo_chain:{} 4607:{}, GPR32Opnd:{}:$rt, (immZExt5:{}):$rs_sa))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_shra_r_w GPR32Opnd:$rt, immZExt5:$rs_sa))]";
     case Mips::SHRA_R_W_MM:
-      dbgs() << "SHRA_R_W_MM: 	(set GPR32Opnd:{}:$rt, (intrinsic_wo_chain:{} 4607:{}, GPR32Opnd:{}:$rs, (immZExt5:{}):$sa))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (int_mips_shra_r_w GPR32Opnd:$rs, immZExt5:$sa))]";
     case Mips::SHRLV_PH:
-      dbgs() << "SHRLV_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4608:{}, DSPROpnd:{}:$rt, GPR32Opnd:{}:$rs_sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shrl_ph DSPROpnd:$rt, GPR32Opnd:$rs_sa))]";
     case Mips::SHRLV_PH_MMR2:
-      dbgs() << "SHRLV_PH_MMR2: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4608:{}, DSPROpnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shrl_ph DSPROpnd:$rt, GPR32Opnd:$rs))]";
     case Mips::SHRLV_QB:
-      dbgs() << "SHRLV_QB: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4609:{}, DSPROpnd:{}:$rt, GPR32Opnd:{}:$rs_sa))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shrl_qb DSPROpnd:$rt, GPR32Opnd:$rs_sa))]";
     case Mips::SHRLV_QB_MM:
-      dbgs() << "SHRLV_QB_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4609:{}, DSPROpnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_shrl_qb DSPROpnd:$rt, GPR32Opnd:$rs))]";
+    case Mips::SHRL_PH:
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (null_frag DSPROpnd:$rt, immZExt4:$rs_sa))]";
+    case Mips::SHRL_PH_MMR2:
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (null_frag DSPROpnd:$rs, immZExt4:$sa))]";
+    case Mips::SHRL_QB:
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (null_frag DSPROpnd:$rt, immZExt3:$rs_sa))]";
+    case Mips::SHRL_QB_MM:
+    {
+      dbgs() << "[(set DSPROpnd:$rt, (null_frag DSPROpnd:$rs, immZExt3:$sa))]";
     case Mips::SH_MM:
-      dbgs() << "SH_MM: 	(truncstorei16 GPR32Opnd:{}:$rt, addr:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(truncstorei16 GPR32Opnd:$rt, addr:$addr)]";
+    case Mips::SH_MMR6:
+    {
+      dbgs() << "[(null_frag GPR32Opnd:$rt, addr:$addr)]";
     case Mips::SLDI_B:
-      dbgs() << "SLDI_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4614:{}, MSA128BOpnd:{}:$wd_in, MSA128BOpnd:{}:$ws, (timmZExt4:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_sldi_b MSA128BOpnd:$wd_in, MSA128BOpnd:$ws, timmZExt4:$n))]";
     case Mips::SLDI_D:
-      dbgs() << "SLDI_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4615:{}, MSA128DOpnd:{}:$wd_in, MSA128DOpnd:{}:$ws, (timmZExt1:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_sldi_d MSA128DOpnd:$wd_in, MSA128DOpnd:$ws, timmZExt1:$n))]";
     case Mips::SLDI_H:
-      dbgs() << "SLDI_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4616:{}, MSA128HOpnd:{}:$wd_in, MSA128HOpnd:{}:$ws, (timmZExt3:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_sldi_h MSA128HOpnd:$wd_in, MSA128HOpnd:$ws, timmZExt3:$n))]";
     case Mips::SLDI_W:
-      dbgs() << "SLDI_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4617:{}, MSA128WOpnd:{}:$wd_in, MSA128WOpnd:{}:$ws, (timmZExt2:{}):$n))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_sldi_w MSA128WOpnd:$wd_in, MSA128WOpnd:$ws, timmZExt2:$n))]";
     case Mips::SLD_B:
-      dbgs() << "SLD_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4610:{}, MSA128BOpnd:{}:$wd_in, MSA128BOpnd:{}:$ws, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_sld_b MSA128BOpnd:$wd_in, MSA128BOpnd:$ws, GPR32Opnd:$rt))]";
     case Mips::SLD_D:
-      dbgs() << "SLD_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4611:{}, MSA128DOpnd:{}:$wd_in, MSA128DOpnd:{}:$ws, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_sld_d MSA128DOpnd:$wd_in, MSA128DOpnd:$ws, GPR32Opnd:$rt))]";
     case Mips::SLD_H:
-      dbgs() << "SLD_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4612:{}, MSA128HOpnd:{}:$wd_in, MSA128HOpnd:{}:$ws, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_sld_h MSA128HOpnd:$wd_in, MSA128HOpnd:$ws, GPR32Opnd:$rt))]";
     case Mips::SLD_W:
-      dbgs() << "SLD_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4613:{}, MSA128WOpnd:{}:$wd_in, MSA128WOpnd:{}:$ws, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_sld_w MSA128WOpnd:$wd_in, MSA128WOpnd:$ws, GPR32Opnd:$rt))]";
     case Mips::SLL:
-      dbgs() << "SLL: 	(set GPR32Opnd:{}:$rd, (shl:{} GPR32Opnd:{}:$rt, (immZExt5:{}):$shamt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (shl GPR32Opnd:$rt, immZExt5:$shamt))]";
     case Mips::SLLI_B:
-      dbgs() << "SLLI_B: 	(set MSA128BOpnd:{}:$wd, (shl:{} MSA128BOpnd:{}:$ws, vsplati8_uimm3:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (shl MSA128BOpnd:$ws, vsplati8_uimm3:$m))]";
     case Mips::SLLI_D:
-      dbgs() << "SLLI_D: 	(set MSA128DOpnd:{}:$wd, (shl:{} MSA128DOpnd:{}:$ws, vsplati64_uimm6:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (shl MSA128DOpnd:$ws, vsplati64_uimm6:$m))]";
     case Mips::SLLI_H:
-      dbgs() << "SLLI_H: 	(set MSA128HOpnd:{}:$wd, (shl:{} MSA128HOpnd:{}:$ws, vsplati16_uimm4:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (shl MSA128HOpnd:$ws, vsplati16_uimm4:$m))]";
     case Mips::SLLI_W:
-      dbgs() << "SLLI_W: 	(set MSA128WOpnd:{}:$wd, (shl:{} MSA128WOpnd:{}:$ws, vsplati32_uimm5:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (shl MSA128WOpnd:$ws, vsplati32_uimm5:$m))]";
     case Mips::SLLV:
-      dbgs() << "SLLV: 	(set GPR32Opnd:{}:$rd, (shl:{} GPR32Opnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (shl GPR32Opnd:$rt, GPR32Opnd:$rs))]";
+    case Mips::SLLV_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rt, GPR32Opnd:$rs))]";
     case Mips::SLL_B:
-      dbgs() << "SLL_B: 	(set MSA128BOpnd:{}:$wd, (shl:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (shl MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::SLL_D:
-      dbgs() << "SLL_D: 	(set MSA128DOpnd:{}:$wd, (shl:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (shl MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::SLL_H:
-      dbgs() << "SLL_H: 	(set MSA128HOpnd:{}:$wd, (shl:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (shl MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
+    case Mips::SLL_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rt, null_frag:$shamt))]";
+    case Mips::SLL_MMR6:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rt, null_frag:$shamt))]";
     case Mips::SLL_W:
-      dbgs() << "SLL_W: 	(set MSA128WOpnd:{}:$wd, (shl:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (shl MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::SLT:
-      dbgs() << "SLT: 	(set GPR32Opnd:{}:$rd, (setlt:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (setlt GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::SLT64:
-      dbgs() << "SLT64: 	(set GPR32Opnd:{}:$rd, (setlt:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (setlt GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::SLT_MM:
-      dbgs() << "SLT_MM: 	(set GPR32Opnd:{}:$rd, (setlt:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (setlt GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::SLTi:
-      dbgs() << "SLTi: 	(set GPR32Opnd:{}:$rt, (setlt:{} GPR32Opnd:{}:$rs, (immSExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (setlt GPR32Opnd:$rs, immSExt16:$imm16))]";
     case Mips::SLTi64:
-      dbgs() << "SLTi64: 	(set GPR32Opnd:{}:$rt, (setlt:{} GPR64Opnd:{}:$rs, (immSExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (setlt GPR64Opnd:$rs, immSExt16:$imm16))]";
     case Mips::SLTi_MM:
-      dbgs() << "SLTi_MM: 	(set GPR32Opnd:{}:$rt, (setlt:{} GPR32Opnd:{}:$rs, (immSExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (setlt GPR32Opnd:$rs, immSExt16:$imm16))]";
     case Mips::SLTiu:
-      dbgs() << "SLTiu: 	(set GPR32Opnd:{}:$rt, (setult:{} GPR32Opnd:{}:$rs, (immSExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (setult GPR32Opnd:$rs, immSExt16:$imm16))]";
     case Mips::SLTiu64:
-      dbgs() << "SLTiu64: 	(set GPR32Opnd:{}:$rt, (setult:{} GPR64Opnd:{}:$rs, (immSExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (setult GPR64Opnd:$rs, immSExt16:$imm16))]";
     case Mips::SLTiu_MM:
-      dbgs() << "SLTiu_MM: 	(set GPR32Opnd:{}:$rt, (setult:{} GPR32Opnd:{}:$rs, (immSExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (setult GPR32Opnd:$rs, immSExt16:$imm16))]";
     case Mips::SLTu:
-      dbgs() << "SLTu: 	(set GPR32Opnd:{}:$rd, (setult:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (setult GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::SLTu64:
-      dbgs() << "SLTu64: 	(set GPR32Opnd:{}:$rd, (setult:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (setult GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::SLTu_MM:
-      dbgs() << "SLTu_MM: 	(set GPR32Opnd:{}:$rd, (setult:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (setult GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::SNE:
-      dbgs() << "SNE: 	(set GPR64Opnd:{}:$rd, (zext:{} (setne:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt)))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (zext (setne GPR64Opnd:$rs, GPR64Opnd:$rt)))]";
     case Mips::SNEi:
-      dbgs() << "SNEi: 	(set GPR64Opnd:{}:$rt, (zext:{} (setne:{} GPR64Opnd:{}:$rs, (immSExt10_64:{}):$imm10)))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (zext (setne GPR64Opnd:$rs, immSExt10_64:$imm10)))]";
     case Mips::SNZ_B_PSEUDO:
-      dbgs() << "SNZ_B_PSEUDO: 	(set GPR32:{}:$dst, (MipsVAllNonZero:{} MSA128B:{ *:[v16i8] }:$ws))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (MipsVAllNonZero (v16i8 MSA128B:$ws)))]";
     case Mips::SNZ_D_PSEUDO:
-      dbgs() << "SNZ_D_PSEUDO: 	(set GPR32:{}:$dst, (MipsVAllNonZero:{} MSA128D:{ *:[v2i64] }:$ws))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (MipsVAllNonZero (v2i64 MSA128D:$ws)))]";
     case Mips::SNZ_H_PSEUDO:
-      dbgs() << "SNZ_H_PSEUDO: 	(set GPR32:{}:$dst, (MipsVAllNonZero:{} MSA128H:{ *:[v8i16] }:$ws))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (MipsVAllNonZero (v8i16 MSA128H:$ws)))]";
     case Mips::SNZ_V_PSEUDO:
-      dbgs() << "SNZ_V_PSEUDO: 	(set GPR32:{}:$dst, (MipsVAnyNonZero:{} MSA128B:{ *:[v16i8] }:$ws))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (MipsVAnyNonZero (v16i8 MSA128B:$ws)))]";
     case Mips::SNZ_W_PSEUDO:
-      dbgs() << "SNZ_W_PSEUDO: 	(set GPR32:{}:$dst, (MipsVAllNonZero:{} MSA128W:{ *:[v4i32] }:$ws))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (MipsVAllNonZero (v4i32 MSA128W:$ws)))]";
     case Mips::SPLATI_B:
-      dbgs() << "SPLATI_B: 	(set MSA128BOpnd:{}:$wd, (MipsVSHF:{} vsplati8_uimm4:{}:$n, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (MipsVSHF vsplati8_uimm4:$n, MSA128BOpnd:$ws, MSA128BOpnd:$ws))]";
     case Mips::SPLATI_D:
-      dbgs() << "SPLATI_D: 	(set MSA128DOpnd:{}:$wd, (MipsVSHF:{} vsplati64_uimm1:{}:$n, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (MipsVSHF vsplati64_uimm1:$n, MSA128DOpnd:$ws, MSA128DOpnd:$ws))]";
     case Mips::SPLATI_H:
-      dbgs() << "SPLATI_H: 	(set MSA128HOpnd:{}:$wd, (MipsVSHF:{} vsplati16_uimm3:{}:$n, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (MipsVSHF vsplati16_uimm3:$n, MSA128HOpnd:$ws, MSA128HOpnd:$ws))]";
     case Mips::SPLATI_W:
-      dbgs() << "SPLATI_W: 	(set MSA128WOpnd:{}:$wd, (MipsVSHF:{} vsplati32_uimm2:{}:$n, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$ws))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (MipsVSHF vsplati32_uimm2:$n, MSA128WOpnd:$ws, MSA128WOpnd:$ws))]";
     case Mips::SPLAT_B:
-      dbgs() << "SPLAT_B: 	(set MSA128BOpnd:{}:$wd, (vsplati8_elt:{} MSA128BOpnd:{}:$ws, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (vsplati8_elt MSA128BOpnd:$ws, GPR32Opnd:$rt))]";
     case Mips::SPLAT_D:
-      dbgs() << "SPLAT_D: 	(set MSA128DOpnd:{}:$wd, (vsplati64_elt:{} MSA128DOpnd:{}:$ws, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (vsplati64_elt MSA128DOpnd:$ws, GPR32Opnd:$rt))]";
     case Mips::SPLAT_H:
-      dbgs() << "SPLAT_H: 	(set MSA128HOpnd:{}:$wd, (vsplati16_elt:{} MSA128HOpnd:{}:$ws, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (vsplati16_elt MSA128HOpnd:$ws, GPR32Opnd:$rt))]";
     case Mips::SPLAT_W:
-      dbgs() << "SPLAT_W: 	(set MSA128WOpnd:{}:$wd, (vsplati32_elt:{} MSA128WOpnd:{}:$ws, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (vsplati32_elt MSA128WOpnd:$ws, GPR32Opnd:$rt))]";
     case Mips::SRA:
-      dbgs() << "SRA: 	(set GPR32Opnd:{}:$rd, (sra:{} GPR32Opnd:{}:$rt, (immZExt5:{}):$shamt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (sra GPR32Opnd:$rt, immZExt5:$shamt))]";
     case Mips::SRAI_B:
-      dbgs() << "SRAI_B: 	(set MSA128BOpnd:{}:$wd, (sra:{} MSA128BOpnd:{}:$ws, vsplati8_uimm3:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (sra MSA128BOpnd:$ws, vsplati8_uimm3:$m))]";
     case Mips::SRAI_D:
-      dbgs() << "SRAI_D: 	(set MSA128DOpnd:{}:$wd, (sra:{} MSA128DOpnd:{}:$ws, vsplati64_uimm6:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (sra MSA128DOpnd:$ws, vsplati64_uimm6:$m))]";
     case Mips::SRAI_H:
-      dbgs() << "SRAI_H: 	(set MSA128HOpnd:{}:$wd, (sra:{} MSA128HOpnd:{}:$ws, vsplati16_uimm4:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (sra MSA128HOpnd:$ws, vsplati16_uimm4:$m))]";
     case Mips::SRAI_W:
-      dbgs() << "SRAI_W: 	(set MSA128WOpnd:{}:$wd, (sra:{} MSA128WOpnd:{}:$ws, vsplati32_uimm5:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (sra MSA128WOpnd:$ws, vsplati32_uimm5:$m))]";
     case Mips::SRARI_B:
-      dbgs() << "SRARI_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4646:{}, MSA128BOpnd:{}:$ws, (timmZExt3:{}):$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_srari_b MSA128BOpnd:$ws, timmZExt3:$m))]";
     case Mips::SRARI_D:
-      dbgs() << "SRARI_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4647:{}, MSA128DOpnd:{}:$ws, (timmZExt6:{}):$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_srari_d MSA128DOpnd:$ws, timmZExt6:$m))]";
     case Mips::SRARI_H:
-      dbgs() << "SRARI_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4648:{}, MSA128HOpnd:{}:$ws, (timmZExt4:{}):$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_srari_h MSA128HOpnd:$ws, timmZExt4:$m))]";
     case Mips::SRARI_W:
-      dbgs() << "SRARI_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4649:{}, MSA128WOpnd:{}:$ws, (timmZExt5:{}):$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_srari_w MSA128WOpnd:$ws, timmZExt5:$m))]";
     case Mips::SRAR_B:
-      dbgs() << "SRAR_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4642:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_srar_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::SRAR_D:
-      dbgs() << "SRAR_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4643:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_srar_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::SRAR_H:
-      dbgs() << "SRAR_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4644:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_srar_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::SRAR_W:
-      dbgs() << "SRAR_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4645:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_srar_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::SRAV:
-      dbgs() << "SRAV: 	(set GPR32Opnd:{}:$rd, (sra:{} GPR32Opnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (sra GPR32Opnd:$rt, GPR32Opnd:$rs))]";
+    case Mips::SRAV_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rt, GPR32Opnd:$rs))]";
     case Mips::SRA_B:
-      dbgs() << "SRA_B: 	(set MSA128BOpnd:{}:$wd, (sra:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (sra MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::SRA_D:
-      dbgs() << "SRA_D: 	(set MSA128DOpnd:{}:$wd, (sra:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (sra MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::SRA_H:
-      dbgs() << "SRA_H: 	(set MSA128HOpnd:{}:$wd, (sra:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (sra MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
+    case Mips::SRA_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rt, null_frag:$shamt))]";
     case Mips::SRA_W:
-      dbgs() << "SRA_W: 	(set MSA128WOpnd:{}:$wd, (sra:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (sra MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::SRL:
-      dbgs() << "SRL: 	(set GPR32Opnd:{}:$rd, (srl:{} GPR32Opnd:{}:$rt, (immZExt5:{}):$shamt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (srl GPR32Opnd:$rt, immZExt5:$shamt))]";
     case Mips::SRLI_B:
-      dbgs() << "SRLI_B: 	(set MSA128BOpnd:{}:$wd, (srl:{} MSA128BOpnd:{}:$ws, vsplati8_uimm3:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (srl MSA128BOpnd:$ws, vsplati8_uimm3:$m))]";
     case Mips::SRLI_D:
-      dbgs() << "SRLI_D: 	(set MSA128DOpnd:{}:$wd, (srl:{} MSA128DOpnd:{}:$ws, vsplati64_uimm6:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (srl MSA128DOpnd:$ws, vsplati64_uimm6:$m))]";
     case Mips::SRLI_H:
-      dbgs() << "SRLI_H: 	(set MSA128HOpnd:{}:$wd, (srl:{} MSA128HOpnd:{}:$ws, vsplati16_uimm4:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (srl MSA128HOpnd:$ws, vsplati16_uimm4:$m))]";
     case Mips::SRLI_W:
-      dbgs() << "SRLI_W: 	(set MSA128WOpnd:{}:$wd, (srl:{} MSA128WOpnd:{}:$ws, vsplati32_uimm5:{}:$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (srl MSA128WOpnd:$ws, vsplati32_uimm5:$m))]";
     case Mips::SRLRI_B:
-      dbgs() << "SRLRI_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4662:{}, MSA128BOpnd:{}:$ws, (timmZExt3:{}):$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_srlri_b MSA128BOpnd:$ws, timmZExt3:$m))]";
     case Mips::SRLRI_D:
-      dbgs() << "SRLRI_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4663:{}, MSA128DOpnd:{}:$ws, (timmZExt6:{}):$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_srlri_d MSA128DOpnd:$ws, timmZExt6:$m))]";
     case Mips::SRLRI_H:
-      dbgs() << "SRLRI_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4664:{}, MSA128HOpnd:{}:$ws, (timmZExt4:{}):$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_srlri_h MSA128HOpnd:$ws, timmZExt4:$m))]";
     case Mips::SRLRI_W:
-      dbgs() << "SRLRI_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4665:{}, MSA128WOpnd:{}:$ws, (timmZExt5:{}):$m))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_srlri_w MSA128WOpnd:$ws, timmZExt5:$m))]";
     case Mips::SRLR_B:
-      dbgs() << "SRLR_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4658:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_srlr_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::SRLR_D:
-      dbgs() << "SRLR_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4659:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_srlr_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::SRLR_H:
-      dbgs() << "SRLR_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4660:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_srlr_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::SRLR_W:
-      dbgs() << "SRLR_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4661:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_srlr_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::SRLV:
-      dbgs() << "SRLV: 	(set GPR32Opnd:{}:$rd, (srl:{} GPR32Opnd:{}:$rt, GPR32Opnd:{}:$rs))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (srl GPR32Opnd:$rt, GPR32Opnd:$rs))]";
+    case Mips::SRLV_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rt, GPR32Opnd:$rs))]";
     case Mips::SRL_B:
-      dbgs() << "SRL_B: 	(set MSA128BOpnd:{}:$wd, (srl:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (srl MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::SRL_D:
-      dbgs() << "SRL_D: 	(set MSA128DOpnd:{}:$wd, (srl:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (srl MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::SRL_H:
-      dbgs() << "SRL_H: 	(set MSA128HOpnd:{}:$wd, (srl:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (srl MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
+    case Mips::SRL_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rt, null_frag:$shamt))]";
     case Mips::SRL_W:
-      dbgs() << "SRL_W: 	(set MSA128WOpnd:{}:$wd, (srl:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (srl MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
+    case Mips::STORE_ACC128:
+    {
+      dbgs() << "[(null_frag ACC128:$rt, addr:$addr)]";
+    case Mips::STORE_ACC64:
+    {
+      dbgs() << "[(null_frag ACC64:$rt, addr:$addr)]";
+    case Mips::STORE_ACC64DSP:
+    {
+      dbgs() << "[(null_frag ACC64DSPOpnd:$rt, addr:$addr)]";
+    case Mips::STORE_CCOND_DSP:
+    {
+      dbgs() << "[(null_frag DSPCC:$rt, addr:$addr)]";
     case Mips::STR_D:
-      dbgs() << "STR_D: 	(intrinsic_void 4670:{}, MSA128DOpnd:{}:$dst, iPTR:{}:$ptr, GPR32:{}:$imm)";
-      break;
+    {
+      dbgs() << "[(int_mips_str_d MSA128DOpnd:$dst, iPTR:$ptr, GPR32:$imm)]";
     case Mips::STR_W:
-      dbgs() << "STR_W: 	(intrinsic_void 4671:{}, MSA128WOpnd:{}:$dst, iPTR:{}:$ptr, GPR32:{}:$imm)";
-      break;
+    {
+      dbgs() << "[(int_mips_str_w MSA128WOpnd:$dst, iPTR:$ptr, GPR32:$imm)]";
     case Mips::ST_B:
-      dbgs() << "ST_B: 	(store MSA128BOpnd:{ *:[v16i8] }:$wd, addrimm10:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(store (v16i8 MSA128BOpnd:$wd), addrimm10:$addr)]";
     case Mips::ST_D:
-      dbgs() << "ST_D: 	(store MSA128DOpnd:{ *:[v2i64] }:$wd, addrimm10lsl3:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(store (v2i64 MSA128DOpnd:$wd), addrimm10lsl3:$addr)]";
     case Mips::ST_F16:
-      dbgs() << "ST_F16: 	(store MSA128F16:{ *:[f16] }:$ws, (addrimm10:{}):$addr)";
-      break;
+    {
+      dbgs() << "[(store (f16 MSA128F16:$ws), (addrimm10:addr))]";
     case Mips::ST_H:
-      dbgs() << "ST_H: 	(store MSA128HOpnd:{ *:[v8i16] }:$wd, addrimm10lsl1:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(store (v8i16 MSA128HOpnd:$wd), addrimm10lsl1:$addr)]";
     case Mips::ST_W:
-      dbgs() << "ST_W: 	(store MSA128WOpnd:{ *:[v4i32] }:$wd, addrimm10lsl2:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(store (v4i32 MSA128WOpnd:$wd), addrimm10lsl2:$addr)]";
+    case Mips::SUB:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::SUBQH_PH:
-      dbgs() << "SUBQH_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4675:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_subqh_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::SUBQH_PH_MMR2:
-      dbgs() << "SUBQH_PH_MMR2: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4675:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_subqh_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::SUBQH_R_PH:
-      dbgs() << "SUBQH_R_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4676:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_subqh_r_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::SUBQH_R_PH_MMR2:
-      dbgs() << "SUBQH_R_PH_MMR2: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4676:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_subqh_r_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::SUBQH_R_W:
-      dbgs() << "SUBQH_R_W: 	(set GPR32Opnd:{}:$rd, (intrinsic_wo_chain:{} 4677:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_subqh_r_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::SUBQH_R_W_MMR2:
-      dbgs() << "SUBQH_R_W_MMR2: 	(set GPR32Opnd:{}:$rd, (intrinsic_wo_chain:{} 4677:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_subqh_r_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::SUBQH_W:
-      dbgs() << "SUBQH_W: 	(set GPR32Opnd:{}:$rd, (intrinsic_wo_chain:{} 4678:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_subqh_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::SUBQH_W_MMR2:
-      dbgs() << "SUBQH_W_MMR2: 	(set GPR32Opnd:{}:$rd, (intrinsic_wo_chain:{} 4678:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_subqh_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
+    case Mips::SUBQ_PH:
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (null_frag DSPROpnd:$rs, DSPROpnd:$rt))]";
+    case Mips::SUBQ_PH_MM:
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (null_frag DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::SUBQ_S_PH:
-      dbgs() << "SUBQ_S_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4673:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_subq_s_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::SUBQ_S_PH_MM:
-      dbgs() << "SUBQ_S_PH_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4673:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_subq_s_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::SUBQ_S_W:
-      dbgs() << "SUBQ_S_W: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4674:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_subq_s_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::SUBQ_S_W_MM:
-      dbgs() << "SUBQ_S_W_MM: 	(set GPR32Opnd:{}:$rd, (intrinsic_w_chain:{} 4674:{}, GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (int_mips_subq_s_w GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::SUBSUS_U_B:
-      dbgs() << "SUBSUS_U_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4687:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_subsus_u_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::SUBSUS_U_D:
-      dbgs() << "SUBSUS_U_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4688:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_subsus_u_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::SUBSUS_U_H:
-      dbgs() << "SUBSUS_U_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4689:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_subsus_u_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::SUBSUS_U_W:
-      dbgs() << "SUBSUS_U_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4690:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_subsus_u_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::SUBSUU_S_B:
-      dbgs() << "SUBSUU_S_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4691:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_subsuu_s_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::SUBSUU_S_D:
-      dbgs() << "SUBSUU_S_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4692:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_subsuu_s_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::SUBSUU_S_H:
-      dbgs() << "SUBSUU_S_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4693:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_subsuu_s_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::SUBSUU_S_W:
-      dbgs() << "SUBSUU_S_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4694:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_subsuu_s_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::SUBS_S_B:
-      dbgs() << "SUBS_S_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4679:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_subs_s_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::SUBS_S_D:
-      dbgs() << "SUBS_S_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4680:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_subs_s_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::SUBS_S_H:
-      dbgs() << "SUBS_S_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4681:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_subs_s_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::SUBS_S_W:
-      dbgs() << "SUBS_S_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4682:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_subs_s_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::SUBS_U_B:
-      dbgs() << "SUBS_U_B: 	(set MSA128BOpnd:{}:$wd, (intrinsic_wo_chain:{} 4683:{}, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (int_mips_subs_u_b MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::SUBS_U_D:
-      dbgs() << "SUBS_U_D: 	(set MSA128DOpnd:{}:$wd, (intrinsic_wo_chain:{} 4684:{}, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (int_mips_subs_u_d MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::SUBS_U_H:
-      dbgs() << "SUBS_U_H: 	(set MSA128HOpnd:{}:$wd, (intrinsic_wo_chain:{} 4685:{}, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (int_mips_subs_u_h MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::SUBS_U_W:
-      dbgs() << "SUBS_U_W: 	(set MSA128WOpnd:{}:$wd, (intrinsic_wo_chain:{} 4686:{}, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (int_mips_subs_u_w MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::SUBU16_MM:
-      dbgs() << "SUBU16_MM: 	(set GPRMM16Opnd:{}:$rd, (sub:{} GPRMM16Opnd:{}:$rs, GPRMM16Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPRMM16Opnd:$rd, (sub GPRMM16Opnd:$rs, GPRMM16Opnd:$rt))]";
     case Mips::SUBU16_MMR6:
-      dbgs() << "SUBU16_MMR6: 	(set GPRMM16Opnd:{}:$rd, (sub:{} GPRMM16Opnd:{}:$rs, GPRMM16Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPRMM16Opnd:$rd, (sub GPRMM16Opnd:$rs, GPRMM16Opnd:$rt))]";
     case Mips::SUBUH_QB:
-      dbgs() << "SUBUH_QB: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4699:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_subuh_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::SUBUH_QB_MMR2:
-      dbgs() << "SUBUH_QB_MMR2: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4699:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_subuh_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::SUBUH_R_QB:
-      dbgs() << "SUBUH_R_QB: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4700:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_subuh_r_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::SUBUH_R_QB_MMR2:
-      dbgs() << "SUBUH_R_QB_MMR2: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4700:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_subuh_r_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
+    case Mips::SUBU_MMR6:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::SUBU_PH:
-      dbgs() << "SUBU_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4695:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_subu_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::SUBU_PH_MMR2:
-      dbgs() << "SUBU_PH_MMR2: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4695:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_subu_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
+    case Mips::SUBU_QB:
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (null_frag DSPROpnd:$rs, DSPROpnd:$rt))]";
+    case Mips::SUBU_QB_MM:
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (null_frag DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::SUBU_S_PH:
-      dbgs() << "SUBU_S_PH: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4697:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_subu_s_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::SUBU_S_PH_MMR2:
-      dbgs() << "SUBU_S_PH_MMR2: 	(set DSPROpnd:{}:$rd, (intrinsic_w_chain:{} 4697:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_subu_s_ph DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::SUBU_S_QB:
-      dbgs() << "SUBU_S_QB: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4698:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_subu_s_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::SUBU_S_QB_MM:
-      dbgs() << "SUBU_S_QB_MM: 	(set DSPROpnd:{}:$rd, (intrinsic_wo_chain:{} 4698:{}, DSPROpnd:{}:$rs, DSPROpnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set DSPROpnd:$rd, (int_mips_subu_s_qb DSPROpnd:$rs, DSPROpnd:$rt))]";
     case Mips::SUBVI_B:
-      dbgs() << "SUBVI_B: 	(set MSA128BOpnd:{}:$wd, (sub:{} MSA128BOpnd:{}:$ws, vsplati8_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (sub MSA128BOpnd:$ws, vsplati8_uimm5:$imm))]";
     case Mips::SUBVI_D:
-      dbgs() << "SUBVI_D: 	(set MSA128DOpnd:{}:$wd, (sub:{} MSA128DOpnd:{}:$ws, vsplati64_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (sub MSA128DOpnd:$ws, vsplati64_uimm5:$imm))]";
     case Mips::SUBVI_H:
-      dbgs() << "SUBVI_H: 	(set MSA128HOpnd:{}:$wd, (sub:{} MSA128HOpnd:{}:$ws, vsplati16_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (sub MSA128HOpnd:$ws, vsplati16_uimm5:$imm))]";
     case Mips::SUBVI_W:
-      dbgs() << "SUBVI_W: 	(set MSA128WOpnd:{}:$wd, (sub:{} MSA128WOpnd:{}:$ws, vsplati32_uimm5:{}:$imm))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (sub MSA128WOpnd:$ws, vsplati32_uimm5:$imm))]";
     case Mips::SUBV_B:
-      dbgs() << "SUBV_B: 	(set MSA128BOpnd:{}:$wd, (sub:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (sub MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::SUBV_D:
-      dbgs() << "SUBV_D: 	(set MSA128DOpnd:{}:$wd, (sub:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (sub MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::SUBV_H:
-      dbgs() << "SUBV_H: 	(set MSA128HOpnd:{}:$wd, (sub:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (sub MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::SUBV_W:
-      dbgs() << "SUBV_W: 	(set MSA128WOpnd:{}:$wd, (sub:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (sub MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
+    case Mips::SUB_MM:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rs, GPR32Opnd:$rt))]";
+    case Mips::SUB_MMR6:
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (null_frag GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::SUBu:
-      dbgs() << "SUBu: 	(set GPR32Opnd:{}:$rd, (sub:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (sub GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::SUBu_MM:
-      dbgs() << "SUBu_MM: 	(set GPR32Opnd:{}:$rd, (sub:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (sub GPR32Opnd:$rs, GPR32Opnd:$rt))]";
+    case Mips::SUXC1:
+    {
+      dbgs() << "[(null_frag AFGR64Opnd:$fs, (add iPTR:$base, iPTR:$index))]";
+    case Mips::SUXC164:
+    {
+      dbgs() << "[(null_frag FGR64Opnd:$fs, (add iPTR:$base, iPTR:$index))]";
+    case Mips::SUXC1_MM:
+    {
+      dbgs() << "[(null_frag FGR64Opnd:$fs, (add iPTR:$base, iPTR:$index))]";
     case Mips::SW:
-      dbgs() << "SW: 	(store GPR32Opnd:{}:$rt, addr:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(store GPR32Opnd:$rt, addr:$addr)]";
     case Mips::SW64:
-      dbgs() << "SW64: 	(truncstorei32 GPR64Opnd:{}:$rt, addr:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(truncstorei32 GPR64Opnd:$rt, addr:$addr)]";
     case Mips::SWC1:
-      dbgs() << "SWC1: 	(store FGR32Opnd:{}:$rt, addrDefault:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(store FGR32Opnd:$rt, addrDefault:$addr)]";
     case Mips::SWC1_MM:
-      dbgs() << "SWC1_MM: 	(store FGR32Opnd:{}:$rt, addrDefault:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(store FGR32Opnd:$rt, addrDefault:$addr)]";
     case Mips::SWC2:
-      dbgs() << "SWC2: 	(store COP2Opnd:{}:$rt, addrDefault:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(store COP2Opnd:$rt, addrDefault:$addr)]";
     case Mips::SWC2_MMR6:
-      dbgs() << "SWC2_MMR6: 	(store COP2Opnd:{}:$rt, addrimm11:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(store COP2Opnd:$rt, addrimm11:$addr)]";
     case Mips::SWC3:
-      dbgs() << "SWC3: 	(store COP3Opnd:{}:$rt, addrDefault:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(store COP3Opnd:$rt, addrDefault:$addr)]";
+    case Mips::SWDSP:
+    {
+      dbgs() << "[(null_frag DSPROpnd:$rt, addr:$addr)]";
+    case Mips::SWDSP_MM:
+    {
+      dbgs() << "[(null_frag DSPROpnd:$rt, addr:$addr)]";
+    case Mips::SWE_MM:
+    {
+      dbgs() << "[(null_frag GPR32Opnd:$rt, addr:$addr)]";
     case Mips::SWL:
-      dbgs() << "SWL: 	(MipsSWL GPR32Opnd:{}:$rt, addr:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(MipsSWL GPR32Opnd:$rt, addr:$addr)]";
     case Mips::SWL64:
-      dbgs() << "SWL64: 	(MipsSWL GPR64Opnd:{}:$rt, addr:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(MipsSWL GPR64Opnd:$rt, addr:$addr)]";
     case Mips::SWLE_MM:
-      dbgs() << "SWLE_MM: 	(MipsSWL GPR32Opnd:{}:$rt, addrimm12:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(MipsSWL GPR32Opnd:$rt, addrimm12:$addr)]";
     case Mips::SWL_MM:
-      dbgs() << "SWL_MM: 	(MipsSWL GPR32Opnd:{}:$rt, addrimm12:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(MipsSWL GPR32Opnd:$rt, addrimm12:$addr)]";
     case Mips::SWR:
-      dbgs() << "SWR: 	(MipsSWR GPR32Opnd:{}:$rt, addr:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(MipsSWR GPR32Opnd:$rt, addr:$addr)]";
     case Mips::SWR64:
-      dbgs() << "SWR64: 	(MipsSWR GPR64Opnd:{}:$rt, addr:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(MipsSWR GPR64Opnd:$rt, addr:$addr)]";
     case Mips::SWRE_MM:
-      dbgs() << "SWRE_MM: 	(MipsSWR GPR32Opnd:{}:$rt, addrimm12:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(MipsSWR GPR32Opnd:$rt, addrimm12:$addr)]";
     case Mips::SWR_MM:
-      dbgs() << "SWR_MM: 	(MipsSWR GPR32Opnd:{}:$rt, addrimm12:{}:$addr)";
-      break;
+    {
+      dbgs() << "[(MipsSWR GPR32Opnd:$rt, addrimm12:$addr)]";
     case Mips::SWXC1:
-      dbgs() << "SWXC1: 	(store FGR32Opnd:{}:$fs, (add:{} iPTR:{}:$base, iPTR:{}:$index))";
-      break;
+    {
+      dbgs() << "[(store FGR32Opnd:$fs, (add iPTR:$base, iPTR:$index))]";
     case Mips::SWXC1_MM:
-      dbgs() << "SWXC1_MM: 	(store FGR32Opnd:{}:$fs, (add:{} iPTR:{}:$base, iPTR:{}:$index))";
-      break;
+    {
+      dbgs() << "[(store FGR32Opnd:$fs, (add iPTR:$base, iPTR:$index))]";
+    case Mips::SW_MM:
+    {
+      dbgs() << "[(null_frag GPR32Opnd:$rt, addr:$addr)]";
+    case Mips::SW_MMR6:
+    {
+      dbgs() << "[(null_frag GPR32Opnd:$rt, addr:$addr)]";
     case Mips::SYNC:
-      dbgs() << "SYNC: 	(MipsSync (immZExt5:{}):$stype)";
-      break;
+    {
+      dbgs() << "[(MipsSync immZExt5:$stype)]";
     case Mips::SYNC_MM:
-      dbgs() << "SYNC_MM: 	(MipsSync (immZExt5:{}):$stype)";
-      break;
+    {
+      dbgs() << "[(MipsSync immZExt5:$stype)]";
     case Mips::SYNC_MMR6:
-      dbgs() << "SYNC_MMR6: 	(MipsSync (immZExt5:{}):$stype)";
-      break;
+    {
+      dbgs() << "[(MipsSync immZExt5:$stype)]";
     case Mips::SZ_B_PSEUDO:
-      dbgs() << "SZ_B_PSEUDO: 	(set GPR32:{}:$dst, (MipsVAllZero:{} MSA128B:{ *:[v16i8] }:$ws))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (MipsVAllZero (v16i8 MSA128B:$ws)))]";
     case Mips::SZ_D_PSEUDO:
-      dbgs() << "SZ_D_PSEUDO: 	(set GPR32:{}:$dst, (MipsVAllZero:{} MSA128D:{ *:[v2i64] }:$ws))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (MipsVAllZero (v2i64 MSA128D:$ws)))]";
     case Mips::SZ_H_PSEUDO:
-      dbgs() << "SZ_H_PSEUDO: 	(set GPR32:{}:$dst, (MipsVAllZero:{} MSA128H:{ *:[v8i16] }:$ws))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (MipsVAllZero (v8i16 MSA128H:$ws)))]";
     case Mips::SZ_V_PSEUDO:
-      dbgs() << "SZ_V_PSEUDO: 	(set GPR32:{}:$dst, (MipsVAnyZero:{} MSA128B:{ *:[v16i8] }:$ws))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (MipsVAnyZero (v16i8 MSA128B:$ws)))]";
     case Mips::SZ_W_PSEUDO:
-      dbgs() << "SZ_W_PSEUDO: 	(set GPR32:{}:$dst, (MipsVAllZero:{} MSA128W:{ *:[v4i32] }:$ws))";
-      break;
+    {
+      dbgs() << "[(set GPR32:$dst, (MipsVAllZero (v4i32 MSA128W:$ws)))]";
     case Mips::TAILCALL64R6REG:
-      dbgs() << "TAILCALL64R6REG: 	(MipsTailCall GPR64Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(MipsTailCall GPR64Opnd:$rs)]";
     case Mips::TAILCALLHB64R6REG:
-      dbgs() << "TAILCALLHB64R6REG: 	(MipsTailCall GPR64Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(MipsTailCall GPR64Opnd:$rs)]";
     case Mips::TAILCALLHBR6REG:
-      dbgs() << "TAILCALLHBR6REG: 	(MipsTailCall GPR32Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(MipsTailCall GPR32Opnd:$rs)]";
     case Mips::TAILCALLR6REG:
-      dbgs() << "TAILCALLR6REG: 	(MipsTailCall GPR32Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(MipsTailCall GPR32Opnd:$rs)]";
     case Mips::TAILCALLREG:
-      dbgs() << "TAILCALLREG: 	(MipsTailCall GPR32Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(MipsTailCall GPR32Opnd:$rs)]";
     case Mips::TAILCALLREG64:
-      dbgs() << "TAILCALLREG64: 	(MipsTailCall GPR64Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(MipsTailCall GPR64Opnd:$rs)]";
     case Mips::TAILCALLREGHB:
-      dbgs() << "TAILCALLREGHB: 	(MipsTailCall GPR32Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(MipsTailCall GPR32Opnd:$rs)]";
     case Mips::TAILCALLREGHB64:
-      dbgs() << "TAILCALLREGHB64: 	(MipsTailCall GPR64Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(MipsTailCall GPR64Opnd:$rs)]";
     case Mips::TAILCALLREG_MM:
-      dbgs() << "TAILCALLREG_MM: 	(MipsTailCall GPR32Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(MipsTailCall GPR32Opnd:$rs)]";
     case Mips::TAILCALLREG_MMR6:
-      dbgs() << "TAILCALLREG_MMR6: 	(MipsTailCall GPR32Opnd:{}:$rs)";
-      break;
+    {
+      dbgs() << "[(MipsTailCall GPR32Opnd:$rs)]";
     case Mips::TRAP:
-      dbgs() << "TRAP: 	(trap)";
-      break;
+    {
+      dbgs() << "[(trap)]";
     case Mips::TRAP_MM:
-      dbgs() << "TRAP_MM: 	(trap)";
-      break;
+    {
+      dbgs() << "[(trap)]";
+    case Mips::TRUNC_L_D64:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::TRUNC_L_D_MMR6:
+    {
+      dbgs() << "[(set FGR64Opnd:$ft, (null_frag FGR64Opnd:$fs))]";
+    case Mips::TRUNC_L_S:
+    {
+      dbgs() << "[(set FGR64Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::TRUNC_L_S_MMR6:
+    {
+      dbgs() << "[(set FGR64Opnd:$ft, (null_frag FGR32Opnd:$fs))]";
+    case Mips::TRUNC_W_D32:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::TRUNC_W_D64:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR64Opnd:$fs))]";
+    case Mips::TRUNC_W_D_MMR6:
+    {
+      dbgs() << "[(set FGR32Opnd:$ft, (null_frag FGR64Opnd:$fs))]";
+    case Mips::TRUNC_W_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag AFGR64Opnd:$fs))]";
+    case Mips::TRUNC_W_S:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::TRUNC_W_S_MM:
+    {
+      dbgs() << "[(set FGR32Opnd:$fd, (null_frag FGR32Opnd:$fs))]";
+    case Mips::TRUNC_W_S_MMR6:
+    {
+      dbgs() << "[(set FGR32Opnd:$ft, (null_frag FGR32Opnd:$fs))]";
     case Mips::UDIV_MM_Pseudo:
-      dbgs() << "UDIV_MM_Pseudo: 	(set ACC64:{}:$ac, (MipsDivRemU:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set ACC64:$ac, (MipsDivRemU GPR32Opnd:$rs, GPR32Opnd:$rt))]";
+    case Mips::V3MULU:
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (null_frag GPR64Opnd:$rs, GPR64Opnd:$rt))]";
+    case Mips::VMM0:
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (null_frag GPR64Opnd:$rs, GPR64Opnd:$rt))]";
+    case Mips::VMULU:
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (null_frag GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::VSHF_B:
-      dbgs() << "VSHF_B: 	(set MSA128BOpnd:{}:$wd, (MipsVSHF:{} MSA128BOpnd:{}:$wd_in, MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (MipsVSHF MSA128BOpnd:$wd_in, MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::VSHF_D:
-      dbgs() << "VSHF_D: 	(set MSA128DOpnd:{}:$wd, (MipsVSHF:{} MSA128DOpnd:{}:$wd_in, MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (MipsVSHF MSA128DOpnd:$wd_in, MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::VSHF_H:
-      dbgs() << "VSHF_H: 	(set MSA128HOpnd:{}:$wd, (MipsVSHF:{} MSA128HOpnd:{}:$wd_in, MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (MipsVSHF MSA128HOpnd:$wd_in, MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::VSHF_W:
-      dbgs() << "VSHF_W: 	(set MSA128WOpnd:{}:$wd, (MipsVSHF:{} MSA128WOpnd:{}:$wd_in, MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (MipsVSHF MSA128WOpnd:$wd_in, MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::WRDSP:
-      dbgs() << "WRDSP: 	(intrinsic_void 4713:{}, GPR32Opnd:{}:$rs, (timmZExt10:{}):$mask)";
-      break;
+    {
+      dbgs() << "[(int_mips_wrdsp GPR32Opnd:$rs, timmZExt10:$mask)]";
     case Mips::WRDSP_MM:
-      dbgs() << "WRDSP_MM: 	(intrinsic_void 4713:{}, GPR32Opnd:{}:$rt, (timmZExt7:{}):$mask)";
-      break;
+    {
+      dbgs() << "[(int_mips_wrdsp GPR32Opnd:$rt, timmZExt7:$mask)]";
     case Mips::XOR:
-      dbgs() << "XOR: 	(set GPR32Opnd:{}:$rd, (xor:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (xor GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::XOR16_MM:
-      dbgs() << "XOR16_MM: 	(set GPRMM16Opnd:{}:$dst, (xor:{} GPRMM16Opnd:{}:$rs, GPRMM16Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPRMM16Opnd:$dst, (xor GPRMM16Opnd:$rs, GPRMM16Opnd:$rt))]";
+    case Mips::XOR16_MMR6:
+    {
+      dbgs() << "[(set GPRMM16Opnd:$dst, (null_frag GPRMM16Opnd:$rs, GPRMM16Opnd:$rt))]";
     case Mips::XOR64:
-      dbgs() << "XOR64: 	(set GPR64Opnd:{}:$rd, (xor:{} GPR64Opnd:{}:$rs, GPR64Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rd, (xor GPR64Opnd:$rs, GPR64Opnd:$rt))]";
     case Mips::XORI_B:
-      dbgs() << "XORI_B: 	(set MSA128BOpnd:{}:$wd, (xor:{} MSA128BOpnd:{}:$ws, vsplati8_uimm8:{}:$u8))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (xor MSA128BOpnd:$ws, vsplati8_uimm8:$u8))]";
     case Mips::XORI_MMR6:
-      dbgs() << "XORI_MMR6: 	(set GPR32Opnd:{}:$rt, (xor:{} GPR32Opnd:{}:$rs, (immZExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (xor GPR32Opnd:$rs, immZExt16:$imm16))]";
     case Mips::XOR_MM:
-      dbgs() << "XOR_MM: 	(set GPR32Opnd:{}:$rd, (xor:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (xor GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::XOR_MMR6:
-      dbgs() << "XOR_MMR6: 	(set GPR32Opnd:{}:$rd, (xor:{} GPR32Opnd:{}:$rs, GPR32Opnd:{}:$rt))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rd, (xor GPR32Opnd:$rs, GPR32Opnd:$rt))]";
     case Mips::XOR_V:
-      dbgs() << "XOR_V: 	(set MSA128BOpnd:{}:$wd, (xor:{} MSA128BOpnd:{}:$ws, MSA128BOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128BOpnd:$wd, (xor MSA128BOpnd:$ws, MSA128BOpnd:$wt))]";
     case Mips::XOR_V_D_PSEUDO:
-      dbgs() << "XOR_V_D_PSEUDO: 	(set MSA128DOpnd:{}:$wd, (xor:{} MSA128DOpnd:{}:$ws, MSA128DOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128DOpnd:$wd, (xor MSA128DOpnd:$ws, MSA128DOpnd:$wt))]";
     case Mips::XOR_V_H_PSEUDO:
-      dbgs() << "XOR_V_H_PSEUDO: 	(set MSA128HOpnd:{}:$wd, (xor:{} MSA128HOpnd:{}:$ws, MSA128HOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128HOpnd:$wd, (xor MSA128HOpnd:$ws, MSA128HOpnd:$wt))]";
     case Mips::XOR_V_W_PSEUDO:
-      dbgs() << "XOR_V_W_PSEUDO: 	(set MSA128WOpnd:{}:$wd, (xor:{} MSA128WOpnd:{}:$ws, MSA128WOpnd:{}:$wt))";
-      break;
+    {
+      dbgs() << "[(set MSA128WOpnd:$wd, (xor MSA128WOpnd:$ws, MSA128WOpnd:$wt))]";
     case Mips::XORi:
-      dbgs() << "XORi: 	(set GPR32Opnd:{}:$rt, (xor:{} GPR32Opnd:{}:$rs, (imm32ZExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (xor GPR32Opnd:$rs, imm32ZExt16:$imm16))]";
     case Mips::XORi64:
-      dbgs() << "XORi64: 	(set GPR64Opnd:{}:$rt, (xor:{} GPR64Opnd:{}:$rs, (immZExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR64Opnd:$rt, (xor GPR64Opnd:$rs, immZExt16:$imm16))]";
     case Mips::XORi_MM:
-      dbgs() << "XORi_MM: 	(set GPR32Opnd:{}:$rt, (xor:{} GPR32Opnd:{}:$rs, (immZExt16:{}):$imm16))";
-      break;
+    {
+      dbgs() << "[(set GPR32Opnd:$rt, (xor GPR32Opnd:$rs, immZExt16:$imm16))]";
 
 
   }

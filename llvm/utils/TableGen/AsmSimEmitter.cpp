@@ -32,6 +32,8 @@ class IDAGSelEmitter {
   std::map<StringRef, std::vector<MVT::SimpleValueType>*> CollectRegisterTypes(raw_ostream &OS);
   void CollectPhysicalRegisters(raw_ostream &OS);
   void PrintAsmSim(TreePattern I, raw_ostream &OS);
+  void PrintAsmSimExe(TreePattern I, raw_ostream &OS);
+  void PrintTreePatternNodeExe(const TreePatternNodePtr Tree, raw_ostream &OS);
 public:
   explicit IDAGSelEmitter(RecordKeeper &R);
   void run(raw_ostream &OS);
@@ -190,19 +192,8 @@ std::map<StringRef, std::vector<MVT::SimpleValueType>*> IDAGSelEmitter::CollectR
 }
 
 void IDAGSelEmitter::CollectPhysicalRegisters(raw_ostream &OS){
-  OS << "class MachineRegister {\n"
-     << "    unsigned RegIdx;\n"
-     << "    StringRef Name;\n"
-    //  << "    const MVT::SimpleValueType* Types;\n"
-     << "  public:\n"
-    //  << "    MachineRegister(StringRef Name, const MVT::SimpleValueType *Types):\n"
-     << "    MachineRegister(StringRef Name):\n"
-     << "      RegIdx(0), Name(Name) {}\n"
-     << "    unsigned GetRegIdx() {return RegIdx;}\n"
-     << "    StringRef GetName() {return Name;}\n"
-    //  << "    const MVT::SimpleValueType* GetTypes() {return Types;}\n"
-     << "};\n";
-
+  OS << "#include \"llvm/Sim/inst-exe.h\"\n\n";
+  OS << "using namespace instexe;\n\n";
   std::vector<Record*> Regs = Records.getAllDerivedDefinitions("Register");
   for (const auto &Reg : Regs){
     // errs() << Reg->getName() << " = ";
@@ -361,6 +352,24 @@ static bool isValidOperations(TreePattern &I){
   return true;
 }
 
+void IDAGSelEmitter::PrintTreePatternNodeExe(const TreePatternNodePtr Tree, raw_ostream &OS){
+  if (Tree->getOperator()->getName() != "set")
+    llvm_unreachable("first opcode is not set");
+
+  if (Tree->getNumChildren() == 0)
+    llvm_unreachable("Tree has no children");
+
+  OS << "      MachineRegister TmpRes = SimAdd(Inst);\n";
+}
+
+void IDAGSelEmitter::PrintAsmSimExe(TreePattern I, raw_ostream &OS){
+  const std::vector<TreePatternNodePtr> Trees = I.getTrees();
+  if (Trees.size() > 1)
+    llvm_unreachable("Trees size is bigger than 1");
+  
+  const TreePatternNodePtr &Tree = Trees[0];
+  PrintTreePatternNodeExe(Tree, OS);
+}
 
 void IDAGSelEmitter::PrintAsmSim(TreePattern I, raw_ostream &OS) {
   OS << I.getRecord()->getName();
@@ -381,9 +390,11 @@ void IDAGSelEmitter::PrintAsmSim(TreePattern I, raw_ostream &OS) {
     Tree->print(errs());
     // OS << "\n";
   }
-
+  
   if (Trees.size() > 1)
     OS << "]\n";
+
+  OS << "\";\n";
 }
 
 //taken from CodeEmitterGen::run
@@ -410,12 +421,12 @@ void IDAGSelEmitter::run(raw_ostream &OS) {
   // std::vector<Record*> Regs = Records.getAllDerivedDefinitions("Register");
   EmitSimRegisters(OS);
   std::vector<Record*> Instrs = Records.getAllDerivedDefinitions("Instruction");
-  int index = 0;
   OS << "\n\n\n"
      << "bool SimExe(MCInst &Inst){\n"
      << "  bool Res = false;\n"
      << "  switch (Inst.getOpcode()) {\n"
-     << "    default:\n" 
+     << "    default:\n"
+     << "      Inst.dump();\n"
      << "      break;\n";
 
   for (Record *Instr : Instrs) {
@@ -432,22 +443,37 @@ void IDAGSelEmitter::run(raw_ostream &OS) {
     // null_frag operator is as-if no pattern were specified. Normally this
     // is from a multiclass expansion w/ a SDPatternOperator passed in as
     // null_frag.
-    if (!LI || LI->empty() || hasNullFragReference(Instr, LI)) {
+    if (!LI || LI->empty())
+      continue;
+
+    
+    OS << "    case " << TargetName << "::" << Instr->getNameInitAsString() << ":\n"
+    << "    {\n"
+    << "      dbgs() << \"" << LI->getAsString() << "\";\n";
+
+    if(Instr->getNameInitAsString() == "ADDiu")
+      errs() << "found it";
+
+    if (hasNullFragReference(Instr, LI)) {
+      OS << "      break;\n"
+         << "    }\n";
       continue;
     }
     
     TreePattern I(Instr, LI, true, CGP);
 
-    if (!isValidOperations(I))
+    if (!isValidOperations(I)){
+      OS << "      break;\n"
+         << "    }\n";
       continue;
+    }
 
-    errs() << "index " << index << " : ";
     // Instr->dump();
-    OS << "    case " << TargetName << "::" << Instr->getNameInitAsString() << ":\n"
-       << "      dbgs() << \"";
-    PrintAsmSim(I, OS);
-    OS << "\";\n";
-    OS << "      break;\n";
+
+    // PrintAsmSim(I, OS);
+    PrintAsmSimExe(I, OS);
+    OS << "      break;\n"
+       << "    }\n";
       // parseInstructionPattern(CGI, LI, Instructions);
     
   } 

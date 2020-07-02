@@ -10,6 +10,7 @@ set(LLVM_LINK_COMPONENTS
   Object
   Support
   MipsSim
+  Sim
   )
 
 # FIXME: Eventually move headers to include

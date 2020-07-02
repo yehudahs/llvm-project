@@ -1,0 +1,8 @@
+static_library("AsmParser") {
+  output_name = "LLVMSim"
+  deps = [
+  ]
+  sources = [
+    "inst-exe.cpp",
+  ]
+}

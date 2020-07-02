@@ -5,6 +5,6 @@ include_directories(
 )
 
 add_llvm_component_library(LLVMMipsSim
-  AAPSimState.cpp
-  AAPSimulator.cpp
+  MipsSimState.cpp
+  MipsSim.cpp
   )

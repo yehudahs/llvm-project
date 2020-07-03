@@ -14,6 +14,10 @@ class MachineRegister {
     unsigned GetRegIdx() {return RegIdx;}
     StringRef GetName() {return Name;}
     //  const MVT::SimpleValueType* GetTypes() {return Types;}
+
+    //operations
+    MachineRegister operator+(MachineRegister &other);
+    MachineRegister operator+(int64_t &other);
 };
 
 MachineRegister SimAdd(MCInst &Inst);

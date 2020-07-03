@@ -34,6 +34,10 @@ class IDAGSelEmitter {
   void PrintAsmSim(TreePattern I, raw_ostream &OS);
   void PrintAsmSimExe(TreePattern I, raw_ostream &OS);
   void PrintTreePatternNodeExe(const TreePatternNodePtr Tree, raw_ostream &OS);
+  bool isValidOperations(TreePattern &I);
+  bool isValidOperations(const TreePatternNodePtr Tree);
+  bool hasNullFragReference(Record *Instr, ListInit *LI);
+  bool hasNullFragReference(DagInit *DI);
 public:
   explicit IDAGSelEmitter(RecordKeeper &R);
   void run(raw_ostream &OS);
@@ -291,7 +295,7 @@ void IDAGSelEmitter::EmitSimRegisters(raw_ostream &OS){
   return;
 }
 //copy from CodeGenDagPattern.cpp file
-static bool hasNullFragReference(DagInit *DI) {
+bool IDAGSelEmitter::hasNullFragReference(DagInit *DI) {
   DefInit *OpDef = dyn_cast<DefInit>(DI->getOperator());
   if (!OpDef) return false;
   Record *Operator = OpDef->getDef();
@@ -310,7 +314,7 @@ static bool hasNullFragReference(DagInit *DI) {
 }
 
 //copy from CodeGenDagPattern.cpp file
-static bool hasNullFragReference(Record *Instr, ListInit *LI) {
+bool IDAGSelEmitter::hasNullFragReference(Record *Instr, ListInit *LI) {
   for (Init *I : LI->getValues()) {
     DagInit *DI = dyn_cast<DagInit>(I);
     assert(DI && "non-dag in an instruction Pattern list?!");
@@ -320,15 +324,22 @@ static bool hasNullFragReference(Record *Instr, ListInit *LI) {
   return false;
 }
 
-static bool isValidOperations(const TreePatternNodePtr Tree){
+bool IDAGSelEmitter::isValidOperations(const TreePatternNodePtr Tree){
   if (!Tree->isLeaf()){
     std::set<StringRef> ValidOprs{
       "set",
       "add",
+      "imm",
       };
-    StringRef Opr = Tree->getOperator()->getName();
-    // if (Opr == "intrinsic_w_chain")
-    if (ValidOprs.find(Opr) == ValidOprs.end())
+    Record * Opr = Tree->getOperator();
+    StringRef OprStr = Opr->getName();
+    if (Opr->isSubClassOf("PatFrags")){
+      if (TreePattern *PFRec = CGP.getPatternFragmentIfRead(Opr)) {
+        for (auto T : PFRec->getTrees())
+          if (!isValidOperations(T))
+            return false;
+      }
+    }else if (ValidOprs.find(OprStr) == ValidOprs.end())
       return false;
 
     if (Tree->getNumChildren() != 0) {
@@ -342,7 +353,7 @@ static bool isValidOperations(const TreePatternNodePtr Tree){
   return true;
 }
 
-static bool isValidOperations(TreePattern &I){
+bool IDAGSelEmitter::isValidOperations(TreePattern &I){
   const std::vector<TreePatternNodePtr> Trees = I.getTrees();
   for (const TreePatternNodePtr &Tree : Trees) {
     if (!isValidOperations(Tree)){

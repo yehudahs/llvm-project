@@ -87,6 +87,8 @@
 #define GET_REGINFO_ENUM
 #include "MipsGenRegisterInfo.inc"
 
+#include "MipsGenInstDagSel.inc"
+
 using namespace llvm;
 using namespace AAPSim;
 
@@ -130,14 +132,17 @@ AAPSimulator::AAPSimulator(const Target *TheTarget, const ObjectFile *Obj,
                               const MCSubtargetInfo *PrimarySTI,
                               const MCSubtargetInfo *SecondarySTI) :
                               TheTarget(TheTarget),
+                              STI(PrimarySTI),
+                              STISec(SecondarySTI),
+                              MIA(MIA),
                               Obj(Obj),
                               DisAsm(PrimaryDisAsm),
-                              MIA(MIA),
                               DisAsmSec(SecondaryDisAsm),
-                              STI(PrimarySTI),
                               IP(IP),
-                              STISec(SecondarySTI),
                               Ctx(Ctx){
+  MachineRegisters* MRs = MachineRegisters::getInstance();                              
+  initMipsRegisters(MRs);
+
 }
 
 void AAPSimulator::WriteCodeSection(llvm::StringRef Bytes, uint32_t address) {
@@ -210,8 +215,6 @@ static int16_t signExtendBranchAndLinkS(uint16_t val) {
 static int16_t signExtendBranchCCS(uint16_t val) {
   return signExtendBranchAndLinkS(val);
 }
-
-#include "MipsGenInstDagSel.inc"
 
 SimStatus AAPSimulator::exec(MCInst &Inst, uint32_t pc_w, uint32_t &newpc_w) {
 

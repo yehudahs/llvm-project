@@ -3,16 +3,16 @@
 namespace instexe{
 
 MachineRegister MachineRegister::operator+(MachineRegister &other){
-    return MachineRegister("tmp");
+    return MachineRegister("tmp", 0);
 }
 
 MachineRegister MachineRegister::operator+(int64_t &other){
-    return MachineRegister("tmp");
+    return MachineRegister("tmp" , 0);
 }
 
 
 MachineRegister GetRegByNum(unsigned RegNum) {
-    return MachineRegister("tmp");
+    return MachineRegister("tmp", 0);
 }
 
 MachineRegister SimAdd(MCInst &Inst){

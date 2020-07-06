@@ -9,8 +9,8 @@ class MachineRegister {
     //  const MVT::SimpleValueType* Types;
     public:
     //  MachineRegister(StringRef Name, const MVT::SimpleValueType *Types):
-    MachineRegister(StringRef Name):
-    RegIdx(0), Name(Name) {}
+    MachineRegister(StringRef Name, unsigned EnumIdx):
+    RegIdx(EnumIdx), Name(Name) {}
     unsigned GetRegIdx() {return RegIdx;}
     StringRef GetName() {return Name;}
     //  const MVT::SimpleValueType* GetTypes() {return Types;}

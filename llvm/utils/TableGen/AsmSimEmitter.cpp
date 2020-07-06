@@ -198,10 +198,13 @@ std::map<StringRef, std::vector<MVT::SimpleValueType>*> IDAGSelEmitter::CollectR
 void IDAGSelEmitter::CollectPhysicalRegisters(raw_ostream &OS){
   OS << "#include \"llvm/Sim/inst-exe.h\"\n\n";
   OS << "using namespace instexe;\n\n";
-  std::vector<Record*> Regs = Records.getAllDerivedDefinitions("Register");
-  for (const auto &Reg : Regs){
+
+  OS << "MachineRegister NoReg(\"tmp\", -1);\n";
+  const auto &Registers = Target.getRegBank().getRegisters();
+  for (const auto &Reg : Registers){
     // errs() << Reg->getName() << " = ";
-    OS << "MachineRegister " << Reg->getName() << "(\"" << Reg->getName() << "\");\n";
+    OS << "MachineRegister " << Reg.getName() << "(\"" << Reg.getName() << "\", "
+       << Reg.EnumValue << ");\n";
     // for (const auto & Val: Reg->getValues()){
     //   errs() << Val << "\n";
     // }
